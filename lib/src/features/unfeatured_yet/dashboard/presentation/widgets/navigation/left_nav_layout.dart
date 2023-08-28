@@ -46,15 +46,20 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
               pageWidget: Container(),
             ),
             NavigationItem(
-              title: 'Stress test',
-              icon: CarbonIcons.stress_breath_editor,
+              title: 'Network monitor',
+              icon: CarbonIcons.network_1,
               pageWidget: Container(),
             ),
-            NavigationItem(
-              title: 'Message Watcher - DEV',
-              icon: CarbonIcons.stress_breath_editor,
-              pageWidget: Container(),
-            ),
+            // NavigationItem(
+            //   title: 'Stress test',
+            //   icon: CarbonIcons.stress_breath_editor,
+            //   pageWidget: Container(),
+            // ),
+            // NavigationItem(
+            //   title: 'Message Watcher - DEV',
+            //   icon: CarbonIcons.stress_breath_editor,
+            //   pageWidget: Container(),
+            // ),
           ],
         ),
         if (widget.pages.isNotEmpty)

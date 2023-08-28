@@ -1,3 +1,4 @@
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/connection/data/mqtt_server_repository.dart';
@@ -9,7 +10,6 @@ import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:updat/updat.dart';
 
 import 'widgets/connection_button.dart';
 
@@ -101,11 +101,11 @@ class _ConnectionPageState extends State<ConnectionPage> {
                           await client.connect();
                           if (client.isConnected) {
                             /// ToDO set on page render
-                            // appWindow.hide();
-                            // const newSize = Size(1400, 800);
-                            // appWindow.minSize = newSize;
-                            // appWindow.size = newSize;
-                            // appWindow.show();
+                            appWindow.hide();
+                            const newSize = Size(1400, 800);
+                            appWindow.minSize = newSize;
+                            appWindow.size = newSize;
+                            appWindow.show();
                             if (context.mounted) {
                               context.goNamed(RouteNames.dashboard);
                             }
