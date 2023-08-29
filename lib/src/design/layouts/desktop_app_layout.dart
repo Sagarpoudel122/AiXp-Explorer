@@ -1,5 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/window_buttons.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class DesktopAppLayout extends StatelessWidget {
@@ -18,7 +20,20 @@ class DesktopAppLayout extends StatelessWidget {
         WindowTitleBarBox(
           child: Row(
             children: <Widget>[
-              Expanded(child: MoveWindow()),
+              Expanded(
+                child: MoveWindow(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
+                      child: Text(
+                        'E2 Explorer 0.1.1',
+                        style: TextStyles.small(color: ColorStyles.light200),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
               const WindowButtons(),
             ],
           ),

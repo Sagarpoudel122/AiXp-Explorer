@@ -27,11 +27,12 @@ class LeftNavigationMenu extends StatefulWidget {
 class _LeftNavigationMenuState extends State<LeftNavigationMenu> {
   int _currentIndex = 0;
   final OverlayController _settingsOverlayController = OverlayController('Settings Menu');
+  bool isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 50,
+      width: isExpanded ? 100 : 50,
       height: double.infinity,
       color: ColorStyles.dark750,
       child: Padding(
@@ -104,18 +105,19 @@ class _LeftNavigationMenuState extends State<LeftNavigationMenu> {
                   ),
                 ),
               ),
-              // child: SimpleTooltip(
-              //   message: 'Open Settings menu',
-              //   child: InkWell(
-              //     /// ToDO add settings menu with overlay? -> Disconnect could be here.
-              //     onTap: () {},
-              //     child: const Icon(
-              //       CarbonIcons.settings,
-              //       size: 30,
-              //       color: ColorStyles.grey,
-              //     ),
-              //   ),
-              // ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: IconButtonWithTooltip(
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                icon: isExpanded ? CarbonIcons.chevron_left : CarbonIcons.chevron_right,
+                foregroundColor: ColorStyles.grey,
+                tooltipMessage: '',
+              ),
             ),
           ],
         ),

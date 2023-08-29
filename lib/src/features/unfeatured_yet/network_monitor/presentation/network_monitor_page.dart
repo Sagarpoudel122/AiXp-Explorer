@@ -4,6 +4,7 @@ import 'package:e2_explorer/dart_e2/models/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table_row.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/widgets/preferred_supervisor.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,8 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
   final period = const Duration(seconds: 5);
   Map<String, NetmonBoxDetails> netmonStatus = {};
   bool refreshReady = true;
+  String? preferredSupervisor;
+  String? currentSupervisor;
   late final Timer timer;
 
   @override
@@ -45,8 +48,9 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
           currentNetwork.forEach((key, value) {
             currentNetworkMap[key] = NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
           });
-          if (currentNetworkMap.isNotEmpty) {
+          if (currentNetworkMap.length > 1) {
             setState(() {
+              currentSupervisor = dataMap['EE_PAYLOAD_PATH'][0];
               refreshReady = false;
               netmonStatus = currentNetworkMap;
             });
@@ -59,6 +63,11 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
         /// ToDO: Refactor when only supervisor nodes are sending netmon
         final dataMap = data as Map<String, dynamic>;
         if (dataMap['EE_FORMATTER'] != "cavi2") {
+          return false;
+        }
+
+        /// Added a change to accept only preferredSupervisor
+        if (preferredSupervisor != null && dataMap['EE_PAYLOAD_PATH'][0] != preferredSupervisor) {
           return false;
         }
         final dataField = dataMap['data'] as Map<String, dynamic>;
@@ -79,7 +88,31 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
                 ),
               ),
               SizedBox(
-                height: 18,
+                height: 6,
+              ),
+              SizedBox(
+                height: 60,
+                child: PreferredSupervisor(
+                  onSupervisorChanged: (String? id) {
+                    setState(() {
+                      preferredSupervisor = id;
+                    });
+                  },
+                  supervisorId: preferredSupervisor,
+                ),
+              ),
+              SizedBox(
+                height: 6,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  currentSupervisor != null ? 'Current supervisor: $currentSupervisor' : 'No supervisor',
+                  style: TextStyles.body(),
+                ),
+              ),
+              SizedBox(
+                height: 12,
               ),
               SingleChildScrollView(
                 child: Table(

@@ -32,38 +32,70 @@ class NavigationButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool expandedMode = false;
     return AspectRatio(
       aspectRatio: 1,
-      child: ClickableContainer(
-        onTap: onTap,
-        shapeCorners: ShapeUtilsCorners.all,
-        borderRadius: 8,
-        style: ClickableStyleHelper(
-          defaultColor: isSelected ? ColorStyles.selectedButtonBlue : ColorStyles.spaceGrey,
-          hoverColor: isSelected ? ColorStyles.selectedHoverButtonBlue : ColorStyles.dark630,
-        ),
-        childBuilder: (isHovered) {
-          if (icon == null) {
-            return Center(
-              child: Text(
-                title,
-                style: TextStyles.small14(),
-                textAlign: TextAlign.center,
-              ),
-            );
-          } else {
-            return Center(
-              child: SimpleTooltip(
-                message: title,
-                child: Icon(
-                  icon,
-                  color: isHovered ? ColorStyles.light100 : ColorStyles.light200,
+      child: LayoutBuilder(builder: (context, constraints) {
+        if (constraints.maxWidth > 50) {
+          expandedMode = true;
+        }
+        return ClickableContainer(
+          onTap: onTap,
+          shapeCorners: ShapeUtilsCorners.all,
+          borderRadius: 8,
+          style: ClickableStyleHelper(
+            defaultColor: isSelected ? ColorStyles.selectedButtonBlue : ColorStyles.spaceGrey,
+            hoverColor: isSelected ? ColorStyles.selectedHoverButtonBlue : ColorStyles.dark630,
+          ),
+          childBuilder: (isHovered) {
+            /// ToDO: Treat this case separately
+            if (icon == null) {
+              return Center(
+                child: Text(
+                  title,
+                  style: TextStyles.small14(),
+                  textAlign: TextAlign.center,
                 ),
-              ),
-            );
-          }
-        },
-      ),
+              );
+            } else {
+              if (expandedMode) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        icon,
+                        color: isHovered ? ColorStyles.light100 : ColorStyles.light200,
+                      ),
+                      SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        title,
+                        style: TextStyles.small14(
+                          color: isHovered ? ColorStyles.light100 : ColorStyles.light200,
+                        ),
+                        // overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                return Center(
+                  child: SimpleTooltip(
+                    message: title,
+                    child: Icon(
+                      icon,
+                      color: isHovered ? ColorStyles.light100 : ColorStyles.light200,
+                    ),
+                  ),
+                );
+              }
+            }
+          },
+        );
+      }),
     );
   }
 }

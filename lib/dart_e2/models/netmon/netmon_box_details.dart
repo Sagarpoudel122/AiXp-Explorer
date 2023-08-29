@@ -20,9 +20,9 @@ class NetmonBoxDetails {
   final double lastSeenSec;
   final double availDisk;
   final double availMem;
-  final double cpuPast1h;
-  final double gpuLoadPast1h;
-  final double gpuMemPast1h;
+  final double? cpuPast1h;
+  final double? gpuLoadPast1h;
+  final double? gpuMemPast1h;
   final double score;
 
   NetmonBoxDetails({
@@ -100,9 +100,9 @@ class NetmonBoxDetails {
       lastSeenSec: (map['last_seen_sec'] as num).toDouble(),
       availDisk: (map['avail_disk'] as num).toDouble(),
       availMem: (map['avail_mem'] as num).toDouble(),
-      cpuPast1h: (map['cpu_past1h'] as num).toDouble(),
-      gpuLoadPast1h: (map['gpu_load_past1h'] as num).toDouble(),
-      gpuMemPast1h: (map['gpu_mem_past1h'] as num).toDouble(),
+      cpuPast1h: (map['cpu_past1h'] as num?)?.toDouble(),
+      gpuLoadPast1h: (map['gpu_load_past1h'] as num?)?.toDouble(),
+      gpuMemPast1h: (map['gpu_mem_past1h'] as num?)?.toDouble(),
       score: (map['SCORE'] as num).toDouble(),
     );
   }
