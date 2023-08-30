@@ -60,13 +60,18 @@ class _NetmonTableState extends State<NetmonTable> {
   void initState() {
     super.initState();
     tableData = widget.boxStatusList;
+
+    /// Update the sorted table data by applying necessary sort on the tableData
     sortedTableData = List<NetmonBox>.from(tableData);
+    if (sortColumnIndex != null) {
+      sortOnDependencyChange(sortColumnIndex!);
+    }
   }
 
   late List<NetmonBox> tableData;
   late List<NetmonBox> sortedTableData;
   bool sortAscending = true;
-  int? sortColumnIndex;
+  int? sortColumnIndex = 2;
 
   void sortOnDependencyChange(int columnIndex) {
     sortedTableData.sort(_netmonTableColumnsData[columnIndex].sortingFunction);

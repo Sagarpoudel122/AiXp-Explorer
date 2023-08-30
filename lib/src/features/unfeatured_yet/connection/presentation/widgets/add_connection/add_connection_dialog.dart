@@ -148,9 +148,9 @@ class _AddConnectionDialogState extends State<AddConnectionDialog> {
                                       inputFieldLabel: 'Username',
                                       hintText: '',
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Username can not be empty!';
-                                        }
+                                        // if (value == null || value.isEmpty) {
+                                        //   return 'Username can not be empty!';
+                                        // }
                                         return null;
                                       },
                                       textFieldController: _usernameController,
@@ -163,9 +163,9 @@ class _AddConnectionDialogState extends State<AddConnectionDialog> {
                                       inputFieldLabel: 'Password',
                                       hintText: '',
                                       validator: (value) {
-                                        if (value == null || value.isEmpty) {
-                                          return 'Password can not be empty!';
-                                        }
+                                        // if (value == null || value.isEmpty) {
+                                        //   return 'Password can not be empty!';
+                                        // }
                                         return null;
                                       },
                                       textFieldController: _passwordController,

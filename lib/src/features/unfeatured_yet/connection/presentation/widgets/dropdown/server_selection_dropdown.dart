@@ -136,11 +136,11 @@ class _ServerSelectionDropdownState extends State<ServerSelectionDropdown> {
                     if (result != null) {
                       final newServer = result as MqttServer;
                       await MqttServerRepository().saveSelectedServerName(newServer.name);
-                      overlay.closeWithResult(Nullable<MqttServer>.value(newServer));
                       setState(() async {
                         servers = await MqttServerRepository().getMqttServers();
                         selectedIndex = servers.indexWhere((element) => element.name == newServer.name);
                       });
+                      overlay.closeWithResult(Nullable<MqttServer>.value(newServer));
                       // overlayController.rebuild();
                     }
 

@@ -21,11 +21,11 @@ class MqttServer {
   final int port;
 
   /// Mqtt username
-  final String username;
+  final String? username;
 
   /// Mqtt password
   /// ToDO: The password should be stored differently? Encrypted?
-  final String password;
+  final String? password;
 
   /// Default object for server. This should not be used like this in the future
   static final MqttServer defaultServer = MqttServer(
