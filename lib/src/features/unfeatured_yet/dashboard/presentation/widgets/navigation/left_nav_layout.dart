@@ -31,8 +31,8 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
           },
           navigationItems: [
             NavigationItem(
-              title: 'Mqtt Status',
-              icon: CarbonIcons.ai_status,
+              title: 'Network status',
+              icon: CarbonIcons.network_1,
               pageWidget: Container(),
             ),
             NavigationItem(
@@ -45,11 +45,7 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
               icon: CarbonIcons.query_queue,
               pageWidget: Container(),
             ),
-            NavigationItem(
-              title: 'Network monitor',
-              icon: CarbonIcons.network_1,
-              pageWidget: Container(),
-            ),
+
             // NavigationItem(
             //   title: 'Stress test',
             //   icon: CarbonIcons.stress_breath_editor,

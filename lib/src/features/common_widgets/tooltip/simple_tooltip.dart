@@ -10,7 +10,7 @@ class SimpleTooltip extends StatelessWidget {
   });
 
   /// The message displayed in the tooltip
-  final String message;
+  final String? message;
 
   /// The child that we want to apply the tooltip to. If we hover over the child, the tooltip will appear.
   final Widget child;

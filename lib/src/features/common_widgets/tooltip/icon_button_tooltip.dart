@@ -13,7 +13,7 @@ class IconButtonWithTooltip extends StatefulWidget {
     this.iconSize,
   });
 
-  final void Function() onTap;
+  final void Function()? onTap;
   final IconData icon;
   final String tooltipMessage;
   final Color foregroundColor;
