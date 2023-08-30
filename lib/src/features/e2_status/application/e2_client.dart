@@ -63,6 +63,8 @@ class E2Client {
 
   Map<String, MessageFilter> boxFilters = {};
 
+  bool boxHasMessages(String boxName) => boxMessages.containsKey(boxName);
+
   BoxMessages? selectBoxByName(String boxName) => boxMessages[boxName];
 
   MessageFilter? selectBoxFiltersByName(String boxName) => boxFilters[boxName];

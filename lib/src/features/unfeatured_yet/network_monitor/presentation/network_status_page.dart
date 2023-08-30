@@ -11,14 +11,19 @@ import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presenta
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
-class NetworkMonitorPage extends StatefulWidget {
-  const NetworkMonitorPage({super.key});
+class NetworkStatusPage extends StatefulWidget {
+  const NetworkStatusPage({
+    super.key,
+    required this.onBoxSelected,
+  });
+
+  final void Function(String boxName) onBoxSelected;
 
   @override
-  State<NetworkMonitorPage> createState() => _NetworkMonitorPageState();
+  State<NetworkStatusPage> createState() => _NetworkStatusPageState();
 }
 
-class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
+class _NetworkStatusPageState extends State<NetworkStatusPage> {
   final period = const Duration(seconds: 5);
   Map<String, NetmonBoxDetails> netmonStatus = {};
   List<NetmonBox> netmonStatusList = [];
@@ -165,6 +170,7 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
               Expanded(
                 child: NetmonTable(
                   boxStatusList: netmonStatusList,
+                  onBoxSelected: widget.onBoxSelected,
                 ),
               )
             ],

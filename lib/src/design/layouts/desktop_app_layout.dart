@@ -27,7 +27,7 @@ class DesktopAppLayout extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: Text(
-                        'E2 Explorer 0.1.1',
+                        'E2 Explorer 0.1.2',
                         style: TextStyles.small(color: ColorStyles.light200),
                       ),
                     ),

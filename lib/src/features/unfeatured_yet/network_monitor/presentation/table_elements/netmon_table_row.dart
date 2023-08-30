@@ -199,7 +199,7 @@ TableRow createNetmonHeader() {
   );
 }
 
-DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details) {
+DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details, {void Function(String)? onBoxClicked}) {
   return DataRow(
     cells: [
       DataCell(
@@ -207,6 +207,9 @@ DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details) {
           boxName,
           style: TextStyles.small14(),
         ),
+        onTap: () {
+          onBoxClicked?.call(boxName);
+        },
       ),
       DataCell(
         Text(
@@ -256,19 +259,19 @@ DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details) {
       // ),
       DataCell(
         Text(
-          '${details.cpuPast1h != -1 ? '${details.cpuPast1h.toStringAsFixed(1)} %' : 'Not enough data'}',
+          '${details.cpuPast1h != -1 ? '${details.cpuPast1h.toStringAsFixed(1)}%' : 'Not enough data'}',
           style: TextStyles.small14(),
         ),
       ),
       DataCell(
         Text(
-          '${details.gpuLoadPast1h != -1 ? '${details.gpuLoadPast1h.toStringAsFixed(1)} %' : 'Not enough data'}',
+          '${details.gpuLoadPast1h != -1 ? '${details.gpuLoadPast1h.toStringAsFixed(1)}%' : 'Not enough data'}',
           style: TextStyles.small14(),
         ),
       ),
       DataCell(
         Text(
-          '${details.gpuMemPast1h != -1 ? '${details.gpuMemPast1h.toStringAsFixed(1)} %' : 'Not enough data'}',
+          '${details.gpuMemPast1h != -1 ? '${details.gpuMemPast1h.toStringAsFixed(1)}%' : 'Not enough data'}',
           style: TextStyles.small14(),
         ),
       ),

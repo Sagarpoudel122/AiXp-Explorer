@@ -35,11 +35,11 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
               icon: CarbonIcons.network_1,
               pageWidget: Container(),
             ),
-            NavigationItem(
-              title: 'Box viewer',
-              icon: CarbonIcons.iot_connect,
-              pageWidget: Container(),
-            ),
+            // NavigationItem(
+            //   title: 'Box viewer',
+            //   icon: CarbonIcons.iot_connect,
+            //   pageWidget: Container(),
+            // ),
             NavigationItem(
               title: 'Message viewer',
               icon: CarbonIcons.query_queue,

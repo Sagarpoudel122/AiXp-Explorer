@@ -9,9 +9,11 @@ class NetmonTable extends StatefulWidget {
   const NetmonTable({
     super.key,
     required this.boxStatusList,
+    this.onBoxSelected,
   });
 
   final List<NetmonBox> boxStatusList;
+  final void Function(String)? onBoxSelected;
 
   @override
   State<NetmonTable> createState() => _NetmonTableState();
@@ -123,7 +125,9 @@ class _NetmonTableState extends State<NetmonTable> {
                     ))
                 .toList(),
             // rows: [],
-            rows: sortedTableData.map((data) => createNetmonTableDataRow(data.boxId, data.details)).toList(),
+            rows: sortedTableData
+                .map((data) => createNetmonTableDataRow(data.boxId, data.details, onBoxClicked: widget.onBoxSelected))
+                .toList(),
           ),
         ),
       );
