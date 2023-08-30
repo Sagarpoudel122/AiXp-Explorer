@@ -26,11 +26,13 @@ dependencies:
   json_data_explorer: ^0.1.0
   provider: ^6.0.5
   meta: ^1.9.1
-  go_router: ^8.2.0
+  go_router: any
   path_provider: ^2.0.15
   file_picker: any
   shared_preferences: ^2.1.2
   updat: ^1.3.1
+  data_table_2: ^2.5.7
+
 
 
 dev_dependencies:

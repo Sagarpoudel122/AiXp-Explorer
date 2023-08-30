@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:e2_explorer/dart_e2/models/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table_row.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/widgets/preferred_supervisor.dart';
-import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -19,8 +17,10 @@ class NetworkMonitorPage extends StatefulWidget {
 class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
   final period = const Duration(seconds: 5);
   Map<String, NetmonBoxDetails> netmonStatus = {};
+  List<NetmonBox> netmonStatusList = [];
+  List<String> supervisorIds = [];
   bool refreshReady = true;
-  String? preferredSupervisor;
+  // String? preferredSupervisor;
   String? currentSupervisor;
   late final Timer timer;
 
@@ -53,6 +53,12 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
               currentSupervisor = dataMap['EE_PAYLOAD_PATH'][0];
               refreshReady = false;
               netmonStatus = currentNetworkMap;
+              netmonStatusList =
+                  netmonStatus.entries.map((entry) => NetmonBox(boxId: entry.key, details: entry.value)).toList();
+              supervisorIds = netmonStatusList
+                  .where((element) => element.details.isSupervisor && element.details.working == 'ONLINE')
+                  .map((e) => e.boxId)
+                  .toList();
             });
           }
         } else {}
@@ -67,7 +73,7 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
         }
 
         /// Added a change to accept only preferredSupervisor
-        if (preferredSupervisor != null && dataMap['EE_PAYLOAD_PATH'][0] != preferredSupervisor) {
+        if (currentSupervisor != null && dataMap['EE_PAYLOAD_PATH'][0] != currentSupervisor) {
           return false;
         }
         final dataField = dataMap['data'] as Map<String, dynamic>;
@@ -79,6 +85,7 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Align(
                 alignment: Alignment.centerLeft,
@@ -92,14 +99,14 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
               ),
               SizedBox(
                 height: 60,
-                child: PreferredSupervisor(
-                  onSupervisorChanged: (String? id) {
-                    setState(() {
-                      preferredSupervisor = id;
-                    });
-                  },
-                  supervisorId: preferredSupervisor,
-                ),
+                // child: PreferredSupervisor(
+                //   onSupervisorChanged: (String? id) {
+                //     setState(() {
+                //       preferredSupervisor = id;
+                //     });
+                //   },
+                //   supervisorId: preferredSupervisor,
+                // ),
               ),
               SizedBox(
                 height: 6,
@@ -114,27 +121,11 @@ class _NetworkMonitorPageState extends State<NetworkMonitorPage> {
               SizedBox(
                 height: 12,
               ),
-              SingleChildScrollView(
-                child: Table(
-                  border: TableBorder.all(color: ColorStyles.grey),
-                  columnWidths: const <int, TableColumnWidth>{
-                    0: FlexColumnWidth(),
-                    1: FlexColumnWidth(),
-                    2: FlexColumnWidth(),
-                    3: FlexColumnWidth(),
-                    4: FlexColumnWidth(),
-                    5: FlexColumnWidth(),
-                    6: FlexColumnWidth(),
-                    7: FlexColumnWidth(),
-                    8: FlexColumnWidth(),
-                    9: FlexColumnWidth(),
-                  },
-                  children: [
-                    createNetmonHeader(),
-                    ...netmonStatus.entries.map((entry) => createNetmonTableRow(entry.key, entry.value)).toList(),
-                  ],
+              Expanded(
+                child: NetmonTable(
+                  boxStatusList: netmonStatusList,
                 ),
-              ),
+              )
             ],
           ),
         );

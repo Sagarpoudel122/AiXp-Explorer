@@ -27,7 +27,7 @@ class LeftNavigationMenu extends StatefulWidget {
 class _LeftNavigationMenuState extends State<LeftNavigationMenu> {
   int _currentIndex = 0;
   final OverlayController _settingsOverlayController = OverlayController('Settings Menu');
-  bool isExpanded = false;
+  bool isExpanded = true;
 
   @override
   Widget build(BuildContext context) {

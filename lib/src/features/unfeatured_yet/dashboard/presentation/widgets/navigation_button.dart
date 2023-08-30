@@ -36,7 +36,7 @@ class NavigationButton extends StatelessWidget {
     return AspectRatio(
       aspectRatio: 1,
       child: LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth > 50) {
+        if (constraints.maxWidth > 60) {
           expandedMode = true;
         }
         return ClickableContainer(
