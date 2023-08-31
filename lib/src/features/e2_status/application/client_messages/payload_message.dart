@@ -55,12 +55,14 @@ class PayloadMessage {
   factory PayloadMessage.fromMap(Map<String, dynamic> payloadMap) {
     final eePayloadPath = (payloadMap['EE_PAYLOAD_PATH'] as List).map((e) => e as String).toList();
 
-    final boxName = payloadMap['sender']['hostId'];
-    final pipelineName = payloadMap['data']['identifiers']['streamId'];
-    final pluginSignature = payloadMap['type'].toString().toUpperCase();
+    final boxName = eePayloadPath[0];
+    final pipelineName = eePayloadPath[1];
+    final pluginSignature = eePayloadPath[2].toUpperCase();
     final pluginInstanceName = eePayloadPath[3];
 
+    // final timestamp = payloadMap['data'] != null ? payloadMap['data']['time'] : '2023-08-31 14:06:04.980345';
     final timestamp = payloadMap['data']['time'];
+    // final timezone = payloadMap['data'] != null ?  payloadMap['data']['specificValue']['ee_timezone'] : 'UTC+3';
     final timezone = payloadMap['data']['specificValue']['ee_timezone'];
 
     final content = payloadMap;

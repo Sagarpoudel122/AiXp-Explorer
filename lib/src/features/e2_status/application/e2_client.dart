@@ -179,17 +179,25 @@ class E2Client {
   }
 
   void _onPayload(Map<String, dynamic> message) {
-    final boxName = getBoxName(message);
+    // final boxName = getBoxName(message);
+    String boxName = '';
+    try {
+      boxName = message['EE_PAYLOAD_PATH'][0];
+    } catch (_) {
+      print('Error while accessing EE_PAYLOAD_PATH: $message');
+      return;
+    }
+
     final currentBox = boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
     // print(currentBox);
     try {
-      currentBox.addPayloadToPipeline(message['data']['identifiers']['streamId'], message);
+      currentBox.addPayloadToPipeline(message['EE_PAYLOAD_PATH'][1], message);
       notifiers.payloads.emit(message);
       notifiers.all.emit(message);
     } catch (_, stackTrace) {
       if (kDebugMode) {
         print(
-          'Problem with payload message. Can not access data.identifiers.streamId.\nMessage: ${message['messageId']}\n Error:$_',
+          'Problem with payload message. Can not access message.EE_PAYLOAD_PATH[1]\nMessage: ${message['messageId']}\n Error:$_',
         );
         // print(stackTrace);
       }

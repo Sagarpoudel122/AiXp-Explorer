@@ -19,9 +19,10 @@ class E2VideoStream extends E2Pipeline {
   final int capResolution;
   final bool? defaultPlugin;
   final bool? liveFeed;
-  final dynamic reconnectable;
 
   /// Can be the following values: null, 'YES', true
+  final dynamic reconnectable;
+
   final dynamic url;
 
   factory E2VideoStream.fromMap(Map<String, dynamic> map) {

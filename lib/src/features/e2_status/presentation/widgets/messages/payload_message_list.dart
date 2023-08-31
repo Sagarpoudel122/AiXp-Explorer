@@ -109,7 +109,7 @@ class _PayloadMessageListState extends State<PayloadMessageList> {
                       children: [
                         Expanded(
                           child: Text(
-                            '${message['sender']['hostId']} -> ${message['type']}',
+                            '${message['EE_PAYLOAD_PATH'][0]} -> ${message['type']}',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Colors.white38,
