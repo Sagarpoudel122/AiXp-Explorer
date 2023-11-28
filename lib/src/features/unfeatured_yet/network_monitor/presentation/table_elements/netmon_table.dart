@@ -1,5 +1,5 @@
 import 'package:data_table_2/data_table_2.dart';
-import 'package:e2_explorer/dart_e2/models/netmon/netmon_box_details.dart';
+import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table_row.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';

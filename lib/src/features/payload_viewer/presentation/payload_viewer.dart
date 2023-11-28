@@ -1,3 +1,5 @@
+import 'package:e2_explorer/dart_e2/formatter/mqtt_message_transformer.dart';
+import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/simple_tooltip.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/payload_message.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -44,13 +46,13 @@ class _PayloadViewerState extends State<PayloadViewer> {
 
   bool Function(PayloadMessage) filterMessagesByPipeline(String pipelineName) {
     return (PayloadMessage message) {
-      return pipelineName == message.pipelineName;
+      return pipelineName == message.payload.pipelineName;
     };
   }
 
   bool Function(PayloadMessage) filterMessagesByPipelines(List<String> pipelines) {
     return (PayloadMessage message) {
-      return pipelines.contains(message.pipelineName);
+      return pipelines.contains(message.payload.pipelineName);
     };
   }
 
@@ -156,8 +158,17 @@ class _PayloadViewerState extends State<PayloadViewer> {
                     // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
 
                     /// ToDo:  find  a way to optimize and insert the element in the sorted list
-                    final payloadMessage = PayloadMessage.fromMap(message);
+                    final Map<String, dynamic> convertedMessage = MqttMessageTransformer.formatToRaw(message);
+                    final E2Payload payloadObject = E2Payload.fromMap(
+                      convertedMessage,
+                      originalMap: message,
+                    );
+                    final payloadMessage = PayloadMessage.fromE2Payload(payloadObject);
+
                     messages.add(payloadMessage);
+                    // /// ToDo:  find  a way to optimize and insert the element in the sorted list
+                    // final payloadMessage = PayloadMessage.fromMap(message);
+                    // messages.add(payloadMessage);
                     if (autoScroll) {
                       if (filters.isNotEmpty) {
                         if (filterSingleMessageByFilters(payloadMessage, filters)) {
@@ -236,7 +247,7 @@ class _PayloadViewerState extends State<PayloadViewer> {
                                           messages: filters.isEmpty
                                               ? messages
                                               : messages.where(filterMessagesByMessageFilters(filters)).toList(),
-                                          selectedMessageId: _selectedMessage?.content['messageID'],
+                                          selectedMessageId: _selectedMessage?.payload.hash,
                                           scrollController: _scrollController,
                                           onTap: (int index, PayloadMessage message) {
                                             setState(() {

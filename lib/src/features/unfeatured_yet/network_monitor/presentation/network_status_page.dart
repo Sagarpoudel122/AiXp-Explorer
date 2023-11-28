@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:carbon_icons/carbon_icons.dart';
-import 'package:e2_explorer/dart_e2/models/netmon/netmon_box_details.dart';
+import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/icon_button_tooltip.dart';
@@ -79,18 +79,18 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         // return true;
         /// ToDO: Refactor when only supervisor nodes are sending netmon
         final dataMap = data as Map<String, dynamic>;
-        if (dataMap['EE_FORMATTER'] != "cavi2") {
-          return false;
-        }
+        // if (dataMap['EE_FORMATTER'] != "cavi2") {
+        //   return false;
+        // }
 
         /// Added a change to accept only preferredSupervisor
         if (currentSupervisor != null && dataMap['EE_PAYLOAD_PATH'][0] != currentSupervisor) {
           return false;
         }
-        final dataField = dataMap['data'] as Map<String, dynamic>;
-        final specificValueField = dataField['specificValue'] as Map<String, dynamic>;
-        final isSupervisor = specificValueField['is_supervisor'] as bool?;
-        return isSupervisor == true;
+        // final dataField = dataMap['data'] as Map<String, dynamic>;
+        // final specificValueField = dataField['specificValue'] as Map<String, dynamic>;
+        // final isSupervisor = specificValueField['is_supervisor'] as bool?;
+        return true;
       },
       builder: (BuildContext context) {
         return Padding(

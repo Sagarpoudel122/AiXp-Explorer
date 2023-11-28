@@ -29,15 +29,16 @@ class PayloadMessageView extends StatefulWidget {
 class _PayloadMessageViewState extends State<PayloadMessageView> {
   late bool hasImages = false;
   List<String> base64Images = [];
-  Map<String, dynamic>? selectedMessage;
+  PayloadMessage? selectedMessage;
   final DataExplorerStore store = DataExplorerStore();
   final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    final imgField = widget.selectedMessage?.content['data']?['img']['id'];
-    selectedMessage = widget.selectedMessage?.content;
+    // final imgField = widget.selectedMessage?.content['data']?['img']['id'];
+    final imgField = null;
+    selectedMessage = widget.selectedMessage;
     store.buildNodes(json.decode(jsonEncode(selectedMessage)));
     if (imgField != null) {
       if (imgField is List) {
@@ -58,12 +59,13 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
   @override
   void didUpdateWidget(PayloadMessageView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedMessage?.content['messageID'] != oldWidget.selectedMessage?.content['messageID']) {
+    if (widget.selectedMessage?.payload.hash != oldWidget.selectedMessage?.payload.hash) {
       print('Message view different');
-      selectedMessage = widget.selectedMessage?.content;
-      store.buildNodes(json.decode(jsonEncode(selectedMessage)));
+      selectedMessage = widget.selectedMessage;
+      store.buildNodes(json.decode(jsonEncode(selectedMessage?.payload.messageBody)));
 
-      final imgField = widget.selectedMessage?.content['data']?['img']['id'];
+      // final imgField = widget.selectedMessage?.content['data']?['img']['id'];
+      final imgField = null;
 
       if (imgField != null) {
         if (imgField is List) {
@@ -227,7 +229,7 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                               String selectedDirectory =
                                                   await FilePicker.platform.getDirectoryPath() ?? '';
                                               if (selectedDirectory.isNotEmpty) {
-                                                final messageId = selectedMessage?['messageID'] ?? 'savedJson';
+                                                final messageId = selectedMessage?.payload.hash ?? 'savedJson';
                                                 final File file = File('$selectedDirectory/$messageId.json');
                                                 await file.writeAsString(
                                                   const JsonEncoder.withIndent('    ').convert(selectedMessage),

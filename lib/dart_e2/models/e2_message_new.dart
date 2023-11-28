@@ -56,13 +56,17 @@ class E2Message {
     };
   }
 
-  factory E2Message.fromMap(Map<String, dynamic> map) {
+  factory E2Message.fromMap(
+    Map<String, dynamic> map, {
+    Map<String, dynamic>? originalMap,
+  }) {
     return E2Message(
       payloadPath: (map['EE_PAYLOAD_PATH'] as List).map((e) => e as String).toList(),
-      formatter: map['EE_FORMATTER'] as String,
+      formatter: map['EE_FORMATTER'] as String?,
       sign: map['EE_SIGN'] as String,
       sender: map['EE_SENDER'] as String,
       hash: map['EE_HASH'] as String,
+      messageBody: originalMap,
     );
   }
 }

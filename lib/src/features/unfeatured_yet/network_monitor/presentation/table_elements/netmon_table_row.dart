@@ -1,4 +1,4 @@
-import 'package:e2_explorer/dart_e2/models/netmon/netmon_box_details.dart';
+import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';

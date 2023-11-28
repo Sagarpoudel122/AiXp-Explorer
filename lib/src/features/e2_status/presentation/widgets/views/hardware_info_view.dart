@@ -1,11 +1,10 @@
-import 'package:e2_explorer/dart_e2/models/e2_message.dart';
+import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener_filters.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/charts/usage_chart.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/common/info_card.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class HardwareInfoView extends StatefulWidget {
   const HardwareInfoView({
@@ -22,12 +21,12 @@ class HardwareInfoView extends StatefulWidget {
 class _HardwareInfoViewState extends State<HardwareInfoView> {
   final E2Client _client = E2Client();
 
-  List<E2Message> heartbeatHistory = [];
+  List<E2Heartbeat> heartbeatHistory = [];
 
   @override
   void initState() {
     super.initState();
-    heartbeatHistory = _client.boxMessages[widget.boxName]?.heartbeatDecodedMessages ?? [];
+    heartbeatHistory = _client.boxMessages[widget.boxName]?.heartbeatMessages ?? [];
   }
 
   @override
@@ -41,7 +40,7 @@ class _HardwareInfoViewState extends State<HardwareInfoView> {
       onHeartbeat: (data) {
         // print('Hb received on hw info view');
         setState(() {
-          heartbeatHistory = _client.boxMessages[widget.boxName]?.heartbeatDecodedMessages ?? [];
+          heartbeatHistory = _client.boxMessages[widget.boxName]?.heartbeatMessages ?? [];
         });
       },
       dataFilter: E2ListenerFilters.filterByBox(widget.boxName),
@@ -85,7 +84,7 @@ class _HardwareInfoViewState extends State<HardwareInfoView> {
                                   color: Colors.white,
                                 ),
                                 Text(
-                                  'Box name: ${lastHeartbeat.id}',
+                                  'Box name: ${lastHeartbeat.boxId}',
                                   style: const TextStyle(color: Colors.white),
                                 ),
                                 const Divider(
@@ -98,8 +97,9 @@ class _HardwareInfoViewState extends State<HardwareInfoView> {
                                 const Divider(
                                   color: Colors.white,
                                 ),
-                                Text(
-                                  'Machine time: ${DateFormat('hh:mm a').format(lastHeartbeat.currentTime!)}',
+                                const Text(
+                                  // 'Machine time: ${DateFormat('hh:mm a').format(lastHeartbeat.currentTime!)}',
+                                  'Feature removed at the moment from explorer',
                                   style: const TextStyle(color: Colors.white),
                                 ),
                               ],

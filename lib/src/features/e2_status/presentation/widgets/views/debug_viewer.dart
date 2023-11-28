@@ -3,7 +3,6 @@ import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/co
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/hardware_info_view.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/heartbeat_view.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/notification_view.dart';
-import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/payload_view.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/pipeline_detailed_view.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -42,9 +41,16 @@ class DebugViewer extends StatelessWidget {
           key: ValueKey(boxName),
           boxName: boxName!,
         ),
-        payloadView: PayloadView(
+        // payloadView: PayloadView(
+        //   key: ValueKey(boxName),
+        //   boxName: boxName!,
+        // ),
+        payloadView: Center(
           key: ValueKey(boxName),
-          boxName: boxName!,
+          child: Text(
+            'Functionality disabled',
+            style: TextStyles.body(),
+          ),
         ),
         notificationView: NotificationView(
           key: ValueKey(boxName),

@@ -1,6 +1,6 @@
 import 'package:e2_explorer/dart_e2/base/generic_session.dart';
 import 'package:e2_explorer/dart_e2/default/mqtt_session.dart';
-import 'package:e2_explorer/dart_e2/models/e2_message.dart';
+import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
 import 'package:e2_explorer/src/features/e2_status/application/filters/message_filter.dart';
 import 'package:e2_explorer/src/features/e2_status/application/filters/payload_filters/box_filter.dart';
 import 'package:e2_explorer/src/features/e2_status/application/filters/payload_filters/pipeline_filter.dart';
@@ -100,7 +100,7 @@ class E2Client {
     notifiers.connection.emit(false);
   }
 
-  void loadFilters(String boxName, E2Message heartbeatMessage) {
+  void loadFilters(String boxName, E2Heartbeat heartbeatMessage) {
     final List<PipelineFilter> pipelineFilters = [];
     for (final pipeline in heartbeatMessage.configPipelines.allPipelines) {
       final List<PluginTypeFilter> pluginTypeFilters = [];
@@ -164,7 +164,7 @@ class E2Client {
     final boxName = getBoxName(message);
     final currentBox = boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
     currentBox.addHeartbeat(message);
-    loadFilters(boxName, currentBox.heartbeatDecodedMessages.last);
+    loadFilters(boxName, currentBox.heartbeatMessages.last);
 
     notifiers.heartbeats.emit(message);
     notifiers.all.emit(message);

@@ -1,9 +1,10 @@
+import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener_filters.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/messages/heartbeat_message_viewer.dart';
-import 'package:e2_explorer/src/features/e2_status/presentation/widgets/messages/message_list.dart';
 import 'package:e2_explorer/src/features/e2_status/utils/box_messages.dart';
+import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class HeartbeatView extends StatefulWidget {
@@ -26,7 +27,7 @@ class _HeartbeatViewState extends State<HeartbeatView> {
 
   /// Used to represent v2 before decoding!
   Map<String, dynamic>? _selectedMessageRaw;
-  List<Map<String, dynamic>> messages = [];
+  List<E2Heartbeat> messages = [];
   List<Map<String, dynamic>> rawMessages = [];
   late HeartbeatVersion heartbeatVersion;
 
@@ -58,7 +59,6 @@ class _HeartbeatViewState extends State<HeartbeatView> {
         // print('Hb received on hw info view');
         setState(() {
           messages = _client.boxMessages[widget.boxName]?.heartbeatMessages ?? [];
-          rawMessages = _client.boxMessages[widget.boxName]?.rawHeartbeatMessages ?? [];
           heartbeatVersion = _client.boxMessages[widget.boxName]?.heartbeatVersion ?? HeartbeatVersion.unknown;
         });
         // print('Raw message');
@@ -81,17 +81,23 @@ class _HeartbeatViewState extends State<HeartbeatView> {
                       child: Column(
                         children: [
                           Flexible(
-                            child: MessageList(
-                                messages: messages,
-                                selectedMessageId: _selectedMessage?['messageID'],
-                                onTap: (int index, Map<String, dynamic> message) {
-                                  setState(() {
-                                    setSelectedMessage(
-                                      message: messages[index],
-                                      rawMessage: heartbeatVersion == HeartbeatVersion.v2 ? rawMessages[index] : null,
-                                    );
-                                  });
-                                }),
+                            child: Container(
+                              child: Text(
+                                'Functionality breaked during refactoring. Work in progress.',
+                                style: TextStyles.body(),
+                              ),
+                            ),
+                            // child: MessageList(
+                            //     messages: messages,
+                            //     selectedMessageId: _selectedMessage?['messageID'],
+                            //     onTap: (int index, Map<String, dynamic> message) {
+                            //       setState(() {
+                            //         setSelectedMessage(
+                            //           message: messages[index].messageBody ?? {},
+                            //           rawMessage: heartbeatVersion == HeartbeatVersion.v2 ? rawMessages[index] : null,
+                            //         );
+                            //       });
+                            //     }),
                           ),
                         ],
                       ),
