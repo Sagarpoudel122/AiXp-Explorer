@@ -1,4 +1,4 @@
-import 'package:e2_explorer/dart_e2/formatter/cavi2_transformer.dart';
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/simple_tooltip.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/payload_message.dart';
@@ -158,7 +158,7 @@ class _PayloadViewerState extends State<PayloadViewer> {
 
                     final payloadMessage = PayloadMessage.fromE2Payload(
                       E2Payload.fromMap(
-                        Cavi2Transformer.decodeCavi2(message),
+                        MqttMessageEncoderDecoder.raw(message),
                         originalMap: message,
                       ),
                     );

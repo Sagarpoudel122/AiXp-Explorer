@@ -1,4 +1,4 @@
-import 'package:e2_explorer/dart_e2/formatter/mqtt_message_transformer.dart';
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/payload_message.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -145,7 +145,7 @@ class _FullPayloadViewState extends State<FullPayloadView> {
 
                 /// ToDo:  find  a way to optimize and insert the element in the sorted list
                 final Map<String, dynamic> convertedMessage =
-                    MqttMessageTransformer.formatToRaw(message);
+                    MqttMessageEncoderDecoder.raw(message);
                 final E2Payload payloadObject = E2Payload.fromMap(
                   convertedMessage,
                   originalMap: message,

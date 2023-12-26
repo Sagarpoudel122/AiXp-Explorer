@@ -1,4 +1,4 @@
-import 'package:e2_explorer/dart_e2/formatter/mqtt_message_transformer.dart';
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/e2_message.dart';
 import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
@@ -55,7 +55,8 @@ class BoxMessages {
 
   void addPayloadToPipeline(String pipelineName, Map<String, dynamic> payload) {
     final Map<String, dynamic> convertedMessage =
-        MqttMessageTransformer.formatToRaw(payload);
+        MqttMessageEncoderDecoder.raw(payload);
+
     final E2Payload payloadObject = E2Payload.fromMap(
       convertedMessage,
       originalMap: payload,
@@ -81,7 +82,8 @@ class BoxMessages {
     // bool isV2 = false;
     // final Map<String, dynamic> heartbeat = Map<String, dynamic>.from(receivedHeartbeat);
     final Map<String, dynamic> convertedMessage =
-        MqttMessageTransformer.formatToRaw(receivedHeartbeat);
+        MqttMessageEncoderDecoder.raw(receivedHeartbeat);
+
     final E2Heartbeat heartbeatObject = E2Heartbeat.fromMap(
       convertedMessage,
       originalMap: receivedHeartbeat,

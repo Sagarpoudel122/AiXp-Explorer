@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:carbon_icons/carbon_icons.dart';
-import 'package:e2_explorer/dart_e2/formatter/mqtt_message_transformer.dart';
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_utils.dart';
@@ -55,7 +55,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
     return E2Listener(
       onPayload: (message) {
         final Map<String, dynamic> convertedMessage =
-            MqttMessageTransformer.formatToRaw(message);
+            MqttMessageEncoderDecoder.raw(message);
 
         if (convertedMessage['IS_SUPERVISOR'] == true &&
             convertedMessage['CURRENT_NETWORK'] != null) {
