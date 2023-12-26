@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:carbon_icons/carbon_icons.dart';
+import 'package:e2_explorer/dart_e2/formatter/mqtt_message_transformer.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_utils.dart';
@@ -29,7 +30,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   List<NetmonBox> netmonStatusList = [];
   List<String> supervisorIds = [];
   bool refreshReady = true;
-  final OverlayController _settingsOverlayController = OverlayController('Preferred supervisor');
+  final OverlayController _settingsOverlayController =
+      OverlayController('Preferred supervisor');
 
   // String? preferredSupervisor;
   String? currentSupervisor;
@@ -38,7 +40,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) => refreshReady = true);
+    timer = Timer.periodic(
+        const Duration(seconds: 5), (timer) => refreshReady = true);
   }
 
   @override
@@ -50,24 +53,34 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   @override
   Widget build(BuildContext context) {
     return E2Listener(
-      onPayload: (data) {
-        final dataMap = data as Map<String, dynamic>;
-        if (dataMap['data']['specificValue']['is_supervisor'] == true &&
-            dataMap['data']['specificValue']['current_network'] != null) {
-          final currentNetwork = dataMap['data']['specificValue']['current_network'] as Map<String, dynamic>;
+      onPayload: (message) {
+        final Map<String, dynamic> convertedMessage =
+            MqttMessageTransformer.formatToRaw(message);
+
+        if (convertedMessage['IS_SUPERVISOR'] == true &&
+            convertedMessage['CURRENT_NETWORK'] != null) {
+          final currentNetwork =
+              convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
+
           final currentNetworkMap = <String, NetmonBoxDetails>{};
           currentNetwork.forEach((key, value) {
-            currentNetworkMap[key] = NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
+            currentNetworkMap[key] =
+                NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
           });
           if (currentNetworkMap.length > 1) {
             setState(() {
-              currentSupervisor = dataMap['EE_PAYLOAD_PATH'][0];
+              currentSupervisor = convertedMessage['EE_PAYLOAD_PATH']?[0];
               refreshReady = false;
               netmonStatus = currentNetworkMap;
-              netmonStatusList =
-                  netmonStatus.entries.map((entry) => NetmonBox(boxId: entry.key, details: entry.value)).toList();
+              netmonStatusList = netmonStatus.entries
+                  .map((entry) =>
+                      NetmonBox(boxId: entry.key, details: entry.value))
+                  .toList();
+
               supervisorIds = netmonStatusList
-                  .where((element) => element.details.isSupervisor && element.details.working == 'ONLINE')
+                  .where((element) =>
+                      element.details.isSupervisor &&
+                      element.details.working == 'ONLINE')
                   .map((e) => e.boxId)
                   .toList();
             });
@@ -79,17 +92,18 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         // return true;
         /// ToDO: Refactor when only supervisor nodes are sending netmon
         final dataMap = data as Map<String, dynamic>;
-        // if (dataMap['EE_FORMATTER'] != "cavi2") {
+        // if (dataMap?['EE_FORMATTER'] != "cavi2") {
         //   return false;
         // }
 
         /// Added a change to accept only preferredSupervisor
-        if (currentSupervisor != null && dataMap['EE_PAYLOAD_PATH'][0] != currentSupervisor) {
+        if (currentSupervisor != null &&
+            dataMap['EE_PAYLOAD_PATH']?[0] != currentSupervisor) {
           return false;
         }
-        // final dataField = dataMap['data'] as Map<String, dynamic>;
-        // final specificValueField = dataField['specificValue'] as Map<String, dynamic>;
-        // final isSupervisor = specificValueField['is_supervisor'] as bool?;
+        // final dataField = dataMap?['data'] as Map<String, dynamic>;
+        // final specificValueField = dataField?['specificValue'] as Map<String, dynamic>;
+        // final isSupervisor = specificValueField?['is_supervisor'] as bool?;
         return true;
       },
       builder: (BuildContext context) {
@@ -105,7 +119,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                   style: TextStyles.h2(),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Align(
@@ -113,7 +127,9 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                 child: Row(
                   children: [
                     Text(
-                      currentSupervisor != null ? 'Current supervisor: $currentSupervisor' : 'No supervisor',
+                      currentSupervisor != null
+                          ? 'Current supervisor: $currentSupervisor'
+                          : 'No supervisor',
                       style: TextStyles.body(),
                     ),
                     const SizedBox(width: 8),
@@ -126,18 +142,23 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                             ? null
                             : () async {
                                 if (!_settingsOverlayController.canOpen) {
-                                  _settingsOverlayController.closeWithResult(null);
+                                  _settingsOverlayController
+                                      .closeWithResult(null);
                                   return;
                                 }
-                                const Alignment targetAnchor = Alignment.bottomRight;
-                                const Alignment followerAnchor = Alignment.bottomLeft;
+                                const Alignment targetAnchor =
+                                    Alignment.bottomRight;
+                                const Alignment followerAnchor =
+                                    Alignment.bottomLeft;
 
-                                final dynamic returnedValue = await _settingsOverlayController.showOverlay(
+                                final dynamic returnedValue =
+                                    await _settingsOverlayController
+                                        .showOverlay(
                                   context: context,
                                   isModal: false,
                                   targetAnchor: targetAnchor,
                                   followerAnchor: followerAnchor,
-                                  contentOffset: Offset(15, 175),
+                                  contentOffset: const Offset(15, 175),
                                   width: 250,
                                   maxHeight: 200,
 
@@ -146,7 +167,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                   shellBuilder: (context, content) => content,
                                   contentBuilder: (context, controller) {
                                     return PreferredSupervisorMenu(
-                                      overlayController: _settingsOverlayController,
+                                      overlayController:
+                                          _settingsOverlayController,
                                       supervisors: supervisorIds,
                                       selectedSupervisor: currentSupervisor!,
                                     );
@@ -164,7 +186,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 12,
               ),
               Expanded(
