@@ -1,5 +1,9 @@
 import 'format_decoder.dart';
 
+/// Cavi2 encoder and decoders.
+/// Port of https://github.com/AiXpand/PyE2/blob/main/PyE2/io_formatter/default/aixp1.py
+/// and https://github.com/AiXpand/tsclient/blob/main/src/decoders/cavi2.decoder.ts
+
 class Cavi2MessageEncoderDecoder implements MqttMessageEncoderDecoder {
   final mandatoryKeys = ['EE_SIGN', 'EE_SENDER', 'EE_HASH', 'EE_PAYLOAD_PATH'];
 
@@ -113,8 +117,64 @@ class Cavi2MessageEncoderDecoder implements MqttMessageEncoderDecoder {
     }
   }
 
+  /// decoded must be in raw format
   @override
   Map<String, dynamic> encoder(Map<String, dynamic> decoded) {
-    throw UnimplementedError();
+    var eventType = decoded.remove('EE_EVENT_TYPE');
+
+    // Below fields are not required as they will be decorated post-formatting anyway
+    decoded.remove('EE_MESSAGE_ID');
+    decoded.remove('EE_MESSAGE_SEQ');
+    decoded.remove('EE_TOTAL_MESSAGES');
+
+    decoded.remove('EE_TIMESTAMP');
+    decoded.remove('EE_ID');
+    decoded.remove('STREAM_NAME');
+    decoded.remove('SIGNATURE');
+    decoded.remove('INSTANCE_ID');
+
+    decoded.remove('EE_TIMEZONE');
+    decoded.remove('EE_VERSION');
+    decoded.remove('EE_TZ');
+
+    decoded.remove('INITIATOR_ID');
+    decoded.remove('SESSION_ID');
+    // End non-managed fields
+
+    var lvl0Dct = {
+      "DATA": {},
+    };
+
+    var lvl1Dct = lvl0Dct['DATA'];
+
+    if (eventType == 'PAYLOAD') {
+      // Add payload context
+      decoded.remove('STREAM');
+      decoded.remove('PIPELINE');
+
+      // Plugin meta
+      if (true) {
+        lvl1Dct?['PLUGIN_META'] = {};
+        var pluginMetaKeys =
+            decoded.keys.where((k) => k.startsWith('_P_')).toList();
+        for (var k in pluginMetaKeys) {
+          lvl1Dct?['PLUGIN_META'][k] = decoded.remove(k);
+        }
+      }
+
+      // Pipeline meta
+      if (true) {
+        lvl1Dct?['PIPELINE_META'] = {};
+        var pipelineMetaKeys =
+            decoded.keys.where((k) => k.startsWith('_C_')).toList();
+        for (var k in pipelineMetaKeys) {
+          lvl1Dct?['PIPELINE_META'][k] = decoded.remove(k);
+        }
+      }
+    }
+
+    lvl1Dct?.addAll(decoded);
+
+    return lvl0Dct;
   }
 }

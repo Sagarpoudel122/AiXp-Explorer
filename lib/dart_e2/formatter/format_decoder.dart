@@ -30,4 +30,31 @@ abstract class MqttMessageEncoderDecoder {
             'EE_FORMATTER is invalid for the message with path: ${message['EE_PAYLOAD_PATH']}');
     }
   }
+
+  /// if [encoder] is provided, it uses the provided encoder and ignores the format.
+  /// [message] is the raw message, if provided other than the raw format, will throw an exception
+  static Map<String, dynamic> formatted(
+    Map<String, dynamic> message, {
+    String? format,
+    MqttMessageEncoderDecoder? encoder,
+  }) {
+    if (encoder != null) {
+      return encoder.encoder(message);
+    }
+
+    if (message['EE_FORMATTER'] != null && message['EE_FORMATTER'] != 'raw') {
+      throw FormatException(
+          'EE_FORMATTER is invalid for the message with path: ${message['EE_PAYLOAD_PATH']}');
+    }
+
+    switch (format) {
+      case 'cavi2':
+        return Cavi2MessageEncoderDecoder().encoder(message);
+      case 'raw':
+      case null:
+        return message;
+      default:
+        throw FormatException('This format is not supported: $format');
+    }
+  }
 }
