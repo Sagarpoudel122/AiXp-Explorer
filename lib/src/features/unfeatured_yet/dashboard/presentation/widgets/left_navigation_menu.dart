@@ -1,11 +1,9 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/icon_button_tooltip.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation/settings_menu.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_button.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -34,115 +32,102 @@ class _LeftNavigationMenuState extends State<LeftNavigationMenu> {
 
   @override
   Widget build(BuildContext context) {
-    // return Container(
-    //   width: isExpanded ? 100 : 50,
-    //   height: double.infinity,
-    //   color: ColorStyles.dark750,
-    //   child: Padding(
-    //     padding: const EdgeInsets.all(4.0),
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //       children: [
-    //         Expanded(
-    //           child: ListView.separated(
-    //             shrinkWrap: true,
-    //             itemBuilder: (context, index) {
-    //               return NavigationButton(
-    //                 title: widget.navigationItems[index].title,
-    //                 isSelected: index == _currentIndex,
-    //                 icon: widget.navigationItems[index].icon,
-    //                 onTap: () {
-    //                   setState(() {
-    //                     _currentIndex = index;
-    //                     widget.navigationIndexChanged?.call(index);
-    //                   });
-    //                 },
-    //               );
-    //             },
-    //             separatorBuilder: (context, index) {
-    //               return const SizedBox(height: 4);
-    //             },
-    //             itemCount: widget.navigationItems.length,
-    //           ),
-    //         ),
-    //         SizedBox(
-    //           height: 80,
-    //           child: Center(
-    //             child: OverlayTarget(
-    //               targetKey: _settingsOverlayController.targetKey,
-    //               layerLink: _settingsOverlayController.layerLink,
-    //               groupID: _settingsOverlayController.tapRegionGroupID,
-    //               child: IconButtonWithTooltip(
-    //                 onTap: () async {
-    //                   if (!_settingsOverlayController.canOpen) {
-    //                     _settingsOverlayController.closeWithResult(null);
-    //                     return;
-    //                   }
-    //                   const Alignment targetAnchor = Alignment.bottomRight;
-    //                   const Alignment followerAnchor = Alignment.bottomLeft;
-
-    //                   final dynamic returnedValue =
-    //                       await _settingsOverlayController.showOverlay(
-    //                     context: context,
-    //                     isModal: false,
-    //                     targetAnchor: targetAnchor,
-    //                     followerAnchor: followerAnchor,
-    //                     contentOffset: Offset(15, 0),
-    //                     width: 300,
-    //                     maxHeight: 350,
-
-    //                     // maxWidth: widget.maxContentWidth,
-    //                     // maxHeight: widget.maxContentHeight,
-    //                     shellBuilder: (context, content) => content,
-    //                     contentBuilder: (context, controller) {
-    //                       return SettingsMenu(
-    //                         overlayController: _settingsOverlayController,
-    //                       );
-    //                     },
-    //                     // onTapOutside: widget.onTapOutside,
-    //                   );
-    //                 },
-    //                 icon: CarbonIcons.settings,
-    //                 tooltipMessage: 'Open Settings menu',
-    //                 iconSize: 30,
-    //                 foregroundColor: ColorStyles.grey,
-    //               ),
-    //             ),
-    //           ),
-    //         ),
-    //         Padding(
-    //           padding: const EdgeInsets.only(bottom: 8.0),
-    //           child: IconButtonWithTooltip(
-    //             onTap: () {
-    //               setState(() {
-    //                 isExpanded = !isExpanded;
-    //               });
-    //             },
-    //             icon: isExpanded
-    //                 ? CarbonIcons.chevron_left
-    //                 : CarbonIcons.chevron_right,
-    //             foregroundColor: ColorStyles.grey,
-    //             tooltipMessage: '',
-    //           ),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
-    return SideNav(
-      isExpanded: false,
-      key: const ValueKey('LeftNavigationMenu'),
-      items: widget.navigationItems
-          .map(
-            (e) => HomeNavigationItem.simple(
-              label: (context) => Text(e.title),
-              icon: (context) => Icon(e.icon),
-              matchingRoutePrefixes: [e.title],
-              onNavigate: () {},
+    return Container(
+      width: isExpanded ? 100 : 50,
+      height: double.infinity,
+      color: ColorStyles.dark750,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: ListView.separated(
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return NavigationButton(
+                    title: widget.navigationItems[index].title,
+                    isSelected: index == _currentIndex,
+                    icon: widget.navigationItems[index].icon,
+                    onTap: () {
+                      setState(() {
+                        _currentIndex = index;
+                        widget.navigationIndexChanged?.call(index);
+                      });
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return const SizedBox(height: 4);
+                },
+                itemCount: widget.navigationItems.length,
+              ),
             ),
-          )
-          .toList(),
+            SizedBox(
+              height: 80,
+              child: Center(
+                child: OverlayTarget(
+                  targetKey: _settingsOverlayController.targetKey,
+                  layerLink: _settingsOverlayController.layerLink,
+                  groupID: _settingsOverlayController.tapRegionGroupID,
+                  child: IconButtonWithTooltip(
+                    onTap: () async {
+                      if (!_settingsOverlayController.canOpen) {
+                        _settingsOverlayController.closeWithResult(null);
+                        return;
+                      }
+                      const Alignment targetAnchor = Alignment.bottomRight;
+                      const Alignment followerAnchor = Alignment.bottomLeft;
+
+                      final dynamic returnedValue =
+                          await _settingsOverlayController.showOverlay(
+                        context: context,
+                        isModal: false,
+                        targetAnchor: targetAnchor,
+                        followerAnchor: followerAnchor,
+                        contentOffset: Offset(15, 0),
+                        width: 300,
+                        maxHeight: 350,
+
+                        // maxWidth: widget.maxContentWidth,
+                        // maxHeight: widget.maxContentHeight,
+                        shellBuilder: (context, content) => content,
+                        contentBuilder: (context, controller) {
+                          return SettingsMenu(
+                            overlayController: _settingsOverlayController,
+                          );
+                        },
+                        // onTapOutside: widget.onTapOutside,
+                      );
+                    },
+                    icon: CarbonIcons.settings,
+                    tooltipMessage: 'Open Settings menu',
+                    iconSize: 30,
+                    foregroundColor: ColorStyles.grey,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: IconButtonWithTooltip(
+                onTap: () {
+                  setState(() {
+                    isExpanded = !isExpanded;
+                  });
+                },
+                icon: isExpanded
+                    ? CarbonIcons.chevron_left
+                    : CarbonIcons.chevron_right,
+                foregroundColor: ColorStyles.grey,
+                tooltipMessage: '',
+              ),
+            ),
+          ],
+        ),
+      ),
     );
+  
   }
 }
 
