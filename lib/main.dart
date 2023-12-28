@@ -1,4 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:e2_explorer/src/design/colors.dart';
 import 'package:e2_explorer/src/design/layouts/desktop_app_layout.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
@@ -7,6 +8,8 @@ import 'package:flutter/material.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  HFColors.loadDarkTheme();
+  HFColors.loadLightTheme();
   runApp(const MyApp());
 
   doWhenWindowReady(() {
