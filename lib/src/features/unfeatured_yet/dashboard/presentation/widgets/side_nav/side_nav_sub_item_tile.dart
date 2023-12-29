@@ -1,5 +1,5 @@
-import 'package:e2_explorer/src/design/colors.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
 class SideNavSubItemTile extends StatelessWidget {
@@ -34,8 +34,8 @@ class SideNavSubItemTile extends StatelessWidget {
                 //   const SizedBox(width: 20),
                 Expanded(
                   child: DefaultTextStyle(
-                    style: TextStyle(
-                      color: HFColors.light100,
+                    style: const TextStyle(
+                      color: ColorStyles.light100,
                     ),
                     overflow: TextOverflow.ellipsis,
                     child: Builder(

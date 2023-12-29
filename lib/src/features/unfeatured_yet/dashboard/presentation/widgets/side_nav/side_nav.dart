@@ -1,8 +1,8 @@
-import 'package:e2_explorer/src/design/colors.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/child_size_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_item_list.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_rail_subitem_list.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
@@ -79,10 +79,10 @@ class _SideNavState extends State<SideNav> {
               child: widget.isExpanded
                   ? const SizedBox.shrink()
                   : Material(
-                      color: HFColors.dark800,
-                      shape: Border(
+                      color: ColorStyles.dark800,
+                      shape: const Border(
                         right: BorderSide(
-                          color: HFColors.dark700,
+                          color: ColorStyles.dark700,
                         ),
                       ),
                       elevation: 4,

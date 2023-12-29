@@ -1,8 +1,8 @@
 import 'package:carbon_icons/carbon_icons.dart';
-import 'package:e2_explorer/src/design/colors.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_sub_item_tile.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
 class SideNavItemTile extends StatefulWidget {
@@ -38,8 +38,8 @@ class _SideNavItemTileState extends State<SideNavItemTile>
                   children: <Widget>[
                     const SizedBox(width: 12),
                     IconTheme(
-                      data: IconThemeData(
-                        color: HFColors.light100,
+                      data: const IconThemeData(
+                        color: ColorStyles.light100,
                       ),
                       child: Builder(
                         builder: widget.item.icon,
@@ -61,7 +61,7 @@ class _SideNavItemTileState extends State<SideNavItemTile>
                         widget.isExpanded
                             ? CarbonIcons.chevron_up
                             : CarbonIcons.chevron_down,
-                        color: HFColors.light100,
+                        color: ColorStyles.light100,
                         size: 16,
                       ),
                     ],
@@ -100,10 +100,10 @@ class _SideNavItemTileState extends State<SideNavItemTile>
             ),
             child: widget.isExpanded
                 ? DecoratedBox(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border.symmetric(
                         horizontal: BorderSide(
-                          color: HFColors.dark700,
+                          color: ColorStyles.dark700,
                         ),
                       ),
                     ),

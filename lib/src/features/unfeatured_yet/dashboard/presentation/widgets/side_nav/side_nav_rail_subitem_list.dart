@@ -1,7 +1,7 @@
-import 'package:e2_explorer/src/design/colors.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_sub_item_tile.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
 class SideNavRailSubItemList extends StatelessWidget {
@@ -12,10 +12,10 @@ class SideNavRailSubItemList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: HFColors.dark800,
+      color: ColorStyles.dark800,
       elevation: 4,
-      shape: Border(
-        right: BorderSide(color: HFColors.dark700),
+      shape: const Border(
+        right: BorderSide(color: ColorStyles.dark700),
       ),
       child: SizedBox(
         width: 180,
@@ -50,10 +50,10 @@ class SideNavRailSubItemList extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                       horizontal: 24,
                     ),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       border: Border(
                         bottom: BorderSide(
-                          color: HFColors.dark700,
+                          color: ColorStyles.dark700,
                         ),
                       ),
                     ),
@@ -63,8 +63,8 @@ class SideNavRailSubItemList extends StatelessWidget {
                           child: DefaultTextStyle(
                             // style: HFTextStyles.h4Bold()
                             //     .copyWith(color: HFColors.light900),
-                            style: TextStyle(
-                              color: HFColors.light900,
+                            style: const TextStyle(
+                              color: ColorStyles.light900,
                               fontSize: 16,
                               fontWeight: FontWeight.w700,
                             ),
@@ -75,8 +75,8 @@ class SideNavRailSubItemList extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         IconTheme(
-                          data: IconThemeData(
-                            color: HFColors.dark700,
+                          data: const IconThemeData(
+                            color: ColorStyles.dark700,
                             size: 42,
                           ),
                           child: Builder(
@@ -88,7 +88,8 @@ class SideNavRailSubItemList extends StatelessWidget {
                   ),
                 ],
                 const SizedBox(height: 16),
-                for (final HomeNavigationSubItem subItem in (item?.subItems ?? []))
+                for (final HomeNavigationSubItem subItem
+                    in (item?.subItems ?? []))
                   SideNavSubItemTile(
                     key: ValueKey<HomeNavigationSubItem>(subItem),
                     subItem: subItem,

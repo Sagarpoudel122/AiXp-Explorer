@@ -1,6 +1,6 @@
 import 'package:carbon_icons/carbon_icons.dart';
-import 'package:e2_explorer/src/design/colors.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
 class SideNavItemRailTile extends StatefulWidget {
@@ -46,12 +46,12 @@ class _SideNavItemRailTileState extends State<SideNavItemRailTile> {
             fit: StackFit.passthrough,
             children: <Widget>[
               if (widget.item.subItems.isNotEmpty)
-                Positioned(
+                const Positioned(
                   top: 6,
                   right: 12,
                   child: Icon(
                     CarbonIcons.overflow_menu_horizontal,
-                    color: HFColors.dark600,
+                    color: ColorStyles.dark600,
                     size: 16,
                   ),
                 ),
@@ -64,8 +64,8 @@ class _SideNavItemRailTileState extends State<SideNavItemRailTile> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     IconTheme(
-                      data: IconThemeData(
-                        color: HFColors.light100,
+                      data: const IconThemeData(
+                        color: ColorStyles.light100,
                       ),
                       child: Builder(
                         builder: widget.item.icon,
@@ -73,7 +73,7 @@ class _SideNavItemRailTileState extends State<SideNavItemRailTile> {
                     ),
                     const SizedBox(height: 4),
                     DefaultTextStyle(
-                      style: TextStyle(),
+                      style: const TextStyle(),
                       textAlign: TextAlign.center,
                       child: Builder(
                         builder: widget.item.label,
