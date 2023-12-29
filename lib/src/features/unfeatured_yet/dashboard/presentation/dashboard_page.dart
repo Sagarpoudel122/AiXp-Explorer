@@ -56,6 +56,22 @@ class DashboardPage extends StatelessWidget {
             pageWidget: NetworkPage(),
           ),
           NavigationItem(
+              title: 'Manager',
+              icon: CarbonIcons.network_1,
+              pageWidget: NetworkPage(),
+              children: [
+                NavigationItem(
+                  title: 'Config Startup',
+                  icon: CarbonIcons.iot_connect,
+                  pageWidget: SizedBox(),
+                ),
+                NavigationItem(
+                  title: 'Command Launcher',
+                  icon: CarbonIcons.iot_connect,
+                  pageWidget: SizedBox(),
+                ),
+              ]),
+          NavigationItem(
             title: 'Message viewer',
             icon: CarbonIcons.query_queue,
             pageWidget: PayloadViewer(boxName: ''),

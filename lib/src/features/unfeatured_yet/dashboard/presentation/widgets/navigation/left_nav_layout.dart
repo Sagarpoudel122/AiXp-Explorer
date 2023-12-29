@@ -1,5 +1,6 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/left_navigation_menu.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
@@ -28,10 +29,27 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
         SizedBox(
           width: 180,
           child: SideNav(
+            selectedIndex: _navIndex,
             isExpanded: false,
-            items: widget.pages
-                .map(
-                  (e) => HomeNavigationItem.simple(
+            items: widget.pages.map(
+              (e) {
+                if (e.children != null) {
+                  return HomeNavigationItem.shell(
+                    label: (context) => Text(e.title),
+                    icon: (context) => Icon(e.icon),
+                    matchingRoutePrefixes: [],
+                    subitems: e.children!
+                        .map(
+                          (e) => HomeNavigationSubItem(
+                            label: (context) => Text(e.title),
+                            onNavigate: () {},
+                            routeNamePrefix: '',
+                          ),
+                        )
+                        .toList(),
+                  );
+                } else {
+                  return HomeNavigationItem.simple(
                     label: (context) => Text(e.title),
                     icon: (context) => Icon(e.icon),
                     matchingRoutePrefixes: [],
@@ -41,9 +59,10 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                       });
                     },
                     enableLowerDivider: true,
-                  ),
-                )
-                .toList(),
+                  );
+                }
+              },
+            ).toList(),
           ),
         ),
         if (widget.pages.isNotEmpty)

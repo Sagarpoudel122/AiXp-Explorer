@@ -12,6 +12,7 @@ class SideNav extends StatefulWidget {
     super.key,
     required this.isExpanded,
     required this.items,
+    this.selectedIndex = 0,
   });
 
   static const double collapsedWidth = 86;
@@ -19,6 +20,7 @@ class SideNav extends StatefulWidget {
 
   final bool isExpanded;
   final List<HomeNavigationItem> items;
+  final int selectedIndex;
 
   @override
   State<SideNav> createState() => _SideNavState();
@@ -32,35 +34,6 @@ class _SideNavState extends State<SideNav> {
       onExit: _onHoverExit,
       child: Stack(
         children: <Widget>[
-          /// List of subitems that only appears in rail format
-          Positioned.fill(
-            left: 180,
-            right: null,
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              switchInCurve: Curves.easeOut,
-              switchOutCurve: Curves.easeOut,
-              layoutBuilder:
-                  (Widget? currentChild, List<Widget> previousChildren) =>
-                      Stack(
-                fit: StackFit.passthrough,
-                children: <Widget>[
-                  ...previousChildren,
-                  if (currentChild != null) currentChild,
-                ],
-              ),
-              transitionBuilder: (Widget child, Animation<double> animation) =>
-                  SlideTransition(
-                position: Tween<Offset>(
-                  begin: const Offset(-1, 0),
-                  end: Offset.zero,
-                ).animate(animation),
-                child: child,
-              ),
-              child: const SideNavRailSubItemList(),
-            ),
-          ),
-
           /// Main side nav component
           Positioned.fill(
             right: null,

@@ -9,11 +9,9 @@ class SideNavItemTile extends StatefulWidget {
   const SideNavItemTile({
     super.key,
     required this.item,
-    this.isExpanded = false,
   });
 
   final HomeNavigationItem item;
-  final bool isExpanded;
 
   @override
   State<SideNavItemTile> createState() => _SideNavItemTileState();
@@ -21,6 +19,8 @@ class SideNavItemTile extends StatefulWidget {
 
 class _SideNavItemTileState extends State<SideNavItemTile>
     with SingleTickerProviderStateMixin {
+  bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -28,6 +28,11 @@ class _SideNavItemTileState extends State<SideNavItemTile>
         InkWell(
           onTap: () {
             if (widget.item.onNavigate != null) widget.item.onNavigate!();
+            if (widget.item.subItems.isNotEmpty) {
+              setState(() {
+                isExpanded = !isExpanded;
+              });
+            }
           },
           child: Stack(
             fit: StackFit.passthrough,
@@ -58,7 +63,7 @@ class _SideNavItemTileState extends State<SideNavItemTile>
                     if (widget.item.subItems.isNotEmpty) ...<Widget>[
                       const SizedBox(width: 8),
                       Icon(
-                        widget.isExpanded
+                        isExpanded
                             ? CarbonIcons.chevron_up
                             : CarbonIcons.chevron_down,
                         color: ColorStyles.light100,
@@ -98,7 +103,7 @@ class _SideNavItemTileState extends State<SideNavItemTile>
               axisAlignment: 1,
               child: child,
             ),
-            child: widget.isExpanded
+            child: isExpanded
                 ? DecoratedBox(
                     decoration: const BoxDecoration(
                       border: Border.symmetric(
@@ -111,7 +116,9 @@ class _SideNavItemTileState extends State<SideNavItemTile>
                       children: <Widget>[
                         for (final HomeNavigationSubItem subitem
                             in widget.item.subItems)
-                          SideNavSubItemTile(subItem: subitem),
+                          SideNavSubItemTile(
+                            subItem: subitem,
+                          ),
                       ],
                     ),
                   )
