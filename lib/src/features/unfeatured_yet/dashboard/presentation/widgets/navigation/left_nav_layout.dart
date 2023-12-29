@@ -1,6 +1,9 @@
 import 'package:carbon_icons/carbon_icons.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/left_navigation_menu.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
 import 'package:flutter/material.dart';
 
 class LeftNavLayout extends StatefulWidget {
@@ -9,7 +12,7 @@ class LeftNavLayout extends StatefulWidget {
     this.pages = const [],
   });
 
-  final List<Widget> pages;
+  final List<NavigationItem> pages;
 
   @override
   State<LeftNavLayout> createState() => _LeftNavLayoutState();
@@ -23,46 +26,50 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        LeftNavigationMenu(
-          navigationIndexChanged: (index) {
-            setState(() {
-              _navIndex = index;
-            });
-          },
-          navigationItems: [
-            NavigationItem(
-              title: 'Network status',
-              icon: CarbonIcons.network_1,
-              pageWidget: Container(),
-            ),
-            // NavigationItem(
-            //   title: 'Box viewer',
-            //   icon: CarbonIcons.iot_connect,
-            //   pageWidget: Container(),
-            // ),
-            NavigationItem(
-              title: 'Message viewer',
-              icon: CarbonIcons.query_queue,
-              pageWidget: Container(),
-            ),
-
-            // NavigationItem(
-            //   title: 'Stress test',
-            //   icon: CarbonIcons.stress_breath_editor,
-            //   pageWidget: Container(),
-            // ),
-            // NavigationItem(
-            //   title: 'Message Watcher - DEV',
-            //   icon: CarbonIcons.stress_breath_editor,
-            //   pageWidget: Container(),
-            // ),
-          ],
+        SizedBox(
+          width: 180,
+          child: SideNav(
+            selectedIndex: _navIndex,
+            isExpanded: false,
+            items: widget.pages.map(
+              (e) {
+                if (e.children != null) {
+                  return HomeNavigationItem.shell(
+                    label: (context) => Text(e.title),
+                    icon: (context) => Icon(e.icon),
+                    matchingRoutePrefixes: [],
+                    subitems: e.children!
+                        .map(
+                          (e) => HomeNavigationSubItem(
+                            label: (context) => Text(e.title),
+                            onNavigate: () {},
+                            routeNamePrefix: '',
+                          ),
+                        )
+                        .toList(),
+                  );
+                } else {
+                  return HomeNavigationItem.simple(
+                    label: (context) => Text(e.title),
+                    icon: (context) => Icon(e.icon),
+                    matchingRoutePrefixes: [],
+                    onNavigate: () {
+                      setState(() {
+                        _navIndex = widget.pages.indexOf(e);
+                      });
+                    },
+                    enableLowerDivider: true,
+                  );
+                }
+              },
+            ).toList(),
+          ),
         ),
         if (widget.pages.isNotEmpty)
           Expanded(
             child: IndexedStack(
               index: _navIndex,
-              children: widget.pages,
+              children: widget.pages.map((e) => e.pageWidget).toList(),
             ),
           )
         else
