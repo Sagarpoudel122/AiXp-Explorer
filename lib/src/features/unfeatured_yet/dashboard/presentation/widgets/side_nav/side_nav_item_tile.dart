@@ -26,7 +26,9 @@ class _SideNavItemTileState extends State<SideNavItemTile>
     return Column(
       children: <Widget>[
         InkWell(
-          onTap: () => _onTap(context),
+          onTap: () {
+            if (widget.item.onNavigate != null) widget.item.onNavigate!();
+          },
           child: Stack(
             fit: StackFit.passthrough,
             children: <Widget>[
@@ -118,6 +120,4 @@ class _SideNavItemTileState extends State<SideNavItemTile>
       ],
     );
   }
-
-  void _onTap(BuildContext context) {}
 }

@@ -9,7 +9,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   HFColors.loadDarkTheme();
-  HFColors.loadLightTheme();
   runApp(const MyApp());
 
   doWhenWindowReady(() {

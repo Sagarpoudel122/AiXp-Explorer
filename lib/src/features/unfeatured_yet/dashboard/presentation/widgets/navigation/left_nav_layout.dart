@@ -11,7 +11,7 @@ class LeftNavLayout extends StatefulWidget {
     this.pages = const [],
   });
 
-  final List<Widget> pages;
+  final List<NavigationItem> pages;
 
   @override
   State<LeftNavLayout> createState() => _LeftNavLayoutState();
@@ -25,41 +25,32 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SideNav(
-          isExpanded: false,
-          items: [
-            NavigationItem(
-              title: 'Network status',
-              icon: CarbonIcons.network_1,
-              pageWidget: Container(),
-            ),
-            // NavigationItem(
-            //   title: 'Box viewer',
-            //   icon: CarbonIcons.iot_connect,
-            //   pageWidget: Container(),
-            // ),
-            NavigationItem(
-              title: 'Message viewer',
-              icon: CarbonIcons.query_queue,
-              pageWidget: Container(),
-            ),
-          ]
-              .map(
-                (e) => HomeNavigationItem.simple(
-                  label: (context) => Text(e.title),
-                  icon: (context) => Icon(e.icon),
-                  matchingRoutePrefixes: [],
-                  onNavigate: () {},
-                  enableLowerDivider: true,
-                ),
-              )
-              .toList(),
+        SizedBox(
+          width: 180,
+          child: SideNav(
+            isExpanded: false,
+            items: widget.pages
+                .map(
+                  (e) => HomeNavigationItem.simple(
+                    label: (context) => Text(e.title),
+                    icon: (context) => Icon(e.icon),
+                    matchingRoutePrefixes: [],
+                    onNavigate: () {
+                      setState(() {
+                        _navIndex = widget.pages.indexOf(e);
+                      });
+                    },
+                    enableLowerDivider: true,
+                  ),
+                )
+                .toList(),
+          ),
         ),
         if (widget.pages.isNotEmpty)
           Expanded(
             child: IndexedStack(
               index: _navIndex,
-              children: widget.pages,
+              children: widget.pages.map((e) => e.pageWidget).toList(),
             ),
           )
         else

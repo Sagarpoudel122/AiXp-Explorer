@@ -50,12 +50,16 @@ class DashboardPage extends StatelessWidget {
       ),
       body: const LeftNavLayout(
         pages: [
-          NetworkPage(),
-          // NetworkStatusPage(
-          //   onBoxSelected: (boxName) {},
-          // ),
-          // BoxViewer(),
-          PayloadViewer(boxName: ''),
+          NavigationItem(
+            title: 'Network status',
+            icon: CarbonIcons.network_1,
+            pageWidget: NetworkPage(),
+          ),
+          NavigationItem(
+            title: 'Message viewer',
+            icon: CarbonIcons.query_queue,
+            pageWidget: PayloadViewer(boxName: ''),
+          ),
         ],
       ),
     );
