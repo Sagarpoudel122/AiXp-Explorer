@@ -18,20 +18,6 @@ class SideNavSubItemTile extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
             child: Row(
               children: <Widget>[
-                // if (subItem == homeNavigationBloc.state.currentSubItem)
-                //   Container(
-                //     height: 8,
-                //     width: 8,
-                //     margin: const EdgeInsets.only(
-                //       right: 12,
-                //     ),
-                //     decoration: BoxDecoration(
-                //       color: HFColors.blue,
-                //       borderRadius: BorderRadius.circular(2),
-                //     ),
-                //   )
-                // else
-                //   const SizedBox(width: 20),
                 Expanded(
                   child: DefaultTextStyle(
                     style: const TextStyle(

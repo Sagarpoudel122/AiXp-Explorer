@@ -11,10 +11,12 @@ class NavigationItem {
     required this.pageWidget,
     this.icon,
     this.children,
+    required this.path,
   });
 
   final Widget pageWidget;
   final IconData? icon;
   final String title;
   final List<NavigationItem>? children;
+  final String path;
 }
