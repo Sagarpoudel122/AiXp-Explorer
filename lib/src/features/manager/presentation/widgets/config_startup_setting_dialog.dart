@@ -5,6 +5,7 @@ import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/hf_input_field.dart';
 import 'package:e2_explorer/src/widgets/property_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ConfigStartupSettingDialog extends StatefulWidget {
   const ConfigStartupSettingDialog({Key? key, required this.title})
@@ -43,7 +44,9 @@ class _ConfigStartupSettingDialogState
                 alignment: Alignment.center,
                 child: Text(
                   'Config startup file for ',
-                  style: TextStyles.h4(),
+                  style: TextStyles.h4().copyWith(
+                    fontFamily: GoogleFonts.inter().fontFamily,
+                  ),
                 ),
               ),
               const SizedBox(height: 10),
