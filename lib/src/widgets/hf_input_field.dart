@@ -14,7 +14,7 @@ enum OptionalPositionedLabel {
 class HSInputField extends StatefulWidget {
   HSInputField({
     super.key,
-    required this.inputFieldLabel,
+    this.inputFieldLabel,
     required this.hintText,
     this.textFieldController,
     this.initialValue,
@@ -55,7 +55,7 @@ class HSInputField extends StatefulWidget {
   final String? initialValue;
 
   /// Label above input field
-  final String inputFieldLabel;
+  final String? inputFieldLabel;
 
   /// Hint of input text
   final String? hintText;
@@ -184,12 +184,12 @@ class _HSInputFieldState extends State<HSInputField> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        if (widget.inputFieldLabel.isNotEmpty) ...<Widget>[
+        if (widget.inputFieldLabel != null) ...<Widget>[
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                widget.inputFieldLabel,
+                widget.inputFieldLabel!,
                 style: TextStyles.smallStrong(
                   color: widget.enabled
                       ? ColorStyles.light100
