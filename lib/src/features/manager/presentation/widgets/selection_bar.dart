@@ -1,53 +1,88 @@
-import 'package:e2_explorer/src/styles/text_styles.dart';
+import 'package:e2_explorer/src/data/parameter_widget_data.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/widgets/property_tile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
-class SelectionBar extends StatelessWidget {
-  const SelectionBar({
-    Key? key,
-    required this.items,
-    required this.onChanged,
-    this.selectedItem,
-  }) : super(key: key);
+class SelectionBar extends StatefulWidget {
+  const SelectionBar({super.key, required this.parameterData});
 
-  final List<String> items;
-  final ValueChanged<String> onChanged;
-  final String? selectedItem;
+  final ParameterWidgetData parameterData;
+
+  @override
+  State<StatefulWidget> createState() => _SelectionBarState();
+}
+
+class _SelectionBarState extends State<SelectionBar> {
+  bool isFocus = false;
+  late bool value;
+
+  @override
+  void initState() {
+    super.initState();
+    value = widget.parameterData.initialValue as bool;
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SegmentedButton<String>(
-      segments: items
-          .map(
-            (e) => ButtonSegment(
-              value: e,
-              label: Text(
-                e,
-                style: TextStyles.body(),
+    return MouseRegion(
+      onHover: (PointerHoverEvent event) {
+        setState(() => isFocus = true);
+      },
+      onExit: (PointerExitEvent event) {
+        setState(() => isFocus = false);
+      },
+      child: PropertyTitle(
+        name: widget.parameterData.label,
+        description: widget.parameterData.description,
+        isPropertyFocus: isFocus,
+        parameterKey: widget.parameterData.parameterKey,
+        child: SizedBox(
+          width: double.infinity,
+          child: CupertinoSlidingSegmentedControl<bool>(
+            backgroundColor: ColorStyles.spaceGrey,
+            thumbColor: const Color(0xff484B50),
+            groupValue: value,
+            onValueChanged: (bool? value) {
+              setState(() {
+                this.value = value ?? this.value;
+              });
+            },
+            children: const <bool, Widget>{
+              false: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'False',
+                  style: TextStyle(color: CupertinoColors.white),
+                ),
               ),
-            ),
-          )
-          .toList(),
-      selected: {
-        if (selectedItem != null) selectedItem!,
-      },
-      emptySelectionAllowed: true,
-      multiSelectionEnabled: false,
-      onSelectionChanged: (value) {
-        if (value.isEmpty) {
-        } else {
-          onChanged.call(value.first);
-        }
-      },
-      showSelectedIcon: false,
-      style: ButtonStyle(
-        overlayColor: MaterialStateProperty.all(
-          const Color(0xffd8d8d8),
-        ),
-        shape: MaterialStateProperty.all(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
+              true: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'True',
+                  style: TextStyle(color: CupertinoColors.white),
+                ),
+              ),
+            },
           ),
         ),
+        // child: HSInputField(
+        //   inputFieldLabel: '',
+        //   hintText: 'String value',
+        //   textFieldController: textController,
+        //   onChanged: (value) {
+        //     BlocProvider.of<AiPluginBloc>(context).add(PropertyChanged(
+        //       propertyKey: widget.parameterData.parameterKey,
+        //       newValue: value,
+        //     ));
+        //   },
+        // ),
       ),
     );
   }
