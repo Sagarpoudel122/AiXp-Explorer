@@ -1,11 +1,10 @@
 import 'package:carbon_icons/carbon_icons.dart';
+import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation/left_nav_layout.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_page.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
@@ -45,7 +44,7 @@ class DashboardPage extends StatelessWidget {
               NavigationItem(
                 title: 'Command Launcher',
                 icon: CarbonIcons.iot_connect,
-                pageWidget: SizedBox(),
+                pageWidget: CommandLauncherPage(),
                 path: RouteNames.commandLauncher,
               ),
             ],

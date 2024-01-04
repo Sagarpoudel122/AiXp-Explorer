@@ -21,4 +21,5 @@ class RouteLocations {
   static const String config = '/config';
   static const String network = '/network';
   static const payloadViewer = '/payloadViewer';
+  static const commandLauncher = '/commandLauncher';
 }
