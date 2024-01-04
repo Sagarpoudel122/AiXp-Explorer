@@ -18,6 +18,7 @@ class LeftNavLayout extends StatefulWidget {
   final List<NavigationItem> pages;
   final Widget child;
 
+
   @override
   State<LeftNavLayout> createState() => _LeftNavLayoutState();
 }
@@ -72,6 +73,7 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
         Expanded(
           child: widget.child,
         ),
+
       ],
     );
   }
