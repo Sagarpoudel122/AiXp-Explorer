@@ -4,15 +4,20 @@ import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_na
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/left_navigation_menu.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
+import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LeftNavLayout extends StatefulWidget {
   const LeftNavLayout({
     super.key,
     this.pages = const [],
+    required this.child,
   });
 
   final List<NavigationItem> pages;
+  final Widget child;
+
 
   @override
   State<LeftNavLayout> createState() => _LeftNavLayoutState();
@@ -42,7 +47,9 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                         .map(
                           (e) => HomeNavigationSubItem(
                             label: (context) => Text(e.title),
-                            onNavigate: () {},
+                            onNavigate: () {
+                              context.goNamed(e.path);
+                            },
                             routeNamePrefix: '',
                           ),
                         )
@@ -54,9 +61,7 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                     icon: (context) => Icon(e.icon),
                     matchingRoutePrefixes: [],
                     onNavigate: () {
-                      setState(() {
-                        _navIndex = widget.pages.indexOf(e);
-                      });
+                      context.goNamed(e.path);
                     },
                     enableLowerDivider: true,
                   );
@@ -65,15 +70,10 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
             ).toList(),
           ),
         ),
-        if (widget.pages.isNotEmpty)
-          Expanded(
-            child: IndexedStack(
-              index: _navIndex,
-              children: widget.pages.map((e) => e.pageWidget).toList(),
-            ),
-          )
-        else
-          const Spacer(),
+        Expanded(
+          child: widget.child,
+        ),
+
       ],
     );
   }

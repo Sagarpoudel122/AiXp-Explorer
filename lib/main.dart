@@ -60,6 +60,7 @@ class _MyHomePageState extends State<MyHomePage> {
             child: DesktopAppLayout(
               child: MaterialApp.router(
                 routerConfig: AppRoutes.routes,
+                theme: ThemeData.dark(),
               ),
             ),
             // child: LandingScreen(),

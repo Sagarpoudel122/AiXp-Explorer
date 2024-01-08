@@ -112,7 +112,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
                             appWindow.size = newSize;
                             if (!Platform.isMacOS) appWindow.show();
                             if (context.mounted) {
-                              context.goNamed(RouteNames.dashboard);
+                              context.goNamed(RouteNames.network);
                             }
                           } else {
                             await _showConnectionFailedDialog();
