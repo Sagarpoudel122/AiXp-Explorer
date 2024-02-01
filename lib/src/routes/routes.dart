@@ -1,3 +1,4 @@
+import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/dashboard_page.dart';
@@ -42,6 +43,11 @@ class AppRoutes {
             path: RouteLocations.config,
             name: RouteNames.config,
             builder: (context, state) => const ConfigStartupPage(),
+          ),
+          GoRoute(
+            path: RouteLocations.commandLauncher,
+            name: RouteNames.commandLauncher,
+            builder: (context, state) => const CommandLauncherPage(),
           ),
           GoRoute(
             path: RouteLocations.payloadViewer,
