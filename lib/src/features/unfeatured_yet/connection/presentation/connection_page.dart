@@ -51,7 +51,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyles.dark800,
       body: Center(
         child: LoadingParentWidget(
           isLoading: isLoading,

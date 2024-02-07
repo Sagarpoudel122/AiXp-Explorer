@@ -1,10 +1,7 @@
-import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/left_navigation_menu.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
-import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,7 +14,6 @@ class LeftNavLayout extends StatefulWidget {
 
   final List<NavigationItem> pages;
   final Widget child;
-
 
   @override
   State<LeftNavLayout> createState() => _LeftNavLayoutState();
@@ -73,7 +69,6 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
         Expanded(
           child: widget.child,
         ),
-
       ],
     );
   }

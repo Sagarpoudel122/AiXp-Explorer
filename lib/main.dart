@@ -1,7 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:e2_explorer/src/design/layouts/desktop_app_layout.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
-import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -50,22 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: WindowBorder(
-        width: 1,
-        color: ColorStyles.dark700,
-        child: Container(
-          color: ColorStyles.dark900,
-          // color: const Color.fromRGBO(45, 45, 45, 1.0),
-          child: Center(
-            child: DesktopAppLayout(
-              child: MaterialApp.router(
-                routerConfig: AppRoutes.routes,
-                theme: ThemeData.dark(),
-              ),
-            ),
-            // child: LandingScreen(),
+      body: Center(
+        child: DesktopAppLayout(
+          child: MaterialApp.router(
+            routerConfig: AppRoutes.routes,
+            theme: DarkAppTheme().defaultTheme,
           ),
         ),
+        // child: LandingScreen(),
       ),
     );
   }

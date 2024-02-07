@@ -40,4 +40,8 @@ class ColorStyles {
   static const Color selectedHoverButtonBlue = Color(0xff344A9B);
   static const Color hoverBlue = Color(0xff193047);
   static const Color darkBlue = Color(0xff1c2733);
+
+  // start of new color
+  static const Color primaryColor = Color(0xff0A0930);
+  static const Color secondaryColor = Color(0xff1E1D47);
 }

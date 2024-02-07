@@ -7,7 +7,6 @@ import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/w
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_page.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
-import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -20,7 +19,6 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyles.dark800,
       body: LeftNavLayout(
         pages: const [
           NavigationItem(
@@ -54,6 +52,7 @@ class DashboardPage extends StatelessWidget {
             icon: CarbonIcons.query_queue,
             pageWidget: PayloadViewer(boxName: ''),
             path: RouteNames.payloadViewer,
+            
           ),
         ],
         child: child,
