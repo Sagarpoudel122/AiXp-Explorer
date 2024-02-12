@@ -1,6 +1,7 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:e2_explorer/src/design/layouts/desktop_app_layout.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    AppColors.initialize();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MQTT Connection Demo',

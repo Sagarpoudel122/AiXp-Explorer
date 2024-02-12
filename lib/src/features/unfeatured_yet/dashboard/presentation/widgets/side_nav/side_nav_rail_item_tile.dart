@@ -2,6 +2,7 @@ import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SideNavItemRailTile extends StatefulWidget {
   const SideNavItemRailTile({super.key, required this.item});
@@ -63,14 +64,35 @@ class _SideNavItemRailTileState extends State<SideNavItemRailTile> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    IconTheme(
-                      data: const IconThemeData(
-                        color: ColorStyles.light100,
+                    if (widget.item.svgIconPath != null) ...<Widget>[
+                      Container(
+                        width: 34,
+                        alignment: Alignment.centerLeft,
+                        child: SvgPicture.asset(
+                          widget.item.svgIconPath!,
+                          color: AppColors.sideNavUnselectedTileIconColor,
+                        ),
                       ),
-                      child: Builder(
-                        builder: widget.item.icon,
+                    ] else if (widget.item.iconData != null) ...<Widget>[
+                      Container(
+                        width: 34,
+                        alignment: Alignment.centerLeft,
+                        child: IconTheme(
+                          data: IconThemeData(
+                            color: AppColors.sideNavUnselectedTileIconColor,
+                          ),
+                          child: Icon(widget.item.iconData),
+                        ),
                       ),
-                    ),
+                    ],
+                    // IconTheme(
+                    //   data: const IconThemeData(
+                    //     color: ColorStyles.light100,
+                    //   ),
+                    //   child: Builder(
+                    //     builder: widget.item.icon,
+                    //   ),
+                    // ),
                     const SizedBox(height: 4),
                     DefaultTextStyle(
                       style: const TextStyle(),

@@ -106,10 +106,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
                             /// ToDO set on page render
 
                             if (!Platform.isMacOS) appWindow.hide();
-                            const newSize = Size(1400, 800);
-                            appWindow.minSize = newSize;
-                            appWindow.size = newSize;
-                            if (!Platform.isMacOS) appWindow.show();
+                            // const newSize = Size(1400, 800);
+                            // appWindow.minSize = newSize;
+                            // appWindow.size = newSize;
+                            // if (!Platform.isMacOS) appWindow.show();
                             if (context.mounted) {
                               context.goNamed(RouteNames.network);
                             }

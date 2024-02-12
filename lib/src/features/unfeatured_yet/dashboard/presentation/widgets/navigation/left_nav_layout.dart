@@ -2,6 +2,7 @@ import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_na
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
+import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,7 +29,7 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
     return Row(
       children: [
         SizedBox(
-          width: 180,
+          width: Dimens.sideNavWidth,
           child: SideNav(
             selectedIndex: _navIndex,
             isExpanded: false,
@@ -37,8 +38,10 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                 if (e.children != null) {
                   return HomeNavigationItem.shell(
                     label: (context) => Text(e.title),
-                    icon: (context) => Icon(e.icon),
+                    iconData: e.icon,
+                    svgIconPath: e.svgIconPath,
                     matchingRoutePrefixes: [],
+                    enableLowerDivider: e.includeBottomDivider,
                     subitems: e.children!
                         .map(
                           (e) => HomeNavigationSubItem(
@@ -54,12 +57,13 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                 } else {
                   return HomeNavigationItem.simple(
                     label: (context) => Text(e.title),
-                    icon: (context) => Icon(e.icon),
+                    iconData: e.icon,
+                    svgIconPath: e.svgIconPath,
                     matchingRoutePrefixes: [],
                     onNavigate: () {
                       context.goNamed(e.path);
                     },
-                    enableLowerDivider: true,
+                    enableLowerDivider: e.includeBottomDivider,
                   );
                 }
               },
