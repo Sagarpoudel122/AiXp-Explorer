@@ -223,4 +223,14 @@ class TextStyles {
       letterSpacing: -0.02,
     );
   }
+  static TextStyle sideNavTileTextStyle({required bool isSelected}) {
+    return TextStyle(
+      fontFamily: 'Inter',
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      color: isSelected
+          ? AppColors.sideNavSelectedTileTextColor
+          : AppColors.sideNavUnselectedTileTextColor,
+    );
+  }
 }

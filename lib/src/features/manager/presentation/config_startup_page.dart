@@ -10,7 +10,6 @@ class ConfigStartupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyles.dark800,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(

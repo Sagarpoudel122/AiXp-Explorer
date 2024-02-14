@@ -1,7 +1,152 @@
 import 'package:flutter/material.dart';
 
+class AppColors {
+  static void initialize() => _loadDarkTheme();
+  static late Color scaffoldBackgroundColor;
+  static late Color containerBgColor;
+
+  // Text colors
+  static late Color textPrimaryColor;
+  static late Color textSecondaryColor;
+  static late Color textTertiaryColor;
+
+  // Side nav colors
+  static late Color sideNavBgColor;
+  static late Color sideNavUnselectedTileBgColor;
+  static late Color sideNavSelectedTileBgColor;
+  static late Color sideNavSelectedTileIndicatorColor;
+  static late Color sideNavTileHoverBgColor;
+  static late Color sideNavUnselectedTileTextColor;
+  static late Color sideNavSelectedTileTextColor;
+  static late Color sideNavUnselectedTileIconColor;
+  static late Color sideNavSelectedTileIconColor;
+  static late Color sideNavDividerColor;
+
+  // Input fields
+  static late Color dropdownFieldFillColor;
+  static late Color dropdownFieldIconColor;
+  static late Color inputFieldFillColor;
+  static late Color inputFieldHintTextColor;
+  static late Color inputFieldSuffixButtonBgColor;
+  static late Color inputFieldSuffixButtonTextColor;
+  static late Color inputFieldUnfocusedBorderColor;
+  static late Color inputFieldFocusedBorderColor;
+  static late Color inputFieldErrorBorderColor;
+  static late Color inputFieldErrorTextColor;
+
+  // Button colors
+  static late Color buttonPrimaryBgColor;
+  static late Color buttonPrimaryTextColor;
+  static late Color buttonPrimaryIconColor;
+  static late Color buttonPrimaryBorderColor;
+  static late Color buttonSecondaryBgColor;
+  static late Color buttonSecondaryTextColor;
+  static late Color buttonSecondaryIconColor;
+  static late Color buttonSecondaryBorderColor;
+
+  // Dialog colors
+  static late Color alertDialogBgColor;
+  static late Color alertDialogDividerColor;
+
+  // Scroll bar colors
+  static late Color scrollBarBgColor;
+  static late Color scrollBarDraggableSectionColor;
+
+  // Wallet info container
+  static late Color walletInfoContainerBgColor;
+  static late Color walletInfoContainerDividerColor;
+
+  // Table colors
+  static late Color tableHeaderBgColor;
+  static late Color tableHeaderTextColor;
+  static late Color tableHeaderInactiveIconColor;
+  static late Color tableHeaderActiveIconColor;
+  static late Color tableBodyTextColor;
+  static late Color tableRowOddIndexBgColor;
+  static late Color tableRowEvenIndexBgColor;
+  static late Color tableStatusSuccessBtnBgColor;
+  static late Color tableStatusSuccessBtnTextColor;
+  static late Color tableStatusErrorBtnBgColor;
+  static late Color tableStatusErrorBtnTextColor;
+  static late Color tableStatusWarningBtnBgColor;
+  static late Color tableStatusWarningBtnTextColor;
+
+  /// Loads the colors for dark theme
+  static void _loadDarkTheme() {
+    scaffoldBackgroundColor = const Color(0xFF0A0930);
+    containerBgColor = const Color(0xFF1E1D47);
+
+    // Text colors
+    textPrimaryColor = const Color(0xFFFFFFFF);
+    textSecondaryColor = const Color(0xFF92A3D6);
+    textTertiaryColor = const Color(0xFF8A8FB5);
+
+    // Side nav colors
+    sideNavBgColor = const Color(0xFF1E1D47);
+    sideNavUnselectedTileBgColor = Colors.transparent;
+    sideNavSelectedTileBgColor = const Color(0xFF2E2C6A);
+    sideNavSelectedTileIndicatorColor = const Color(0xFF4E4BDE);
+    sideNavTileHoverBgColor = Colors.transparent;
+    sideNavUnselectedTileTextColor = const Color(0xFFDFDFDF);
+    sideNavSelectedTileTextColor = const Color(0xFFF0F1F5);
+    sideNavUnselectedTileIconColor = const Color(0xFFDFDFDF);
+    sideNavSelectedTileIconColor = const Color(0xFFF0F1F5);
+    sideNavDividerColor = const Color(0xFF0C0B2F);
+
+    // Input fields
+    dropdownFieldFillColor = const Color(0xFF282760);
+    dropdownFieldIconColor = const Color(0xFFFFFFFF);
+    inputFieldFillColor = const Color(0xFF282760);
+    inputFieldHintTextColor = const Color(0xFF92A3D6);
+    inputFieldSuffixButtonBgColor = const Color(0xFF1B1A49);
+    inputFieldSuffixButtonTextColor = const Color(0xFFFFFFFF);
+    inputFieldUnfocusedBorderColor = Colors.transparent;
+    inputFieldFocusedBorderColor = const Color(0xFF4E4BDE);
+    inputFieldErrorBorderColor = const Color(0xFFFF384E);
+    inputFieldErrorTextColor = const Color(0xFFFF384E);
+
+    // Button colors
+    buttonPrimaryBgColor = const Color(0xFF4E4BDE);
+    buttonPrimaryTextColor = const Color(0xFFFFFFFF);
+    buttonPrimaryIconColor = const Color(0xFFFFFFFF);
+    buttonPrimaryBorderColor = buttonPrimaryBgColor;
+    buttonSecondaryBgColor = const Color(0xFF2E2C6A);
+    buttonSecondaryTextColor = const Color(0xFFFFFFFF);
+    buttonSecondaryIconColor = const Color(0xFFFFFFFF);
+    buttonSecondaryBorderColor = const Color(0xFF5553DA);
+
+    // Dialog colors
+    alertDialogBgColor = const Color(0xFF1E1D47);
+    alertDialogDividerColor = const Color(0xFF0C0B2F);
+
+    // Scroll bar colors
+    scrollBarBgColor = const Color(0xFF535561);
+    scrollBarDraggableSectionColor = const Color(0xFFFFFFFF);
+
+    // Wallet info container
+    walletInfoContainerBgColor = const Color(0xFF0C0B2F);
+    walletInfoContainerDividerColor = const Color(0xFF2C2E40);
+
+    // Table colors
+    tableHeaderBgColor = const Color(0xFF11113A);
+    tableHeaderTextColor = const Color(0xFFF0F1F5);
+    tableHeaderInactiveIconColor = const Color(0xFFBEC0C9);
+    tableHeaderActiveIconColor = const Color(0xFFFFFFFF);
+    tableBodyTextColor = const Color(0xFFFFFFFF);
+    tableRowOddIndexBgColor = const Color(0xFF1E1D47);
+    tableRowEvenIndexBgColor = const Color(0xFF171744);
+    tableStatusSuccessBtnBgColor = const Color(0xFF0BE27B).withOpacity(0.2);
+    tableStatusSuccessBtnTextColor = const Color(0xFF0BE27B);
+    tableStatusErrorBtnBgColor = const Color(0xFFF65F70).withOpacity(0.2);
+    tableStatusErrorBtnTextColor = const Color(0xFFF65F70);
+    tableStatusWarningBtnBgColor = const Color(0xFFFFD600).withOpacity(0.2);
+    tableStatusWarningBtnTextColor = const Color(0xFFFFD600);
+  }
+}
+
 class ColorStyles {
   ColorStyles._();
+
   static const Color dark800 = Color(0xff1F1F1F);
   static const Color dark700 = Color(0xff282828);
 
@@ -40,4 +185,8 @@ class ColorStyles {
   static const Color selectedHoverButtonBlue = Color(0xff344A9B);
   static const Color hoverBlue = Color(0xff193047);
   static const Color darkBlue = Color(0xff1c2733);
+
+  // start of new color
+  static const Color primaryColor = Color(0xff0A0930);
+  static const Color secondaryColor = Color(0xff1E1D47);
 }

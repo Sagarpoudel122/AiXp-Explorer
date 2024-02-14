@@ -3,6 +3,7 @@ import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_na
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_sub_item_tile.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class SideNavRailSubItemList extends StatelessWidget {
   const SideNavRailSubItemList({super.key, this.item});
@@ -74,15 +75,27 @@ class SideNavRailSubItemList extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 16),
-                        IconTheme(
-                          data: const IconThemeData(
-                            color: ColorStyles.dark700,
-                            size: 42,
+                        if (item!.svgIconPath != null) ...<Widget>[
+                          Container(
+                            width: 34,
+                            alignment: Alignment.centerLeft,
+                            child: SvgPicture.asset(
+                              item!.svgIconPath!,
+                              color: AppColors.sideNavUnselectedTileIconColor,
+                            ),
                           ),
-                          child: Builder(
-                            builder: item!.icon,
+                        ] else if (item!.iconData != null) ...<Widget>[
+                          Container(
+                            width: 34,
+                            alignment: Alignment.centerLeft,
+                            child: IconTheme(
+                              data: IconThemeData(
+                                color: AppColors.sideNavUnselectedTileIconColor,
+                              ),
+                              child: Icon(item!.iconData),
+                            ),
                           ),
-                        ),
+                        ],
                       ],
                     ),
                   ),

@@ -7,7 +7,7 @@ import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/w
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_page.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
-import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
@@ -20,9 +20,43 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyles.dark800,
       body: LeftNavLayout(
-        pages: const [
+        pages: [
+          NavigationItem(
+            title: 'Node Dashboard',
+            // icon: CarbonIcons.query_queue,
+            svgIconPath: AssetUtils.getSidebarIconPath('node_dashboard'),
+            pageWidget: NetworkPage(),
+            path: RouteNames.network,
+            includeBottomDivider: true,
+          ),
+          NavigationItem(
+            title: 'Config Startup',
+            // icon: CarbonIcons.query_queue,
+            svgIconPath: AssetUtils.getSidebarIconPath('sliders'),
+            pageWidget: NetworkPage(),
+            path: RouteNames.network,
+          ),
+          NavigationItem(
+            title: 'Command Launcher',
+            // icon: CarbonIcons.query_queue,
+            svgIconPath: AssetUtils.getSidebarIconPath('command_launcher'),
+            pageWidget: NetworkPage(),
+            path: RouteNames.network,
+          ),
+          NavigationItem(
+            title: 'Profile',
+            // icon: CarbonIcons.query_queue,
+            svgIconPath: AssetUtils.getSidebarIconPath('profile'),
+            pageWidget: NetworkPage(),
+            path: RouteNames.network,
+          ),
+
+          /// old ones
+          ///
+          ///
+          ///
+
           NavigationItem(
             title: 'Network status',
             icon: CarbonIcons.network_1,

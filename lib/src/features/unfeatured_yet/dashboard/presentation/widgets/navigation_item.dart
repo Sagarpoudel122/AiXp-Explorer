@@ -12,6 +12,8 @@ class NavigationItem {
     this.icon,
     this.children,
     required this.path,
+    this.svgIconPath,
+    this.includeBottomDivider = false,
   });
 
   final Widget pageWidget;
@@ -19,4 +21,6 @@ class NavigationItem {
   final String title;
   final List<NavigationItem>? children;
   final String path;
+  final String? svgIconPath;
+  final bool includeBottomDivider;
 }

@@ -3,9 +3,12 @@ import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/w
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_item_list.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav_rail_subitem_list.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/utils/asset_utils.dart';
+import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SideNav extends StatefulWidget {
   const SideNav({
@@ -52,12 +55,7 @@ class _SideNavState extends State<SideNav> {
               child: widget.isExpanded
                   ? const SizedBox.shrink()
                   : Material(
-                      color: ColorStyles.dark800,
-                      shape: const Border(
-                        right: BorderSide(
-                          color: ColorStyles.dark700,
-                        ),
-                      ),
+                      color: AppColors.sideNavBgColor,
                       elevation: 4,
                       child: SafeArea(
                         right: false,
@@ -65,7 +63,7 @@ class _SideNavState extends State<SideNav> {
                           duration: const Duration(milliseconds: 200),
                           curve: Curves.easeOut,
                           alignment: Alignment.centerLeft,
-                          width: 180,
+                          width: Dimens.sideNavWidth,
                           child: ClipRect(
                             child: OverflowBox(
                               alignment: Alignment.centerLeft,
@@ -77,16 +75,49 @@ class _SideNavState extends State<SideNav> {
                                   child: Scrollable(
                                     viewportBuilder: (BuildContext context,
                                         ViewportOffset position) {
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.stretch,
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: SideNavItemList(
-                                              items: widget.items,
-                                              key: const ValueKey(
-                                                  'side-nav-list'),
+                                      return Stack(
+                                        children: [
+                                          SizedBox(
+                                            height: 120,
+                                            width:Dimens.sideNavWidth,
+                                            child: Center(
+                                              child: Image.asset(
+                                                AssetUtils.getPngIconPath(
+                                                  'sidenav/sidenav_waves',
+                                                ),
+                                                height: 120,
+                                              ),
                                             ),
+                                          ),
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              Container(
+                                                margin: const EdgeInsets.only(top: 16),
+                                                width: Dimens.sideNavWidth,
+                                                child: Center(
+                                                  child: SvgPicture.asset(
+                                                    AssetUtils.getSidebarIconPath(
+                                                      'brand_logo_and_text',
+                                                    ),
+                                                    fit: BoxFit.contain,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              Expanded(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                                  child: SideNavItemList(
+                                                    items: widget.items,
+                                                    key: const ValueKey(
+                                                      'side-nav-list',
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       );
