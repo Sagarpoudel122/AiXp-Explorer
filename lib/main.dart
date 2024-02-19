@@ -3,11 +3,15 @@ import 'package:e2_explorer/src/design/layouts/desktop_app_layout.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
+import 'package:e2_explorer/src/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// check theme
+  await ThemeUtils.initialize();
   runApp(const MyApp());
 
   doWhenWindowReady(() {
@@ -21,46 +25,53 @@ void main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  // late final GoRouter router;
+  @override
+  void initState() {
+    // router = AppRoutes.of(context);
+    ThemeUtils.themeValueNotifier.addListener(_listenToThemeChanges);
+    super.initState();
+  }
+
+  void _listenToThemeChanges() {
+    ThemeUtils.loadThemeColors();
+    setState(() {});
+    rebuildAllChildren(context);
+  }
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el
+        ..markNeedsBuild()
+        ..visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
+  @override
+  void dispose() {
+    ThemeUtils.themeValueNotifier.removeListener(_listenToThemeChanges);
+    super.dispose();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     AppColors.initialize();
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'MQTT Connection Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'MQTT Connection Demo'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: DesktopAppLayout(
-          child: MaterialApp.router(
-            routerConfig: AppRoutes.routes,
-            theme: DarkAppTheme().defaultTheme,
-          ),
-        ),
-        // child: LandingScreen(),
-      ),
+      theme: appTheme,
+      routerConfig: AppRoutes.routes,
     );
   }
 }

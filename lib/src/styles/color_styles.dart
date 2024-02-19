@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  /// Todo: load proper colors based on theme after implementing light theme colors
   static void initialize() => _loadDarkTheme();
   static late Color scaffoldBackgroundColor;
   static late Color containerBgColor;
@@ -34,6 +35,11 @@ class AppColors {
   static late Color inputFieldErrorBorderColor;
   static late Color inputFieldErrorTextColor;
 
+  // checkbox colors
+  static late Color checkboxUncheckedFillColor;
+  static late Color checkboxCheckedFillColor;
+  static late Color checkboxCheckColor;
+
   // Button colors
   static late Color buttonPrimaryBgColor;
   static late Color buttonPrimaryTextColor;
@@ -49,8 +55,8 @@ class AppColors {
   static late Color alertDialogDividerColor;
 
   // Scroll bar colors
-  static late Color scrollBarBgColor;
-  static late Color scrollBarDraggableSectionColor;
+  static late Color scrollbarTrackColor;
+  static late Color scrollbarThumbColor;
 
   // Wallet info container
   static late Color walletInfoContainerBgColor;
@@ -105,6 +111,11 @@ class AppColors {
     inputFieldErrorBorderColor = const Color(0xFFFF384E);
     inputFieldErrorTextColor = const Color(0xFFFF384E);
 
+    // checkbox colors
+    checkboxUncheckedFillColor = const Color(0xFFFFFFFF);
+    checkboxCheckedFillColor = const Color(0xFF4E4BDE);
+    checkboxCheckColor = const Color(0xFFFFFFFF);
+
     // Button colors
     buttonPrimaryBgColor = const Color(0xFF4E4BDE);
     buttonPrimaryTextColor = const Color(0xFFFFFFFF);
@@ -120,8 +131,8 @@ class AppColors {
     alertDialogDividerColor = const Color(0xFF0C0B2F);
 
     // Scroll bar colors
-    scrollBarBgColor = const Color(0xFF535561);
-    scrollBarDraggableSectionColor = const Color(0xFFFFFFFF);
+    scrollbarTrackColor = const Color(0xFF535561);
+    scrollbarThumbColor = const Color(0xFFFFFFFF);
 
     // Wallet info container
     walletInfoContainerBgColor = const Color(0xFF0C0B2F);
