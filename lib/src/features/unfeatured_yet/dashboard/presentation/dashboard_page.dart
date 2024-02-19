@@ -34,21 +34,21 @@ class DashboardPage extends StatelessWidget {
             title: 'Config Startup',
             // icon: CarbonIcons.query_queue,
             svgIconPath: AssetUtils.getSidebarIconPath('sliders'),
-            pageWidget: NetworkPage(),
+            pageWidget: const NetworkPage(),
             path: RouteNames.network,
           ),
           NavigationItem(
             title: 'Command Launcher',
             // icon: CarbonIcons.query_queue,
             svgIconPath: AssetUtils.getSidebarIconPath('command_launcher'),
-            pageWidget: NetworkPage(),
+            pageWidget: const NetworkPage(),
             path: RouteNames.network,
           ),
           NavigationItem(
             title: 'Profile',
             // icon: CarbonIcons.query_queue,
             svgIconPath: AssetUtils.getSidebarIconPath('profile'),
-            pageWidget: NetworkPage(),
+            pageWidget: const NetworkPage(),
             path: RouteNames.network,
           ),
 
@@ -57,13 +57,13 @@ class DashboardPage extends StatelessWidget {
           ///
           ///
 
-          NavigationItem(
+          const NavigationItem(
             title: 'Network status',
             icon: CarbonIcons.network_1,
             pageWidget: NetworkPage(),
             path: RouteNames.network,
           ),
-          NavigationItem(
+          const NavigationItem(
             title: 'Manager',
             icon: CarbonIcons.network_1,
             pageWidget: SizedBox(),
@@ -83,7 +83,7 @@ class DashboardPage extends StatelessWidget {
               ),
             ],
           ),
-          NavigationItem(
+          const NavigationItem(
             title: 'Message viewer',
             icon: CarbonIcons.query_queue,
             pageWidget: PayloadViewer(boxName: ''),

@@ -1,12 +1,6 @@
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
+
 import 'package:e2_explorer/src/utils/app_config.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:e2_explorer/src/utils/theme_utils.dart';

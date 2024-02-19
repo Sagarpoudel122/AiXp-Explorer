@@ -48,6 +48,7 @@ flutter:
     - assets/icons/svg/sidenav/
     - assets/icons/svg/
     - assets/icons/png/sidenav/
+    - assets/icons/png/
 
   fonts:
     - family: Inter
