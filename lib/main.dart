@@ -33,10 +33,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // late final GoRouter router;
   @override
   void initState() {
-    // router = AppRoutes.of(context);
     ThemeUtils.themeValueNotifier.addListener(_listenToThemeChanges);
     super.initState();
   }

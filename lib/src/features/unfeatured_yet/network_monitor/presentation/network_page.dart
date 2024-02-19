@@ -4,7 +4,11 @@ import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/debug_viewer.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_status_page.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
+import 'package:e2_explorer/src/widgets/app_dialog_widget.dart';
+import 'package:e2_explorer/src/widgets/text_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../widgets/networks_listing_widget.dart';
 
 class NetworkPage extends StatefulWidget {
   const NetworkPage({super.key});

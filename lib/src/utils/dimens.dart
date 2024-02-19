@@ -10,5 +10,9 @@ class Dimens{
   static const double scrollbarBorderRadius = 10;
   static const double scrollbarTrackThickness = 10;
   static const double checkboxBorderRadius = 2;
+  static const double alertDialogSmallWidth = 541;
+  static const double alertDialogMediumWidth = 766;
+  static const double alertDialogLargeWidth = alertDialogMediumWidth * 1.6;
+  static const double alertDialogBorderRadius = 4;
 
 }

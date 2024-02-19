@@ -4,30 +4,31 @@ import 'package:flutter/material.dart';
 import '../styles/color_styles.dart';
 
 enum CustomTextStyles {
-  text10_500_primary,
-
+  text12_600,
+  text16_400_secondary,
+  text16_600,
 }
 
 class TextWidget extends StatelessWidget {
   TextWidget(
-      this.text, {
-        super.key,
-        this.style,
-        this.fontSize,
-        this.fontStyle = FontStyle.normal,
-        this.fontFamily = AppConfig.appFontFamily,
-        this.fontWeight = FontWeight.normal,
-        this.textColor,
-        this.letterSpacing = 0.0,
-        this.textAlign = TextAlign.start,
-        this.textDecoration = TextDecoration.none,
-        this.lineHeight,
-        this.decorationColor,
-        this.maxLines,
-        this.textOverflow,
-        this.isSelectable = false,
-        this.shadows,
-      }) {
+    this.text, {
+    super.key,
+    this.style,
+    this.fontSize,
+    this.fontStyle = FontStyle.normal,
+    this.fontFamily = AppConfig.appFontFamily,
+    this.fontWeight = FontWeight.normal,
+    this.textColor,
+    this.letterSpacing = 0.0,
+    this.textAlign = TextAlign.start,
+    this.textDecoration = TextDecoration.none,
+    this.lineHeight,
+    this.decorationColor,
+    this.maxLines,
+    this.textOverflow,
+    this.isSelectable = false,
+    this.shadows,
+  }) {
     getStyle();
   }
 
@@ -50,9 +51,21 @@ class TextWidget extends StatelessWidget {
 
   getStyle() {
     switch (style) {
-      case CustomTextStyles.text10_500_primary:
-        fontSize = 10;
-        fontWeight = FontWeight.w500;
+      case CustomTextStyles.text12_600:
+        fontSize = 12;
+        fontWeight = FontWeight.w600;
+        textColor ??= AppColors.textPrimaryColor;
+        break;
+
+      case CustomTextStyles.text16_400_secondary:
+        fontSize = 16;
+        fontWeight = FontWeight.w400;
+        textColor ??= AppColors.textSecondaryColor;
+        break;
+
+      case CustomTextStyles.text16_600:
+        fontSize = 16;
+        fontWeight = FontWeight.w600;
         textColor ??= AppColors.textPrimaryColor;
         break;
 

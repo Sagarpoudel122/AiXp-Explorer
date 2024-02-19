@@ -26,7 +26,7 @@ class DashboardPage extends StatelessWidget {
             title: 'Node Dashboard',
             // icon: CarbonIcons.query_queue,
             svgIconPath: AssetUtils.getSidebarIconPath('node_dashboard'),
-            pageWidget: NetworkPage(),
+            pageWidget: const NetworkPage(),
             path: RouteNames.network,
             includeBottomDivider: true,
           ),
