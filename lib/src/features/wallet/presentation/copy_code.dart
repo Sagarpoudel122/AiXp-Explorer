@@ -1,5 +1,6 @@
 import 'package:e2_explorer/src/features/common_widgets/buttons/clickable_button.dart';
-import 'package:e2_explorer/src/features/wallet/header.dart';
+import 'package:e2_explorer/src/features/common_widgets/copy_widget.dart';
+import 'package:e2_explorer/src/features/wallet/widgets/header.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/stack_background.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 
@@ -61,27 +62,7 @@ class CopyCodeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 22),
-                  InkWell(
-                    onTap: () =>
-                        Clipboard.setData(const ClipboardData(text: "selected"))
-                            .then((value) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("Copied to Clipboard")));
-                    }),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.copy_outlined,
-                            color: AppColors.sideNavSelectedTileIndicatorColor,
-                          ),
-                          const SizedBox(width: 7),
-                          Text(
-                            "Copy",
-                            style: TextStyles.bodyStrong(),
-                          )
-                        ]),
-                  ),
+                  copyTextWidget(context: context, text: "Copy text"),
                   const Spacer(),
                   ClickableButton(
                     onTap: () => context.goNamed(RouteNames.createWalletReady),

@@ -1,5 +1,5 @@
 import 'package:e2_explorer/src/features/common_widgets/buttons/clickable_button.dart';
-import 'package:e2_explorer/src/features/wallet/header.dart';
+import 'package:e2_explorer/src/features/wallet/widgets/header.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/stack_background.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';

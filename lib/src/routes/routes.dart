@@ -1,6 +1,7 @@
 import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
+import 'package:e2_explorer/src/features/profile/presentation/profile.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/dashboard_page.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_page.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/copy_code.dart';
@@ -22,7 +23,7 @@ class AppRoutes {
   const AppRoutes._();
 
   static final GoRouter routes = GoRouter(
-    initialLocation: RouteLocations.connection,
+    initialLocation: RouteLocations.network,
     redirect: (context, state) {
       return null;
     },
@@ -84,6 +85,12 @@ class AppRoutes {
             name: RouteNames.config,
             builder: (context, state) => const ConfigStartupPage(),
           ),
+           GoRoute(
+            path: RouteLocations.profile,
+            name: RouteNames.profile,
+            builder: (context, state) => const ProfilePage(),
+          ),
+
           GoRoute(
             path: RouteLocations.commandLauncher,
             name: RouteNames.commandLauncher,
