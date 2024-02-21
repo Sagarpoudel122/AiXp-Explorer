@@ -62,7 +62,9 @@ class CopyCodeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 22),
-                  copyTextWidget(context: context, text: "Copy text"),
+                  const CopyTextWidget(
+                      text:
+                          "04695096745htiewbfiwbdihfbisugeut9i4u034htoibsjdbfkvjsb dkjvbiahepjpaowjrpfewbg564"),
                   const Spacer(),
                   ClickableButton(
                     onTap: () => context.goNamed(RouteNames.createWalletReady),

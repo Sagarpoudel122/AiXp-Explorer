@@ -53,7 +53,7 @@ class ReceiveDialouge extends StatelessWidget {
                   color: AppColors.textSecondaryColor),
             ),
             const SizedBox(height: 32),
-            copyTextWidget(context: context, text: "Copy text"),
+            const CopyTextWidget(text: "0xD3455346456456346534v6"),
             const SizedBox(height: 32),
             Image.asset(AssetUtils.getPngIconPath("qr"))
           ],
