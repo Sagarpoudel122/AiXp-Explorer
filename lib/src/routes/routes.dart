@@ -23,7 +23,7 @@ class AppRoutes {
   const AppRoutes._();
 
   static final GoRouter routes = GoRouter(
-    initialLocation: RouteLocations.network,
+    initialLocation: RouteLocations.connection,
     redirect: (context, state) {
       return null;
     },

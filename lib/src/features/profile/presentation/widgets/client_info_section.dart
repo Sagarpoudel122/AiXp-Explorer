@@ -55,7 +55,7 @@ class ClientInfoSection extends StatelessWidget {
             style: TextStyles.body(color: AppColors.textTertiaryColor),
           ),
           const SizedBox(height: 2),
-          Text(
+          SelectableText(
             "0xD3455346bfeiurbviuerbvn",
             style: TextStyles.bodyStrong(),
           ),
@@ -67,7 +67,7 @@ class ClientInfoSection extends StatelessWidget {
             style: TextStyles.body(color: AppColors.textTertiaryColor),
           ),
           const SizedBox(height: 2),
-          Text(
+          SelectableText(
             "0xD3455346bfeiurbviuerbvn",
             style: TextStyles.bodyStrong(),
           ),
