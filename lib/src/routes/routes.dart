@@ -25,7 +25,6 @@ class AppRoutes {
 
   static final GoRouter routes = GoRouter(
     initialLocation: RouteLocations.connection,
-
     redirect: (context, state) {
       return null;
     },

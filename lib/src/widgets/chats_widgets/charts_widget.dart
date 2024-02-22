@@ -55,10 +55,10 @@ class CustomCharts extends StatelessWidget {
                         sideTitles: SideTitles(
                             reservedSize: 30, showTitles: true, interval: 1),
                       )),
-                  minX: 0,
-                  maxX: 11,
-                  minY: 0,
-                  maxY: 6,
+                  minX: data.minX,
+                  maxX: data.maxY,
+                  minY: data.minY,
+                  maxY: data.maxY,
                   gridData: const FlGridData(show: false),
                   lineBarsData: [
                     LineChartBarData(
