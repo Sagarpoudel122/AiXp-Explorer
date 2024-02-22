@@ -1,4 +1,5 @@
 import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
+import 'package:e2_explorer/src/features/coms/coms.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
 import 'package:e2_explorer/src/features/profile/presentation/profile.dart';
@@ -90,6 +91,13 @@ class AppRoutes {
             path: RouteLocations.profile,
             name: RouteNames.profile,
             builder: (context, state) => const ProfilePage(),
+          ),
+          GoRoute(
+            path: RouteLocations.comms,
+            name: RouteNames.comms,
+            builder: (BuildContext context, GoRouterState state) {
+              return const Comms();
+            },
           ),
           GoRoute(
             path: RouteLocations.commandLauncher,
