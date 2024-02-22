@@ -9,6 +9,7 @@ import 'package:e2_explorer/src/features/wallet/presentation/create_wallet_ready
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_create.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_import.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -91,6 +92,11 @@ class AppRoutes {
             builder: (context, state) => const ProfilePage(),
           ),
 
+          GoRoute(
+            path: RouteLocations.profile,
+            name: RouteNames.profile,
+            builder: (context, state) => const ProfilePage(),
+          ),
           GoRoute(
             path: RouteLocations.commandLauncher,
             name: RouteNames.commandLauncher,
