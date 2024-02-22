@@ -1,7 +1,7 @@
 import 'package:e2_explorer/src/utils/app_config.dart';
 import 'package:flutter/material.dart';
 
-import '../styles/color_styles.dart';
+import '../../styles/color_styles.dart';
 
 enum CustomTextStyles {
   text12_600,

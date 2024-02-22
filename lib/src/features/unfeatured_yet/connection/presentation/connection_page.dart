@@ -111,7 +111,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
                             // appWindow.size = newSize;
                             // if (!Platform.isMacOS) appWindow.show();
                             if (context.mounted) {
-                              context.goNamed(RouteNames.walletPage);
+                              context.goNamed(RouteNames.network);
+                              // context.goNamed(RouteNames.walletPage);
                             }
                           } else {
                             await _showConnectionFailedDialog();

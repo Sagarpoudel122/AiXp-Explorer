@@ -2,7 +2,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../utils/dimens.dart';
+import '../../../utils/dimens.dart';
 import 'app_button_primary.dart';
 
 class AppButtonSecondary extends StatefulWidget {

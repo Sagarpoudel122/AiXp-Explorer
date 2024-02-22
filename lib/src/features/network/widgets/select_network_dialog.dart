@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../../widgets/app_dialog_widget.dart';
-import '../../../../widgets/networks_listing_widget.dart';
-import '../../../../widgets/text_widget.dart';
+import '../../../utils/app_utils.dart';
+import '../../common_widgets/app_dialog_widget.dart';
+import 'add_network_dialog_content.dart';
+import 'networks_listing_widget.dart';
+import '../../common_widgets/text_widget.dart';
 
 class SelectNetworkDialog extends StatelessWidget {
   const SelectNetworkDialog({super.key});
@@ -12,6 +14,13 @@ class SelectNetworkDialog extends StatelessWidget {
     return AppDialogWidget(
       positiveActionButtonText: 'Add Network',
       negativeActionButtonText: 'Close',
+      positiveActionButtonAction: () async {
+        Navigator.of(context).pop();
+        showAppDialog(
+          context: context,
+          content: const AddNetworkDialogContent(),
+        );
+      },
       content: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
