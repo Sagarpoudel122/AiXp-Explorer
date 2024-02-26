@@ -93,16 +93,16 @@ class AppRoutes {
             builder: (context, state) => const ProfilePage(),
           ),
 
-          GoRoute(
-            path: RouteLocations.profile,
-            name: RouteNames.profile,
-            builder: (context, state) => const ProfilePage(),
-          ),
-          GoRoute(
-            path: RouteLocations.profile,
-            name: RouteNames.profile,
-            builder: (context, state) => const ProfilePage(),
-          ),
+          // GoRoute(
+          //   path: RouteLocations.profile,
+          //   name: RouteNames.profile,
+          //   builder: (context, state) => const ProfilePage(),
+          // ),
+          // GoRoute(
+          //   path: RouteLocations.profile,
+          //   name: RouteNames.profile,
+          //   builder: (context, state) => const ProfilePage(),
+          // ),
           GoRoute(
             path: RouteLocations.comms,
             name: RouteNames.comms,
