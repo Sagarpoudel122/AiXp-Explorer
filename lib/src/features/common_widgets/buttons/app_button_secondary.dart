@@ -20,6 +20,7 @@ class AppButtonSecondary extends StatefulWidget {
     this.iconWidth,
     this.height = 36,
     this.minWidth,
+    this.borderColor,
   });
 
   final String text;
@@ -34,6 +35,7 @@ class AppButtonSecondary extends StatefulWidget {
   final Color? iconColor;
   final double height;
   final double? minWidth;
+  final Color? borderColor;
 
   @override
   State<AppButtonSecondary> createState() => _AppButtonSecondaryState();
@@ -58,13 +60,13 @@ class _AppButtonSecondaryState extends State<AppButtonSecondary> {
                 });
               },
               style: buttonStyle,
-              onPressed: widget.onPressed,
+              onPressed: widget.onPressed ?? () {},
               icon: iconWidget!,
               label: textWidget,
             )
           : ElevatedButton(
               style: buttonStyle,
-              onPressed: widget.onPressed,
+              onPressed: widget.onPressed ?? () {},
               child: textWidget,
             ),
     );
@@ -86,7 +88,7 @@ class _AppButtonSecondaryState extends State<AppButtonSecondary> {
           borderRadius: BorderRadius.circular(
             Dimens.btnSecondaryBorderRadius,
           ),
-          side: BorderSide(color: AppColors.buttonSecondaryBorderColor),
+          side: BorderSide(color: widget.borderColor ?? AppColors.buttonSecondaryBorderColor),
         ),
       );
 

@@ -1,4 +1,11 @@
+import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../../../widgets/chats_widgets/line_chart_widget.dart';
+import '../../../coms/coms.dart';
 
 enum BoxViewerTab {
   hardwareInfo,
@@ -32,6 +39,7 @@ class BoxMessagesTabDisplay extends StatefulWidget {
   final Widget notificationView;
   final Widget heartbeatView;
   final Widget commandView;
+
   // final Widget fullPayloadsView;
   final void Function(BoxViewerTab tab)? onTabChanged;
 
@@ -47,7 +55,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabIndex = _tabController.index;
     _tabController.addListener(() {
       if (_tabIndex != _tabController.index) {
@@ -64,80 +72,130 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Stack(
-            children: <Widget>[
-              Positioned.fill(
-                child: Align(
-                  alignment: AlignmentDirectional.bottomStart,
-                  child: Container(
-                    color: const Color(0xff282828),
-                    width: double.infinity,
-                    height: 2,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+        Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: 40,
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: FractionallySizedBox(
                     widthFactor: 3 / 3,
                     child: TabBar(
-                      indicatorColor: const Color(0xff0073E6),
+                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      tabAlignment: TabAlignment.start,
+                      padding: EdgeInsets.zero,
+                      labelPadding: const EdgeInsets.only(right: 24),
+                      isScrollable: true,
+                      dividerHeight: 0,
+                      indicatorWeight: 4,
                       controller: _tabController,
-                      tabs: const <Widget>[
-                        Tab(text: 'Hardware info'),
-                        Tab(text: 'Pipelines'),
-                        Tab(text: 'Payload'),
-                        Tab(text: 'Notification'),
-                        Tab(text: 'Heartbeat'),
-                        Tab(text: 'Commands'),
-                        // Tab(text: 'Full payloads (EXP)'),
+                      indicator: ShapeDecoration(
+                        shape: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 4.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        gradient: AppColors.tabBarIndicatorGradient,
+                      ),
+                      indicatorPadding: const EdgeInsets.only(top: 20),
+                      labelStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimaryColor,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textSecondaryColor,
+                      ),
+                      tabs: const [
+                        Text('Resources'),
+                        Text('Pipelines'),
+                        Text('Comms'),
                       ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            AppButtonSecondary(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              text: 'Filter',
+              icon: SvgPicture.asset(
+                AssetUtils.getSvgIconPath('sliders'),
+                color: AppColors.buttonSecondaryIconColor,
+              ),
+              borderColor: Colors.transparent,
+              onPressed: (){},
+            ),
+          ],
         ),
+        const SizedBox(height: 16),
         Expanded(
-          child: IndexedStack(
-            index: _tabIndex,
-            children: <Widget>[
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.hardwareInfoView,
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              /// Resources tab
+              SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MyLineChart(
+                            title: 'GPU',
+                            borderColor: AppColors.lineChartGreenBorderColor,
+                            gradient: AppColors.lineChartGreenGradient,
+                          ),
+                        ),
+                        const SizedBox(width: 34),
+                        Expanded(
+                          child: MyLineChart(
+                            title: 'CPU',
+                            borderColor: AppColors.lineChartMagentaBorderColor,
+                            gradient: AppColors.lineChartMagentaGradient,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 34),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: MyLineChart(
+                            title: 'RAM',
+                            borderColor: AppColors.lineChartPinkBorderColor,
+                            gradient: AppColors.lineChartPinkGradient,
+                          ),
+                        ),
+                        const SizedBox(width: 34),
+                        Expanded(
+                          child: MyLineChart(
+                            title: 'DISK',
+                            borderColor: AppColors.lineChartBlueBorderColor,
+                            gradient: AppColors.lineChartBlueGradient,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.pipelinesView,
+
+              /// Pipelines tab
+              const Center(
+                child: Text('Pipelines Section'),
               ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.payloadView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.notificationView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.heartbeatView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.commandView,
-              ),
-              // ColoredBox(
-              //   color: const Color(0xff1F1F1F),
-              //   child: widget.fullPayloadsView,
-              // ),
+
+              /// Comms tab
+              const Comms(),
             ],
           ),
-        ),
+        )
       ],
     );
   }

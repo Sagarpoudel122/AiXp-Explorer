@@ -30,7 +30,6 @@ class DebugViewer extends StatelessWidget {
       );
     }
     return Container(
-      color: const Color(0xff161616),
       height: double.infinity,
       child: BoxMessagesTabDisplay(
         hardwareInfoView: HardwareInfoView(

@@ -4,11 +4,16 @@ import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
+import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_utils.dart';
+import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/icon_button_tooltip.dart';
+import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table_new.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/widgets/preferred_supervisor_menu.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +35,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   List<NetmonBox> netmonStatusList = [];
   List<String> supervisorIds = [];
   bool refreshReady = true;
-  final OverlayController _settingsOverlayController =
-      OverlayController('Preferred supervisor');
+  final OverlayController _settingsOverlayController = OverlayController('Preferred supervisor');
 
   // String? preferredSupervisor;
   String? currentSupervisor;
@@ -40,8 +44,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(
-        const Duration(seconds: 5), (timer) => refreshReady = true);
+    timer = Timer.periodic(const Duration(seconds: 5), (timer) => refreshReady = true);
   }
 
   @override
@@ -54,18 +57,15 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   Widget build(BuildContext context) {
     return E2Listener(
       onPayload: (message) {
-        final Map<String, dynamic> convertedMessage =
-            MqttMessageEncoderDecoder.raw(message);
+        final Map<String, dynamic> convertedMessage = MqttMessageEncoderDecoder.raw(message);
 
         if (convertedMessage['IS_SUPERVISOR'] == true &&
             convertedMessage['CURRENT_NETWORK'] != null) {
-          final currentNetwork =
-              convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
+          final currentNetwork = convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
 
           final currentNetworkMap = <String, NetmonBoxDetails>{};
           currentNetwork.forEach((key, value) {
-            currentNetworkMap[key] =
-                NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
+            currentNetworkMap[key] = NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
           });
           if (currentNetworkMap.length > 1) {
             setState(() {
@@ -73,14 +73,12 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
               refreshReady = false;
               netmonStatus = currentNetworkMap;
               netmonStatusList = netmonStatus.entries
-                  .map((entry) =>
-                      NetmonBox(boxId: entry.key, details: entry.value))
+                  .map((entry) => NetmonBox(boxId: entry.key, details: entry.value))
                   .toList();
 
               supervisorIds = netmonStatusList
                   .where((element) =>
-                      element.details.isSupervisor &&
-                      element.details.working == 'ONLINE')
+                      element.details.isSupervisor && element.details.working == 'ONLINE')
                   .map((e) => e.boxId)
                   .toList();
             });
@@ -97,8 +95,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         // }
 
         /// Added a change to accept only preferredSupervisor
-        if (currentSupervisor != null &&
-            dataMap['EE_PAYLOAD_PATH']?[0] != currentSupervisor) {
+        if (currentSupervisor != null && dataMap['EE_PAYLOAD_PATH']?[0] != currentSupervisor) {
           return false;
         }
         // final dataField = dataMap?['data'] as Map<String, dynamic>;
@@ -107,6 +104,74 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         return true;
       },
       builder: (BuildContext context) {
+        var d = DashboardBodyContainer(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.only(left: 16, right: 10),
+                child: Row(
+                  children: [
+                    TextWidget('Node Dashboard', style: CustomTextStyles.text20_700),
+                    const Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: 'Network by ',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: AppColors.textPrimaryColor,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: '@prod_super',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.textPrimaryColor,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        TextWidget(
+                          '2023-12-22 14:10:46',
+                          style: CustomTextStyles.text14_700,
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 19),
+                    AppButtonPrimary(
+                      text: 'Refresh',
+                      onPressed: () {},
+                      height: 32,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 14),
+              Expanded(
+                child: NetmonTableNew(
+                  netmonBoxes: netmonStatusList,
+                  onBoxSelected: widget.onBoxSelected,
+                ),
+              ),
+
+              /// Todo: Table here
+              // Container(
+              //   color: Colors.green,
+              //   width: double.maxFinite,
+              //   height: 500,
+              // )
+            ],
+          ),
+        );
+        return d;
         return Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -142,18 +207,14 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                             ? null
                             : () async {
                                 if (!_settingsOverlayController.canOpen) {
-                                  _settingsOverlayController
-                                      .closeWithResult(null);
+                                  _settingsOverlayController.closeWithResult(null);
                                   return;
                                 }
-                                const Alignment targetAnchor =
-                                    Alignment.bottomRight;
-                                const Alignment followerAnchor =
-                                    Alignment.bottomLeft;
+                                const Alignment targetAnchor = Alignment.bottomRight;
+                                const Alignment followerAnchor = Alignment.bottomLeft;
 
                                 final dynamic returnedValue =
-                                    await _settingsOverlayController
-                                        .showOverlay(
+                                    await _settingsOverlayController.showOverlay(
                                   context: context,
                                   isModal: false,
                                   targetAnchor: targetAnchor,
@@ -167,8 +228,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                   shellBuilder: (context, content) => content,
                                   contentBuilder: (context, controller) {
                                     return PreferredSupervisorMenu(
-                                      overlayController:
-                                          _settingsOverlayController,
+                                      overlayController: _settingsOverlayController,
                                       supervisors: supervisorIds,
                                       selectedSupervisor: currentSupervisor!,
                                     );

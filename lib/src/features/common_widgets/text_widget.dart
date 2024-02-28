@@ -5,8 +5,13 @@ import '../../styles/color_styles.dart';
 
 enum CustomTextStyles {
   text12_600,
+  text12_700,
+  text14_400,
+  text14_700,
+  text16_400,
   text16_400_secondary,
   text16_600,
+  text20_700,
 }
 
 class TextWidget extends StatelessWidget {
@@ -57,6 +62,30 @@ class TextWidget extends StatelessWidget {
         textColor ??= AppColors.textPrimaryColor;
         break;
 
+      case CustomTextStyles.text12_700:
+        fontSize = 12;
+        fontWeight = FontWeight.w700;
+        textColor ??= AppColors.textPrimaryColor;
+        break;
+
+      case CustomTextStyles.text14_400:
+        fontSize = 14;
+        fontWeight = FontWeight.w400;
+        textColor ??= AppColors.textPrimaryColor;
+        break;
+
+      case CustomTextStyles.text14_700:
+        fontSize = 14;
+        fontWeight = FontWeight.w700;
+        textColor ??= AppColors.textPrimaryColor;
+        break;
+
+      case CustomTextStyles.text16_400:
+        fontSize = 16;
+        fontWeight = FontWeight.w400;
+        textColor ??= AppColors.textPrimaryColor;
+        break;
+
       case CustomTextStyles.text16_400_secondary:
         fontSize = 16;
         fontWeight = FontWeight.w400;
@@ -66,6 +95,12 @@ class TextWidget extends StatelessWidget {
       case CustomTextStyles.text16_600:
         fontSize = 16;
         fontWeight = FontWeight.w600;
+        textColor ??= AppColors.textPrimaryColor;
+        break;
+
+      case CustomTextStyles.text20_700:
+        fontSize = 20;
+        fontWeight = FontWeight.w700;
         textColor ??= AppColors.textPrimaryColor;
         break;
 
