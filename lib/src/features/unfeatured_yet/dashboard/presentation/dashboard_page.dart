@@ -1,9 +1,7 @@
 import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/coms/coms.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/node_dashboard.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
 import 'package:e2_explorer/src/features/profile/presentation/profile.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation/left_nav_layout.dart';
@@ -12,6 +10,8 @@ import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presenta
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
+
+import '../../../node_dashboard/presentation/pages/node_dashboard.dart';
 
 class DashboardPage extends StatelessWidget {
   DashboardPage({super.key, required this.child});

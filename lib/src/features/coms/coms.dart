@@ -5,7 +5,9 @@ import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:flutter/material.dart';
 
 class Comms extends StatefulWidget {
-  const Comms({super.key});
+  const Comms({super.key, required this.boxName});
+
+  final String boxName;
 
   @override
   State<Comms> createState() => _CommsState();

@@ -1,6 +1,6 @@
-import '../features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
-import '../features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/equipment_dto.dart';
-import '../features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/location.dart';
+import '../features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
+import '../features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/equipment_dto.dart';
+import '../features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/location.dart';
 
 final user = [
   {

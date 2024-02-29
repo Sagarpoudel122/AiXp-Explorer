@@ -5,7 +5,7 @@ import 'dart:convert';
 
 import 'package:e2_explorer/http_client/index.dart';
 import 'package:e2_explorer/src/utils/nullable_field.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/language.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/language.dart';
 import 'package:equatable/equatable.dart';
 
 class BusinessClient extends Equatable {

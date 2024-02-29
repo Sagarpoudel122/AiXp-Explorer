@@ -1,7 +1,8 @@
-import 'package:e2_explorer/src/features/node_dashboard/pages/coms/coms.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/pipeline_screen.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/pipeline_screen.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+
+import '../../../coms/coms.dart';
 
 class NodeDashBoard extends StatefulWidget {
   const NodeDashBoard({super.key});
@@ -36,7 +37,7 @@ class _NodeDashBoardState extends State<NodeDashBoard> {
         child: Text("Resources"),
       ),
       PipeLine(),
-      Comms(),
+      Comms(boxName: ''),
     ];
     return Scaffold(
         body: Padding(

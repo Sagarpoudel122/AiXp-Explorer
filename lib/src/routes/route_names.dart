@@ -17,7 +17,6 @@ class RouteNames {
   static const String createWalletReady = 'createWalletReady';
   static const String profile = 'profile';
   static const String nodeDashboard = "/nodeDashboard";
-  static const String profile = 'profile';
   static const String comms = '/comms';
 }
 

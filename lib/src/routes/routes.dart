@@ -1,22 +1,18 @@
 import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
-import 'package:e2_explorer/src/features/coms/coms.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/coms/coms.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/node_dashboard.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
 import 'package:e2_explorer/src/features/profile/presentation/profile.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/dashboard_page.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_page.dart';
-import 'package:e2_explorer/src/features/wallet/presentation/copy_code.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/create_wallet_ready.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_create.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_import.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_page.dart';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../features/unfeatured_yet/connection/presentation/connection_page.dart';
+import '../features/wallet/presentation/copy_code.dart';
 
 part 'route_names.dart';
 
@@ -98,7 +94,8 @@ class AppRoutes {
             path: RouteLocations.nodeDashboard,
             name: RouteNames.nodeDashboard,
             builder: (BuildContext context, GoRouterState state) {
-              return const NodeDashBoard();
+              return const NetworkPage();
+              // return const NodeDashBoard();
             },
           ),
           GoRoute(

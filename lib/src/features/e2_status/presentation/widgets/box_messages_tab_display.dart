@@ -4,16 +4,10 @@ import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../../../widgets/chats_widgets/line_chart_widget.dart';
-import '../../../coms/coms.dart';
-
 enum BoxViewerTab {
-  hardwareInfo,
+  resources,
   pipelines,
-  payload,
-  notification,
-  heartbeat,
-  fullPayload;
+  comms;
 
   static BoxViewerTab fromIndex(int index) {
     return BoxViewerTab.values[index];
@@ -23,22 +17,15 @@ enum BoxViewerTab {
 class BoxMessagesTabDisplay extends StatefulWidget {
   const BoxMessagesTabDisplay({
     super.key,
-    required this.hardwareInfoView,
+    required this.resourcesView,
     required this.pipelinesView,
-    required this.payloadView,
-    required this.notificationView,
-    required this.heartbeatView,
-    required this.commandView,
-    // required this.fullPayloadsView,
+    required this.commsView,
     this.onTabChanged,
   });
 
-  final Widget hardwareInfoView;
+  final Widget resourcesView;
   final Widget pipelinesView;
-  final Widget payloadView;
-  final Widget notificationView;
-  final Widget heartbeatView;
-  final Widget commandView;
+  final Widget commsView;
 
   // final Widget fullPayloadsView;
   final void Function(BoxViewerTab tab)? onTabChanged;
@@ -129,7 +116,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                 color: AppColors.buttonSecondaryIconColor,
               ),
               borderColor: Colors.transparent,
-              onPressed: (){},
+              onPressed: () {},
             ),
           ],
         ),
@@ -139,60 +126,13 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
             controller: _tabController,
             children: [
               /// Resources tab
-              SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MyLineChart(
-                            title: 'GPU',
-                            borderColor: AppColors.lineChartGreenBorderColor,
-                            gradient: AppColors.lineChartGreenGradient,
-                          ),
-                        ),
-                        const SizedBox(width: 34),
-                        Expanded(
-                          child: MyLineChart(
-                            title: 'CPU',
-                            borderColor: AppColors.lineChartMagentaBorderColor,
-                            gradient: AppColors.lineChartMagentaGradient,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 34),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: MyLineChart(
-                            title: 'RAM',
-                            borderColor: AppColors.lineChartPinkBorderColor,
-                            gradient: AppColors.lineChartPinkGradient,
-                          ),
-                        ),
-                        const SizedBox(width: 34),
-                        Expanded(
-                          child: MyLineChart(
-                            title: 'DISK',
-                            borderColor: AppColors.lineChartBlueBorderColor,
-                            gradient: AppColors.lineChartBlueGradient,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              widget.resourcesView,
 
               /// Pipelines tab
-              const Center(
-                child: Text('Pipelines Section'),
-              ),
+              widget.pipelinesView,
 
               /// Comms tab
-              const Comms(),
+              widget.commsView
             ],
           ),
         )

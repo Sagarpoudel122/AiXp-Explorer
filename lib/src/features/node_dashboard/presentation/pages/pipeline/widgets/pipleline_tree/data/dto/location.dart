@@ -1,7 +1,7 @@
 
 
 import 'package:e2_explorer/http_client/index.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
 import 'package:equatable/equatable.dart';
 
 class Location extends Equatable {

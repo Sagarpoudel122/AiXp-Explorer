@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../styles/color_styles.dart';
 
-class MyLineChart extends StatelessWidget {
-  const MyLineChart({
+class LineChartWidget extends StatelessWidget {
+  const LineChartWidget({
     super.key,
     required this.borderColor,
     required this.gradient,

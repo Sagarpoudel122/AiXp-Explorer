@@ -1,9 +1,7 @@
+import 'package:e2_explorer/src/features/coms/coms.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/box_messages_tab_display.dart';
-import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/command_view.dart';
-import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/hardware_info_view.dart';
-import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/heartbeat_view.dart';
-import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/notification_view.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/pipeline_detailed_view.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/resources_tab.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -32,41 +30,18 @@ class DebugViewer extends StatelessWidget {
     return Container(
       height: double.infinity,
       child: BoxMessagesTabDisplay(
-        hardwareInfoView: HardwareInfoView(
-          key: ValueKey(boxName),
+        resourcesView: ResourcesTab(
+          key: ValueKey('${boxName ?? ''}1'),
           boxName: boxName!,
         ),
         pipelinesView: PipelineDetailedView(
-          key: ValueKey(boxName),
+          key: ValueKey('${boxName ?? ''}2'),
           boxName: boxName!,
         ),
-        // payloadView: PayloadView(
-        //   key: ValueKey(boxName),
-        //   boxName: boxName!,
-        // ),
-        payloadView: Center(
-          key: ValueKey(boxName),
-          child: Text(
-            'Functionality disabled',
-            style: TextStyles.body(),
-          ),
-        ),
-        notificationView: NotificationView(
-          key: ValueKey(boxName),
+        commsView: Comms(
+          key: ValueKey('${boxName ?? ''}3'),
           boxName: boxName!,
         ),
-        heartbeatView: HeartbeatView(
-          key: ValueKey(boxName),
-          boxName: boxName!,
-        ),
-        commandView: CommandView(
-          key: ValueKey(boxName),
-          boxName: boxName!,
-        ),
-        // fullPayloadsView: FullPayloadView(
-        //   key: ValueKey(boxName),
-        //   boxName: boxName,
-        // ),
         onTabChanged: (tab) {},
       ),
     );

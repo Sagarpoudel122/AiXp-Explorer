@@ -1,5 +1,5 @@
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/index.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/widgets/pipleline_tree/index.dart';
 import 'package:flutter/material.dart';
 
 class PipeLine extends StatelessWidget {

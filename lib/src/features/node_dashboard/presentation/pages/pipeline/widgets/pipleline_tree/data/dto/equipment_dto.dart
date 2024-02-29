@@ -2,9 +2,9 @@
 
 import 'dart:convert';
 
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/location.dart';
-import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/widgets/pipleline_tree/index.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/data/dto/location.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/index.dart';
 
 List<EquipmentDTO> equipmentsFromJson(String str) => List<EquipmentDTO>.from(
       (json.decode(str) as List<dynamic>).map(
