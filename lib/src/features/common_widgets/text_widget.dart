@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import '../../styles/color_styles.dart';
 
 enum CustomTextStyles {
+  text12_400_tertiary,
   text12_600,
   text12_700,
   text14_400,
+  text14_400_secondary,
   text14_700,
   text16_400,
   text16_400_secondary,
@@ -56,6 +58,12 @@ class TextWidget extends StatelessWidget {
 
   getStyle() {
     switch (style) {
+      case CustomTextStyles.text12_400_tertiary:
+        fontSize = 12;
+        fontWeight = FontWeight.w400;
+        textColor ??= AppColors.textTertiaryColor;
+        break;
+
       case CustomTextStyles.text12_600:
         fontSize = 12;
         fontWeight = FontWeight.w600;
@@ -72,6 +80,12 @@ class TextWidget extends StatelessWidget {
         fontSize = 14;
         fontWeight = FontWeight.w400;
         textColor ??= AppColors.textPrimaryColor;
+        break;
+
+      case CustomTextStyles.text14_400_secondary:
+        fontSize = 14;
+        fontWeight = FontWeight.w400;
+        textColor ??= AppColors.textSecondaryColor;
         break;
 
       case CustomTextStyles.text14_700:

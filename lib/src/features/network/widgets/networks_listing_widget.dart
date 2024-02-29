@@ -1,18 +1,26 @@
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/connection/domain/models/mqtt_server.dart';
+import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
 
 class NetworksListingWidget extends StatelessWidget {
   const NetworksListingWidget({
     super.key,
     required this.title,
-    required this.subItems,
+    required this.servers,
     this.selectedItem,
+    this.enabled = true,
+    this.onSelectionChanged,
   });
 
-  final List<String> subItems;
-
+  final List<MqttServer> servers;
   final String title;
   final String? selectedItem;
+  final bool enabled;
+  final Function(MqttServer)? onSelectionChanged;
+
+  bool get isActive =>
+      selectedItem != null && servers.map((e) => e.name).toList().contains(selectedItem);
 
   @override
   Widget build(BuildContext context) {
@@ -21,32 +29,37 @@ class NetworksListingWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            ActiveStatusDot(
-              isActive: selectedItem != null && subItems.contains(selectedItem),
-            ),
+            ActiveStatusDot(isActive: isActive),
             const SizedBox(width: 6),
             TextWidget(title, style: CustomTextStyles.text16_600),
           ],
         ),
         const SizedBox(height: 14),
-        for (String item in subItems) ...[
-          Row(
-            children: [
-              const SizedBox(width: 15),
-              Container(
-                width: 30,
-                alignment: Alignment.topLeft,
-                child: itemSelected(item)
-                    ? const Icon(Icons.check_rounded, color: Color(0xFF49D688))
-                    : const SizedBox(),
-              ),
-              TextWidget(
-                item,
-                style: itemSelected(item)
-                    ? CustomTextStyles.text16_600
-                    : CustomTextStyles.text16_400_secondary,
-              ),
-            ],
+        for (MqttServer item in servers) ...[
+          TransparentInkwellWidget(
+            onTap: () {
+              if (item.name.toLowerCase() != selectedItem?.toLowerCase()) {
+                onSelectionChanged?.call(item);
+              }
+            },
+            child: Row(
+              children: [
+                const SizedBox(width: 15),
+                Container(
+                  width: 30,
+                  alignment: Alignment.topLeft,
+                  child: itemSelected(item.name)
+                      ? const Icon(Icons.check_rounded, color: Color(0xFF49D688))
+                      : const SizedBox(),
+                ),
+                TextWidget(
+                  item.name,
+                  style: itemSelected(item.name)
+                      ? CustomTextStyles.text16_600
+                      : CustomTextStyles.text16_400_secondary,
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 12),
         ],
@@ -54,8 +67,7 @@ class NetworksListingWidget extends StatelessWidget {
     );
   }
 
-  bool itemSelected(String item) =>
-      selectedItem != null && selectedItem == item;
+  bool itemSelected(String item) => selectedItem != null && selectedItem == item;
 }
 
 class ActiveStatusDot extends StatelessWidget {

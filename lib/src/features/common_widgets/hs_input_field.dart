@@ -183,9 +183,7 @@ class _HSInputFieldState extends State<HSInputField> {
               Text(
                 widget.inputFieldLabel,
                 style: TextStyles.smallStrong(
-                  color: widget.enabled
-                      ? ColorStyles.light100
-                      : ColorStyles.light900,
+                  color: widget.enabled ? ColorStyles.light100 : ColorStyles.light900,
                 ),
               ),
               optionalTextWidget
@@ -201,8 +199,7 @@ class _HSInputFieldState extends State<HSInputField> {
             textInputAction: widget.textInputAction,
             enabled: widget.enabled,
             style: TextStyles.small(
-              color:
-                  widget.enabled ? ColorStyles.light100 : ColorStyles.light900,
+              color: widget.enabled ? ColorStyles.light100 : ColorStyles.light900,
             ),
             autofocus: widget.autofocus,
             autovalidateMode: widget.autoValidateMode,
@@ -224,34 +221,32 @@ class _HSInputFieldState extends State<HSInputField> {
                   ? widget.inputBackgroundColor
                   : widget.disabledColor ?? ColorStyles.dark800,
               enabledBorder: OutlineInputBorder(
-                borderRadius: widget.borderRadius ??
-                    BorderRadius.all(Radius.circular(widget.cornerRadius)),
+                borderRadius:
+                    widget.borderRadius ?? BorderRadius.all(Radius.circular(widget.cornerRadius)),
                 borderSide: !widget.enableBorder
                     ? BorderSide.none
                     : BorderSide(
-                        color: widget.isValid
-                            ? widget.borderColor
-                            : ColorStyles.red,
+                        color: widget.isValid ? widget.borderColor : ColorStyles.red,
                         width: 2,
                       ),
               ),
               errorBorder: OutlineInputBorder(
-                borderRadius: widget.borderRadius ??
-                    BorderRadius.all(Radius.circular(widget.cornerRadius)),
+                borderRadius:
+                    widget.borderRadius ?? BorderRadius.all(Radius.circular(widget.cornerRadius)),
                 borderSide: !widget.enableBorder
                     ? BorderSide.none
                     : const BorderSide(color: ColorStyles.red, width: 2),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: widget.borderRadius ??
-                    BorderRadius.all(Radius.circular(widget.cornerRadius)),
+                borderRadius:
+                    widget.borderRadius ?? BorderRadius.all(Radius.circular(widget.cornerRadius)),
                 borderSide: !widget.enableBorder
                     ? BorderSide.none
                     : const BorderSide(color: ColorStyles.red, width: 2),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: widget.borderRadius ??
-                    BorderRadius.all(Radius.circular(widget.cornerRadius)),
+                borderRadius:
+                    widget.borderRadius ?? BorderRadius.all(Radius.circular(widget.cornerRadius)),
                 borderSide: !widget.enableBorder
                     ? BorderSide.none
                     : BorderSide(
@@ -306,8 +301,7 @@ class _HSInputFieldState extends State<HSInputField> {
             widget.onChanged!.call(text);
           }
           setState(() {
-            charactersLeft =
-                maxCharacters - widget.textFieldController!.text.length;
+            charactersLeft = maxCharacters - widget.textFieldController!.text.length;
           });
         },
         style: TextStyles.small(
@@ -796,11 +790,15 @@ class TextInputFieldWidget extends StatefulWidget {
     this.controller,
     this.focusNode,
     this.hintText,
+    this.validator,
+    this.inputFormatters,
   });
 
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final String? hintText;
+  final String? Function(BuildContext, String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   State<TextInputFieldWidget> createState() => _TextInputFieldWidgetState();
@@ -830,10 +828,14 @@ class _TextInputFieldWidgetState extends State<TextInputFieldWidget> {
     return TextFormField(
       controller: controller,
       focusNode: focusNode,
+      validator: validator,
+      inputFormatters: widget.inputFormatters,
       decoration: InputDecoration(
         hintText: widget.hintText,
         // contentPadding: const EdgeInsets.symmetric(horizontal: 16,vertical: 20)
       ),
     );
   }
+
+  String? validator(String? val) => widget.validator?.call(context, val);
 }

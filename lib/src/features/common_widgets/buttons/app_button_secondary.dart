@@ -21,6 +21,7 @@ class AppButtonSecondary extends StatefulWidget {
     this.height = 36,
     this.minWidth,
     this.borderColor,
+    this.loading = false,
   });
 
   final String text;
@@ -36,6 +37,7 @@ class AppButtonSecondary extends StatefulWidget {
   final double height;
   final double? minWidth;
   final Color? borderColor;
+  final bool loading;
 
   @override
   State<AppButtonSecondary> createState() => _AppButtonSecondaryState();
@@ -60,25 +62,39 @@ class _AppButtonSecondaryState extends State<AppButtonSecondary> {
                 });
               },
               style: buttonStyle,
-              onPressed: widget.onPressed ?? () {},
+              onPressed: widget.loading ? () {} : widget.onPressed ?? () {},
               icon: iconWidget!,
               label: textWidget,
             )
           : ElevatedButton(
               style: buttonStyle,
-              onPressed: widget.onPressed ?? () {},
+              onPressed: widget.loading ? () {} : widget.onPressed ?? () {},
               child: textWidget,
             ),
     );
   }
 
-  Widget get textWidget => Text(
-        widget.text,
-        style: TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          color: textColor,
-        ),
+  Widget get textWidget => Stack(
+        alignment: Alignment.center,
+        children: [
+          Text(
+            widget.text,
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: widget.loading ? Colors.transparent : textColor,
+            ),
+          ),
+          if (widget.loading) ...[
+            const SizedBox(
+              height: 20,
+              width: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+              ),
+            ),
+          ],
+        ],
       );
 
   ButtonStyle get buttonStyle => ElevatedButton.styleFrom(

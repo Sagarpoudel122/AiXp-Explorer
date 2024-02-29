@@ -15,8 +15,8 @@ enum AppDialogType { small, medium, large }
 class AppDialogWidget extends StatelessWidget {
   const AppDialogWidget({
     super.key,
-    required this.content,
     required this.title,
+    required this.content,
     this.positiveActionButtonText,
     this.negativeActionButtonText,
     this.positiveActionButtonAction,

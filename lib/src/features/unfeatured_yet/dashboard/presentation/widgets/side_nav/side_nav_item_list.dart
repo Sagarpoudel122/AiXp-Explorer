@@ -12,24 +12,20 @@ class SideNavItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: SingleChildScrollView(
-        physics: const ScrollPhysics(),
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          children: <Widget>[
-            for (final HomeNavigationItem item in items)
-              Column(
-                children: <Widget>[
-                  SideNavItemTile(
-                    key: ValueKey<HomeNavigationItem>(item),
-                    item: item,
-                  ),
-                  if (item.enableLowerDivider)
-                    Divider(color: AppColors.sideNavDividerColor),
-                ],
-              ),
-          ],
-        ),
+      child: Column(
+        children: <Widget>[
+          for (final HomeNavigationItem item in items)
+            Column(
+              children: <Widget>[
+                SideNavItemTile(
+                  key: ValueKey<HomeNavigationItem>(item),
+                  item: item,
+                ),
+                if (item.enableLowerDivider)
+                  Divider(color: AppColors.sideNavDividerColor),
+              ],
+            ),
+        ],
       ),
     );
   }

@@ -110,7 +110,10 @@ class _NetworkPageState extends State<NetworkPage> {
                       style: CustomTextStyles.text16_400,
                     ),
                   ),
-                  const AppButtonPrimary(text: 'Refresh', height: 32),
+                  const AppButtonPrimary(
+                    text: 'Refresh',
+                    height: 32,
+                  ),
                 ],
               ),
             ),

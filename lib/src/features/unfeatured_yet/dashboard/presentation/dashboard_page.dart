@@ -47,51 +47,45 @@ class DashboardPage extends StatelessWidget {
             pageWidget: const NetworkPage(),
             path: RouteNames.network,
           ),
-          NavigationItem(
-            title: 'Profile',
-            // icon: CarbonIcons.query_queue,
-            svgIconPath: AssetUtils.getSidebarIconPath('profile'),
-            pageWidget: const ProfilePage(),
-            path: RouteNames.profile,
-          ),
+
 
           /// old ones
           ///
           ///
           ///
 
-          const NavigationItem(
-            title: 'Network status',
-            icon: CarbonIcons.network_1,
-            pageWidget: NetworkPage(),
-            path: RouteNames.network,
-          ),
-          const NavigationItem(
-            title: 'Manager',
-            icon: CarbonIcons.network_1,
-            pageWidget: SizedBox(),
-            path: RouteNames.manager,
-            children: [
-              NavigationItem(
-                title: 'Config Startup',
-                icon: CarbonIcons.iot_connect,
-                pageWidget: ConfigStartupPage(),
-                path: RouteNames.config,
-              ),
-              NavigationItem(
-                title: 'Command Launcher',
-                icon: CarbonIcons.iot_connect,
-                pageWidget: CommandLauncherPage(),
-                path: RouteNames.commandLauncher,
-              ),
-            ],
-          ),
-          const NavigationItem(
-            title: 'Message viewer',
-            icon: CarbonIcons.query_queue,
-            pageWidget: PayloadViewer(boxName: ''),
-            path: RouteNames.payloadViewer,
-          ),
+          // const NavigationItem(
+          //   title: 'Network status',
+          //   icon: CarbonIcons.network_1,
+          //   pageWidget: NetworkPage(),
+          //   path: RouteNames.network,
+          // ),
+          // const NavigationItem(
+          //   title: 'Manager',
+          //   icon: CarbonIcons.network_1,
+          //   pageWidget: SizedBox(),
+          //   path: RouteNames.manager,
+          //   children: [
+          //     NavigationItem(
+          //       title: 'Config Startup',
+          //       icon: CarbonIcons.iot_connect,
+          //       pageWidget: ConfigStartupPage(),
+          //       path: RouteNames.config,
+          //     ),
+          //     NavigationItem(
+          //       title: 'Command Launcher',
+          //       icon: CarbonIcons.iot_connect,
+          //       pageWidget: CommandLauncherPage(),
+          //       path: RouteNames.commandLauncher,
+          //     ),
+          //   ],
+          // ),
+          // const NavigationItem(
+          //   title: 'Message viewer',
+          //   icon: CarbonIcons.query_queue,
+          //   pageWidget: PayloadViewer(boxName: ''),
+          //   path: RouteNames.payloadViewer,
+          // ),
         ],
         child: child,
       ),

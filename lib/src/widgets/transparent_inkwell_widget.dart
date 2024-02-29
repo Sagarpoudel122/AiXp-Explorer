@@ -19,6 +19,7 @@ class TransparentInkwellWidget extends StatelessWidget {
       hoverColor: Colors.transparent,
       focusColor: Colors.transparent,
       splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onTap: onTap,
       child: child,
     );
