@@ -1,5 +1,22 @@
 import 'package:flutter/foundation.dart';
 
+enum NetmonBoxColumn {
+  boxId(sortable: true),
+  version(sortable: true),
+  working,
+  uptime,
+  lastSeen,
+  security,
+  score,
+  trust,
+  notes,
+  superColumn;
+
+  const NetmonBoxColumn({this.sortable = false});
+
+  final bool sortable;
+}
+
 class NetmonBox {
   final String boxId;
   final NetmonBoxDetails details;
@@ -112,12 +129,9 @@ class NetmonBoxDetails {
       lastSeenSec: (map['last_seen_sec'] as num).toDouble(),
       availDisk: (map['avail_disk'] as num).toDouble(),
       availMem: (map['avail_mem'] as num).toDouble(),
-      cpuPast1h: (map['cpu_past1h'] as num?)?.toDouble() ??
-          NetmonBoxDetails.invalidDoubleValue,
-      gpuLoadPast1h:
-          (map['gpu_load_past1h'] as num?)?.toDouble() ?? invalidDoubleValue,
-      gpuMemPast1h:
-          (map['gpu_mem_past1h'] as num?)?.toDouble() ?? invalidDoubleValue,
+      cpuPast1h: (map['cpu_past1h'] as num?)?.toDouble() ?? NetmonBoxDetails.invalidDoubleValue,
+      gpuLoadPast1h: (map['gpu_load_past1h'] as num?)?.toDouble() ?? invalidDoubleValue,
+      gpuMemPast1h: (map['gpu_mem_past1h'] as num?)?.toDouble() ?? invalidDoubleValue,
       score: (map['SCORE'] as num).toDouble(),
     );
   }

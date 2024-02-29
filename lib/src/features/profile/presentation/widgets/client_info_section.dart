@@ -4,7 +4,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
-import 'package:e2_explorer/src/widgets/app_button_secondary.dart';
+import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

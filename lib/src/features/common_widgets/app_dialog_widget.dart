@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:e2_explorer/src/styles/color_styles.dart';
-import 'package:e2_explorer/src/widgets/app_button_primary.dart';
-import 'package:e2_explorer/src/widgets/text_widget.dart';
+import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
+import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:flutter/material.dart';
 
-import '../utils/dimens.dart';
-import 'app_button_secondary.dart';
+import '../../utils/dimens.dart';
+import 'buttons/app_button_secondary.dart';
 
 enum AppDialogType { small, medium, large }
 
@@ -15,8 +15,8 @@ enum AppDialogType { small, medium, large }
 class AppDialogWidget extends StatelessWidget {
   const AppDialogWidget({
     super.key,
-    required this.content,
     required this.title,
+    required this.content,
     this.positiveActionButtonText,
     this.negativeActionButtonText,
     this.positiveActionButtonAction,

@@ -5,7 +5,9 @@ import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:flutter/material.dart';
 
 class Comms extends StatefulWidget {
-  const Comms({super.key});
+  const Comms({super.key, required this.boxName});
+
+  final String boxName;
 
   @override
   State<Comms> createState() => _CommsState();
@@ -28,10 +30,10 @@ class _CommsState extends State<Comms> {
       required bool isSelected,
     }) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF2E2C6A) : null,
-            borderRadius: BorderRadius.circular(10)),
+          color: isSelected ? const Color(0xFF2E2C6A) : null,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -50,44 +52,45 @@ class _CommsState extends State<Comms> {
 
     // Define custom theme
 
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Row(
-          children: [
-            Expanded(
-                flex: 1,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: AppColors.containerBgColor,
-                  ),
-                  child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                            onTap: () => changeOmdex(index),
-                            child:
-                                listTile(isSelected: index == selectedIndex));
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 10),
-                      itemCount: 26),
-                )),
-            const SizedBox(width: 20),
-            Expanded(
-                flex: 2,
-                child: Container(
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: AppColors.containerBgColor,
-                  ),
-                  child: XMLViwer(xml: xml),
-                ))
-          ],
-        ),
+    return Container(
+      // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 17),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: AppColors.containerBgColor,
+              ),
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return InkWell(
+                    onTap: () => changeOmdex(index),
+                    child: listTile(
+                      isSelected: index == selectedIndex,
+                    ),
+                  );
+                },
+                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                itemCount: 26,
+              ),
+            ),
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            flex: 2,
+            child: Container(
+              height: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: AppColors.containerBgColor,
+              ),
+              child: XMLViwer(xml: xml),
+            ),
+          ),
+        ],
       ),
     );
   }

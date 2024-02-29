@@ -73,4 +73,9 @@ flutter:
         - asset: assets/fonts/Inter-Black.ttf
           weight: 900
 
+    - family: OpenSans
+      fonts:
+        - asset: assets/fonts/OpenSans/OpenSans_Normal.ttf
+        - asset: assets/fonts/OpenSans/OpenSans_Italic.ttf
+
 

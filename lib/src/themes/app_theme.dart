@@ -110,7 +110,8 @@ InputDecorationTheme get _customInputTheme {
     disabledBorder: _inputFieldBorder(AppColors.inputFieldUnfocusedBorderColor),
     focusedBorder: _inputFieldBorder(AppColors.inputFieldFocusedBorderColor),
     errorBorder: _inputFieldBorder(AppColors.inputFieldErrorBorderColor),
-    contentPadding: const EdgeInsets.only(bottom: 14, left: 14, right: 14),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
+    // contentPadding: const EdgeInsets.only(bottom: 14, left: 14, right: 14),
     errorMaxLines: 4,
   );
 }

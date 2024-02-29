@@ -4,13 +4,23 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
 import 'package:e2_explorer/src/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+/// Todo: implemented for test. Remove once test completed.
+Future<void> clearServersAndDefaultServer() async {
+  const String mqttServersKey = 'mqtt_servers';
+  const String selectedServerNameKey = 'selected_server_name';
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove(mqttServersKey);
+  await prefs.remove(selectedServerNameKey);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  /// check theme
+  /// Check which theme to use and initialize the colors according to theme.
   await ThemeUtils.initialize();
+  // await clearServersAndDefaultServer();
   runApp(const MyApp());
 
   doWhenWindowReady(() {

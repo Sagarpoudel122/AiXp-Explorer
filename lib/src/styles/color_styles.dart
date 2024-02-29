@@ -76,6 +76,22 @@ class AppColors {
   static late Color tableStatusErrorBtnTextColor;
   static late Color tableStatusWarningBtnBgColor;
   static late Color tableStatusWarningBtnTextColor;
+  static late Color tableBorderColor;
+  static late Color tableHeaderSortIconInactiveColor;
+  static late Color tableHeaderSortIconActiveColor;
+
+  /// Line chart colors
+  static late Color lineChartGreenBorderColor;
+  static late Color lineChartMagentaBorderColor;
+  static late Color lineChartPinkBorderColor;
+  static late Color lineChartBlueBorderColor;
+
+  /// Gradients
+  static late LinearGradient tabBarIndicatorGradient;
+  static late LinearGradient lineChartGreenGradient;
+  static late LinearGradient lineChartMagentaGradient;
+  static late LinearGradient lineChartPinkGradient;
+  static late LinearGradient lineChartBlueGradient;
 
   /// Loads the colors for dark theme
   static void _loadDarkTheme() {
@@ -152,6 +168,59 @@ class AppColors {
     tableStatusErrorBtnTextColor = const Color(0xFFF65F70);
     tableStatusWarningBtnBgColor = const Color(0xFFFFD600).withOpacity(0.2);
     tableStatusWarningBtnTextColor = const Color(0xFFFFD600);
+    tableBorderColor = const Color(0xFF0C0B2F);
+    tableHeaderSortIconInactiveColor = const Color(0xFF8A8FB5);
+    tableHeaderSortIconActiveColor = const Color(0xFFFFFFFF);
+
+    /// Line chart colors
+    lineChartGreenBorderColor = const Color(0xFF0BE27B);
+    lineChartMagentaBorderColor = const Color(0xFF9B29AF);
+    lineChartPinkBorderColor = const Color(0xFFE61E62);
+    lineChartBlueBorderColor = const Color(0xFF2E2BBA);
+
+    /// Gradients
+    tabBarIndicatorGradient = const LinearGradient(
+      begin: Alignment.centerLeft,
+      end: Alignment.centerRight,
+      stops: [0, 0.45, 0.83],
+      colors: [
+        Color(0xFFC92063),
+        Color(0xFFA63CC8),
+        Color(0xFF4E4BDE),
+      ],
+    );
+    lineChartGreenGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        lineChartGreenBorderColor,
+        const Color(0xFF1E1D47).withOpacity(0),
+      ],
+    );
+    lineChartMagentaGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        lineChartMagentaBorderColor,
+        const Color(0xFF9A29AE).withOpacity(0),
+      ],
+    );
+    lineChartPinkGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        lineChartPinkBorderColor,
+        const Color(0xFFEA1E63).withOpacity(0),
+      ],
+    );
+    lineChartBlueGradient = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        lineChartBlueBorderColor,
+        const Color(0xFF1E1D47).withOpacity(0),
+      ],
+    );
   }
 }
 

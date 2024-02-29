@@ -2,7 +2,7 @@ import 'package:e2_explorer/src/features/common_widgets/copy_widget.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
-import 'package:e2_explorer/src/widgets/app_dialog_widget.dart';
+import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:flutter/cupertino.dart';
 
 class ReceiveDialouge extends StatelessWidget {
