@@ -48,7 +48,6 @@ class _CommsState extends State<Comms> {
       );
     }
 
-    // Define custom theme
 
     return Scaffold(
       body: Row(
@@ -75,7 +74,7 @@ class _CommsState extends State<Comms> {
               )),
           const SizedBox(width: 20),
           Expanded(
-              flex: 2,
+              flex: 3,
               child: Container(
                 height: double.infinity,
                 decoration: BoxDecoration(

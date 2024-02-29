@@ -1,4 +1,5 @@
 import 'package:e2_explorer/src/features/node_dashboard/pages/coms/coms.dart';
+import 'package:e2_explorer/src/features/node_dashboard/pages/pipeline/pipeline_screen.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -34,9 +35,7 @@ class _NodeDashBoardState extends State<NodeDashBoard> {
       Center(
         child: Text("Resources"),
       ),
-      Center(
-        child: Text("Piplines"),
-      ),
+      PipeLine(),
       Comms(),
     ];
     return Scaffold(
