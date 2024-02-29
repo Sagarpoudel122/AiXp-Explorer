@@ -16,6 +16,8 @@ class RouteNames {
   static const String createCopyCode = 'walletCreateCopyCode';
   static const String createWalletReady = 'createWalletReady';
   static const String profile = 'profile';
+  static const String nodeDashboard = "/nodeDashboard";
+  static const String profile = 'profile';
   static const String comms = '/comms';
 }
 
@@ -35,4 +37,5 @@ class RouteLocations {
   static const String createWalletReady = '/createWalletReady';
   static const String profile = '/profile';
   static const String comms = '/comms';
+  static const String nodeDashboard = "/nodeDashboard";
 }
