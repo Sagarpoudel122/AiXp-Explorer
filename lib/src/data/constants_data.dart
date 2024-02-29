@@ -1,6 +1,6 @@
-import 'package:e2_explorer/src/widgets/ai/data/dto/business_client.dart';
-import 'package:e2_explorer/src/widgets/ai/data/dto/equipment_dto.dart';
-import 'package:e2_explorer/src/widgets/ai/data/dto/location.dart';
+import '../features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/business_client.dart';
+import '../features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/equipment_dto.dart';
+import '../features/node_dashboard/pages/pipeline/widgets/pipleline_tree/data/dto/location.dart';
 
 final user = [
   {
@@ -28,32 +28,27 @@ List<Location> locationconstantList = const [
       uuid: "d6860e41-b836-456f-a8ad-1eb1bd284547",
       name: "Nusco",
       timezone: "Europe/Bucharest",
-      client: BusinessClient(
-          uuid: "2efe191d-665d-44fc-9014-77845c9df67d", name: "Hyperfy")),
+      client: BusinessClient(uuid: "2efe191d-665d-44fc-9014-77845c9df67d", name: "Hyperfy")),
   Location(
       uuid: "385055a7-d6ef-4342-afc3-c9a6df3dee07",
       name: "Man Otopeni",
       timezone: "Europe/Bucharest",
-      client: BusinessClient(
-          uuid: "9dc9a1ea-4732-4723-bab9-c5a15f39d588", name: "BMW")),
+      client: BusinessClient(uuid: "9dc9a1ea-4732-4723-bab9-c5a15f39d588", name: "BMW")),
   Location(
       uuid: "d56454eb-e3f3-4819-9c4e-353cb018ca98",
       name: "NUSCO 3",
       timezone: "Europe/Bucharest",
-      client: BusinessClient(
-          uuid: "2efe191d-665d-44fc-9014-77845c9df67d", name: "Hyperfy")),
+      client: BusinessClient(uuid: "2efe191d-665d-44fc-9014-77845c9df67d", name: "Hyperfy")),
   Location(
       uuid: "e0b4ff8-2254-4ee8-8567-fd77c4881f21",
       name: "BT",
       timezone: "Europe/Bucharest",
-      client: BusinessClient(
-          uuid: "2efe191d-665d-44fc-9014-77845c9df67d", name: "Hyperfy")),
+      client: BusinessClient(uuid: "2efe191d-665d-44fc-9014-77845c9df67d", name: "Hyperfy")),
   Location(
       uuid: "0c2d7211-db54-4ded-acb3-8a17f7fe9422",
       name: "test",
       timezone: "Europe/Bucharest",
-      client: BusinessClient(
-          uuid: "21eb7c00-e4b0-4f58-8147-f258f5f2f5a6", name: "TEST Tenant")),
+      client: BusinessClient(uuid: "21eb7c00-e4b0-4f58-8147-f258f5f2f5a6", name: "TEST Tenant")),
 ];
 
 final constLocation = [
@@ -120,8 +115,7 @@ List<EquipmentDTO> equipmentDtoContastant = [
       description: "dskadknasdknas",
       type: "EDGEDEVICE",
       metadata: {},
-      location: const Location(
-          uuid: "d6860e41-b836-456f-a8ad-1eb1bd284547", name: "name"),
+      location: const Location(uuid: "d6860e41-b836-456f-a8ad-1eb1bd284547", name: "name"),
       updatedDate: DateTime.now(),
       client: const BusinessClient(uuid: "uuid", name: "name")),
   EquipmentDTO(
@@ -130,8 +124,7 @@ List<EquipmentDTO> equipmentDtoContastant = [
       description: "CM02",
       type: "EDGEDEVICE",
       metadata: {},
-      location:
-          Location(uuid: "0c2d7211-db54-4ded-acb3-8a17f7fe9422", name: "name"),
+      location: Location(uuid: "0c2d7211-db54-4ded-acb3-8a17f7fe9422", name: "name"),
       updatedDate: DateTime.now(),
       client: BusinessClient(uuid: "uuid", name: "name"))
 ];
