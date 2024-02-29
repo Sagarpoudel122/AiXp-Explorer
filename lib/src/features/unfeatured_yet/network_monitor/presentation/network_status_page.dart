@@ -61,8 +61,12 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
 
         if (convertedMessage['IS_SUPERVISOR'] == true &&
             convertedMessage['CURRENT_NETWORK'] != null) {
+          /// Key 'CURRENT_NETWORK' contains list of json that contains details about each row in the
+          /// [NetmonTable()] or [NetmonTableNew()]. Basically, the records in netmon table
+          /// is displayed using objects in the 'CURRENT_NETWORK' key.
+          /// All payload messages received do not contain the
+          /// 'CURRENT_NETWORK' key, the one that contains it is used as data for table.
           final currentNetwork = convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
-
           final currentNetworkMap = <String, NetmonBoxDetails>{};
           currentNetwork.forEach((key, value) {
             currentNetworkMap[key] = NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
