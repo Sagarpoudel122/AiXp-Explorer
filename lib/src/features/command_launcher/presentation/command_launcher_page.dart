@@ -1,7 +1,6 @@
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_with_animation.dart';
-import 'package:e2_explorer/src/features/common_widgets/table/ai_table.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/table_header_item_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
