@@ -124,7 +124,7 @@ List<EquipmentDTO> equipmentDtoContastant = [
       description: "CM02",
       type: "EDGEDEVICE",
       metadata: {},
-      location: Location(uuid: "0c2d7211-db54-4ded-acb3-8a17f7fe9422", name: "name"),
+      location: const Location(uuid: "0c2d7211-db54-4ded-acb3-8a17f7fe9422", name: "name"),
       updatedDate: DateTime.now(),
-      client: BusinessClient(uuid: "uuid", name: "name"))
+      client: const BusinessClient(uuid: "uuid", name: "name"))
 ];

@@ -118,9 +118,10 @@ class MqttSession extends GenericSession {
 
   void _onHeartbeatInternal(Map<String, dynamic> message) {
     try {
-      final boxName = message['sender']['hostId'];
+      final boxName = message['sender']?['hostId'];
       if (boxName == null) {
         debugPrint('stop here');
+        return;
       }
       if ((boxName as String).startsWith('stress_test_')) {
         return;
@@ -135,8 +136,10 @@ class MqttSession extends GenericSession {
             E2Box(name: boxName, isOnline: true, lastHbReceived: timeNow);
       }
       onHeartbeat.call(message);
-    } catch (_) {
-      print('Invalid heartbeat received');
+    } catch (_,s) {
+      print('Invalid heartbeat received\n$_');
+      print(s);
+
     }
   }
 

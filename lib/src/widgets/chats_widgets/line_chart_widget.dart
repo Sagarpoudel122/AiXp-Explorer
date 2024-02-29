@@ -172,19 +172,16 @@ class LineChartWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.containerBgColor,
       ),
-      // child: SizedBox(
         child: AspectRatio(
           aspectRatio: 1.81,
           // aspectRatio: 1.23,
         child: Stack(
           children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(right: 16, left: 6),
-                child: LineChart(
-                  sampleData2,
-                  duration: const Duration(milliseconds: 250),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(right: 16, left: 6),
+              child: LineChart(
+                sampleData2,
+                duration: const Duration(milliseconds: 250),
               ),
             ),
             Positioned(
