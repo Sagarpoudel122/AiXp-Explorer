@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_highlight/flutter_highlight.dart';
 
 class XMLViwer extends StatelessWidget {
-  const XMLViwer({super.key, required this.xml});
-  final String xml;
+  const XMLViwer({super.key, required this.content, required this.type});
+  final String content;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,9 @@ class XMLViwer extends StatelessWidget {
       ),
       // Define text styles for other syntax elements as needed
     };
-    return HighlightView(xml,
+    return HighlightView(content,
         theme: customTheme,
-        language: 'xml',
+        language: type,
         padding: const EdgeInsets.all(12),
         textStyle: TextStyles.small14regular());
   }

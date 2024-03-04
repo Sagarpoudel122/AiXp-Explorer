@@ -1,4 +1,4 @@
-import 'package:e2_explorer/src/data/xml_code.dart';
+import 'package:e2_explorer/src/data/constant_string_code.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
@@ -87,7 +87,7 @@ class _CommsState extends State<Comms> {
                 borderRadius: BorderRadius.circular(16),
                 color: AppColors.containerBgColor,
               ),
-              child: XMLViwer(xml: xml),
+              child: XMLViwer(content: xml,type: "xml",),
             ),
           ),
         ],

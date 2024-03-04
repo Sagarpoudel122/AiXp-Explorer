@@ -52,6 +52,7 @@ class CommandLauncherPage extends StatelessWidget {
                 sortingColumns: const {},
                 sortedColumn: null,
                 items: [
+                  
                   CommandLauncherData(
                     edgeNode: 'Goliath',
                     configStartupFile: 'configStartupFile',

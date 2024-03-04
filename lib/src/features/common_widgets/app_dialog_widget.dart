@@ -25,9 +25,11 @@ class AppDialogWidget extends StatelessWidget {
     this.actions,
     this.isSubmitting = false,
     this.appDialogType = AppDialogType.small,
+    this.isActionbuttonReversed = false,
   });
 
   final Widget content;
+  final bool isActionbuttonReversed;
   final String title;
 
   /// default is OK
@@ -57,6 +59,26 @@ class AppDialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Widget> defaultActionButton = [
+      AppButtonSecondary(
+        minWidth: 134,
+        height: 40,
+        text: negativeActionButtonText ?? 'Cancel',
+        onPressed: () {
+          if (negativeActionButtonAction != null) {
+            negativeActionButtonAction?.call();
+          } else {
+            popIfPossible(context);
+          }
+        },
+      ),
+      const SizedBox(width: 16),
+      AppButtonPrimary(
+        minWidth: 134,
+        text: positiveActionButtonText ?? 'OK',
+        onPressed: positiveActionButtonAction,
+      ),
+    ];
     return Stack(
       children: [
         AlertDialog(
@@ -147,26 +169,10 @@ class AppDialogWidget extends StatelessWidget {
                       children: [
                         if (actions != null)
                           ...actions!
-                        else ...[
-                          AppButtonSecondary(
-                            minWidth: 134,
-                            height: 40,
-                            text: negativeActionButtonText ?? 'Cancel',
-                            onPressed: () {
-                              if (negativeActionButtonAction != null) {
-                                negativeActionButtonAction?.call();
-                              } else {
-                                popIfPossible(context);
-                              }
-                            },
-                          ),
-                          const SizedBox(width: 16),
-                          AppButtonPrimary(
-                            minWidth: 134,
-                            text: positiveActionButtonText ?? 'OK',
-                            onPressed: positiveActionButtonAction,
-                          ),
-                        ],
+                        else
+                          ...(isActionbuttonReversed
+                              ? defaultActionButton.reversed
+                              : defaultActionButton),
                       ],
                     ),
                   ),
