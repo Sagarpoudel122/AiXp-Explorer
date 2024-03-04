@@ -37,8 +37,8 @@ class DashboardPage extends StatelessWidget {
             title: 'Config Startup',
             // icon: CarbonIcons.query_queue,
             svgIconPath: AssetUtils.getSidebarIconPath('sliders'),
-            pageWidget: const NetworkPage(),
-            path: RouteNames.network,
+            pageWidget: const ConfigStartupPage(),
+            path: RouteNames.configStartUp,
           ),
           NavigationItem(
             title: 'Command Launcher',
@@ -47,7 +47,12 @@ class DashboardPage extends StatelessWidget {
             pageWidget: const NetworkPage(),
             path: RouteNames.network,
           ),
-
+          const NavigationItem(
+            title: 'Message viewer',
+            icon: CarbonIcons.query_queue,
+            pageWidget: PayloadViewer(boxName: ''),
+            path: RouteNames.payloadViewer,
+          ),
 
           /// old ones
           ///
@@ -79,12 +84,6 @@ class DashboardPage extends StatelessWidget {
           //       path: RouteNames.commandLauncher,
           //     ),
           //   ],
-          // ),
-          // const NavigationItem(
-          //   title: 'Message viewer',
-          //   icon: CarbonIcons.query_queue,
-          //   pageWidget: PayloadViewer(boxName: ''),
-          //   path: RouteNames.payloadViewer,
           // ),
         ],
         child: child,

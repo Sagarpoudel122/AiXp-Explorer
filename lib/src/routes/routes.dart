@@ -1,4 +1,5 @@
 import 'package:e2_explorer/src/features/command_launcher/presentation/command_launcher_page.dart';
+import 'package:e2_explorer/src/features/config_startup/presentation/config_startup.dart';
 import 'package:e2_explorer/src/features/manager/presentation/config_startup_page.dart';
 import 'package:e2_explorer/src/features/payload_viewer/presentation/payload_viewer.dart';
 import 'package:e2_explorer/src/features/profile/presentation/profile.dart';
@@ -81,9 +82,9 @@ class AppRoutes {
             builder: (context, state) => const NetworkPage(),
           ),
           GoRoute(
-            path: RouteLocations.config,
-            name: RouteNames.config,
-            builder: (context, state) => const ConfigStartupPage(),
+            path: RouteLocations.configStartUp,
+            name: RouteNames.configStartUp,
+            builder: (context, state) => const ConfigStartUp(),
           ),
           GoRoute(
             path: RouteLocations.profile,

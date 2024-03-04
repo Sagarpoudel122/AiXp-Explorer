@@ -1,4 +1,3 @@
-
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
@@ -21,7 +20,11 @@ class SendProfileDialouge extends StatelessWidget {
               decoration: const InputDecoration(hintText: "To: Enter address"),
             ),
             const SizedBox(height: 16),
-            const CustomDropDown(hintText: "Select Asets",),
+            CustomDropDown(
+              hintText: "Select Asets",
+              controller: TextEditingController(),
+              dropDownItems: const[],
+            ),
             const SizedBox(height: 16),
             TextFormField(
               decoration: const InputDecoration(hintText: "Enter amount"),
