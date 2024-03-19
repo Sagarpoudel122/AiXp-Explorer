@@ -1,29 +1,66 @@
 import 'dart:convert';
 
-import 'package:e2_explorer/src/data/constant_string_code.dart';
+import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
+import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 
 class EditDialouges extends StatefulWidget {
-  const EditDialouges({super.key, required this.title});
+  const EditDialouges({super.key, required this.title, required this.json});
 
   final String title;
+  final Map<String, dynamic> json;
 
   @override
   State<EditDialouges> createState() => _EditDialougesState();
 }
 
 class _EditDialougesState extends State<EditDialouges> {
+  late Map<String, dynamic> _jsonData;
+    final E2Client _client = E2Client();
+
+  @override
+  void initState() {
+    _jsonData = widget.json;
+    super.initState();
+  }
+
+  void save() {
+    try {
+      final jsonEncoded = jsonEncode(_jsonData);
+      final base64Encoded = base64.encode(utf8.encode(jsonEncoded));
+
+      // TODO: Send the base64Encoded data to the server
+      _client.session.sendCommand(
+        ActionCommands.updateConfig(
+          targetId: "", payload: {
+          
+        },
+        initiatorId: "",
+        sessionId: ""
+        
+        )
+      );
+
+      Navigator.of(context).pop();
+    } catch (e) {
+      // Handle errors, such as invalid JSON or encoding failures
+      print('Error saving data: $e');
+      // Optionally, you could show an error message to the user
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> jsonData = jsonDecode(jsonString);
-
     return AppDialogWidget(
       appDialogType: AppDialogType.medium,
       positiveActionButtonText: "Save",
       negativeActionButtonText: "Close",
+      positiveActionButtonAction: () {
+        save();
+      },
       title: "Config Startup file for ${widget.title}",
       content: SizedBox(
         height: 360,
@@ -31,7 +68,7 @@ class _EditDialougesState extends State<EditDialouges> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              ...buildTextFields(jsonData),
+              ...buildTextFields(widget.json),
             ],
           ),
         ),
@@ -42,6 +79,7 @@ class _EditDialougesState extends State<EditDialouges> {
   List<Widget> buildTextFields(Map<String, dynamic> data,
       {String prefix = '', Color textColor = Colors.white}) {
     List<Widget> textFields = [];
+    Map<String, dynamic> newJson = data;
 
     data.forEach((key, value) {
       if (value is Map<String, dynamic>) {
@@ -72,6 +110,11 @@ class _EditDialougesState extends State<EditDialouges> {
                 )
               else
                 TextField(
+                  onChanged: (value) {
+                    String editedKey = prefix.isNotEmpty ? '$prefix$key' : key;
+                    newJson[editedKey] = value;
+                    _jsonData = newJson;
+                  },
                   decoration: const InputDecoration(),
                   controller: TextEditingController(text: value.toString()),
                 ),
