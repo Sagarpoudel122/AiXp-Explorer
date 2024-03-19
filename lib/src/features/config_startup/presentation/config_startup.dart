@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
@@ -17,6 +18,7 @@ import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart'
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -172,6 +174,21 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
     return json;
   }
 
+  Future<void> saveJSONToFile(String data) async {
+    // Convert data to JSON string
+    String jsonString = jsonEncode(data);
+
+    // Get directory where user wants to save the file
+    String? directoryPath = await FilePicker.platform.getDirectoryPath();
+    if (directoryPath != null) {
+      String filePath = '$directoryPath/data.json';
+
+      // Save JSON to a file
+      File file = File(filePath);
+      await file.writeAsString(jsonString);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     FLRTableLabels flrTableLabels = FLRTableLabels(
@@ -243,7 +260,6 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                   visibleColumns: CommandLauncherColumns.values.toSet(),
                   sortingColumns: const {},
                   sortedColumn: null,
-                
                   items: netmonStatusList
                       .map((e) => CommandLauncherData(
                             edgeNode: e.boxId,
@@ -268,6 +284,14 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                                       context: context,
                                       content: AppDialogWidget(
                                         isActionbuttonReversed: true,
+                                        positiveActionButtonAction: () async {
+                                          final json = getJsonData();
+                                          String jsonString = jsonEncode(json);
+                                          await saveJSONToFile(
+                                            jsonString,
+                                          );
+                                          Navigator.pop(context);
+                                        },
                                         positiveActionButtonText:
                                             "Download Json",
                                         negativeActionButtonText: "Close",
