@@ -5,6 +5,7 @@ import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class EditDialouges extends StatefulWidget {
@@ -48,11 +49,12 @@ class _EditDialougesState extends State<EditDialouges> {
           },
           initiatorId: "",
           sessionId: ""));
+      debugPrint(' saved data: $base64Encoded');
 
       Navigator.of(context).pop();
     } catch (e) {
       // Handle errors, such as invalid JSON or encoding failures
-      print('Error saving data: $e');
+      debugPrint('Error saving data: $e');
       // Optionally, you could show an error message to the user
     }
   }
@@ -132,14 +134,12 @@ class _EditDialougesState extends State<EditDialouges> {
     return textFields;
   }
 
-  List<Color> colors = [Colors.white, Colors.blue, Colors.green, Colors.black];
-
   Widget getTextColor(String text) {
     List<String> texts = text.split(".");
     List<Color> colors = [
       Colors.white,
-      Colors.blue,
-      Colors.green
+      const Color(0xFFFFD600),
+      const Color(0xFFFF2C78),
     ]; // Define colors
 
     List<InlineSpan> textSpans = [];
