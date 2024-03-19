@@ -19,7 +19,7 @@ class EditDialouges extends StatefulWidget {
 
 class _EditDialougesState extends State<EditDialouges> {
   late Map<String, dynamic> _jsonData;
-    final E2Client _client = E2Client();
+  final E2Client _client = E2Client();
 
   @override
   void initState() {
@@ -33,16 +33,21 @@ class _EditDialougesState extends State<EditDialouges> {
       final base64Encoded = base64.encode(utf8.encode(jsonEncoded));
 
       // TODO: Send the base64Encoded data to the server
-      _client.session.sendCommand(
-        ActionCommands.updateConfig(
-          targetId: "", payload: {
-          
-        },
-        initiatorId: "",
-        sessionId: ""
-        
-        )
-      );
+      _client.session.sendCommand(ActionCommands.updateConfig(
+          targetId: "",
+          payload: {
+            "NAME": "admin_pipeline",
+            "SIGNATURE": "UPDATE_MONITOR_01",
+            "INSTANCE_ID": "UPDATE_MONITOR_01_INST",
+            "INSTANCE_CONFIG": {
+              "INSTANCE_COMMAND": {
+                "COMMAND": "SAVE_CONFIG",
+                "DATA": base64Encoded
+              }
+            }
+          },
+          initiatorId: "",
+          sessionId: ""));
 
       Navigator.of(context).pop();
     } catch (e) {

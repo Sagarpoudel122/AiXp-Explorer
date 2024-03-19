@@ -243,20 +243,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                   visibleColumns: CommandLauncherColumns.values.toSet(),
                   sortingColumns: const {},
                   sortedColumn: null,
-                  // items: [
-                  //   CommandLauncherData(
-                  //     edgeNode: 'Goliath',
-                  //     configStartupFile: 'configStartupFile',
-                  //   ),
-                  //   CommandLauncherData(
-                  //     edgeNode: 'gts-test 1',
-                  //     configStartupFile: 'configStartupFile',
-                  //   ),
-                  //   CommandLauncherData(
-                  //     edgeNode: 'gts-staging',
-                  //     configStartupFile: 'configStartupFile',
-                  //   ),
-                  // ],
+                
                   items: netmonStatusList
                       .map((e) => CommandLauncherData(
                             edgeNode: e.boxId,
