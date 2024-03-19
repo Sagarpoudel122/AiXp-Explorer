@@ -13,9 +13,13 @@ class SideNavItemTile extends StatefulWidget {
   const SideNavItemTile({
     super.key,
     required this.item,
+    required this.isSelected,
+
   });
 
   final HomeNavigationItem item;
+  final bool isSelected;
+
 
   @override
   State<SideNavItemTile> createState() => _SideNavItemTileState();
@@ -27,7 +31,7 @@ class _SideNavItemTileState extends State<SideNavItemTile>
 
   @override
   Widget build(BuildContext context) {
-    bool isCurrent = false;
+    bool isCurrent = widget.isSelected;
     return Column(
       children: <Widget>[
         Container(
@@ -43,6 +47,8 @@ class _SideNavItemTileState extends State<SideNavItemTile>
               Dimens.sideNavListItemBorderRadius,
             ),
             onTap: () {
+             
+
               if (widget.item.onNavigate != null) widget.item.onNavigate!();
               if (widget.item.subItems.isNotEmpty) {
                 setState(() {
@@ -115,7 +121,7 @@ class _SideNavItemTileState extends State<SideNavItemTile>
                     ],
                   ),
                 ),
-                if (isCurrent)
+                if (widget.isSelected)
                   Positioned.fill(
                     right: null,
                     child: Container(
@@ -136,18 +142,18 @@ class _SideNavItemTileState extends State<SideNavItemTile>
             switchOutCurve: Curves.easeOut,
             transitionBuilder: (Widget child, Animation<double> animation) =>
                 SizeTransition(
-                  sizeFactor: animation,
-                  axisAlignment: 1,
-                  child: child,
-                ),
+              sizeFactor: animation,
+              axisAlignment: 1,
+              child: child,
+            ),
             child: isExpanded
                 ? Column(
-              children: <Widget>[
-                for (final HomeNavigationSubItem subitem
-                in widget.item.subItems)
-                  SideNavSubItemTile(subItem: subitem),
-              ],
-            )
+                    children: <Widget>[
+                      for (final HomeNavigationSubItem subitem
+                          in widget.item.subItems)
+                        SideNavSubItemTile(subItem: subitem),
+                    ],
+                  )
                 : null,
           ),
       ],

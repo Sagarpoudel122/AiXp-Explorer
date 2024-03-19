@@ -4,9 +4,11 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:flutter/material.dart';
 
 class SideNavItemList extends StatelessWidget {
-  const SideNavItemList({super.key, required this.items});
+  const SideNavItemList(
+      {super.key, required this.items, required this.selectedIndex});
 
   final List<HomeNavigationItem> items;
+  final int selectedIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +16,15 @@ class SideNavItemList extends StatelessWidget {
       color: Colors.transparent,
       child: Column(
         children: <Widget>[
-          for (final HomeNavigationItem item in items)
+          for (int i = 0; i < items.length; i++)
             Column(
               children: <Widget>[
                 SideNavItemTile(
-                  key: ValueKey<HomeNavigationItem>(item),
-                  item: item,
+                  key: ValueKey<HomeNavigationItem>(items[i]),
+                  item: items[i],
+                  isSelected: selectedIndex == i,
                 ),
-                if (item.enableLowerDivider)
+                if (items[i].enableLowerDivider)
                   Divider(color: AppColors.sideNavDividerColor),
               ],
             ),

@@ -23,6 +23,7 @@ class SideNav extends StatefulWidget {
     required this.isExpanded,
     required this.items,
     this.selectedIndex = 0,
+    required this.onItemTapped,
   });
 
   static const double collapsedWidth = 86;
@@ -31,6 +32,7 @@ class SideNav extends StatefulWidget {
   final bool isExpanded;
   final List<HomeNavigationItem> items;
   final int selectedIndex;
+  final Function(int) onItemTapped;
 
   @override
   State<SideNav> createState() => _SideNavState();
@@ -54,6 +56,7 @@ class _SideNavState extends State<SideNav> {
       matchingRoutePrefixes: [],
       onNavigate: () {
         context.goNamed(profileItem.path);
+            widget.onItemTapped(4);
       },
       enableLowerDivider: profileItem.includeBottomDivider,
     );
@@ -74,7 +77,8 @@ class _SideNavState extends State<SideNav> {
               duration: const Duration(milliseconds: 200),
               switchInCurve: Curves.easeOut,
               switchOutCurve: Curves.easeOut,
-              transitionBuilder: (Widget child, Animation<double> animation) => SlideTransition(
+              transitionBuilder: (Widget child, Animation<double> animation) =>
+                  SlideTransition(
                 position: Tween<Offset>(
                   begin: const Offset(-1, 0),
                   end: Offset.zero,
@@ -105,7 +109,8 @@ class _SideNavState extends State<SideNav> {
                                     children: [
                                       brandLogoBg(),
                                       Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: <Widget>[
                                           /// brand logo
                                           brandLogoWidget(),
@@ -118,8 +123,13 @@ class _SideNavState extends State<SideNav> {
                                           Expanded(
                                             child: SingleChildScrollView(
                                               physics: const ScrollPhysics(),
-                                              padding: const EdgeInsets.symmetric(vertical: 16,horizontal: 12),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 16,
+                                                      horizontal: 12),
                                               child: SideNavItemList(
+                                                selectedIndex:
+                                                    widget.selectedIndex,
                                                 items: widget.items,
                                                 key: const ValueKey(
                                                   'side-nav-list',
@@ -129,9 +139,11 @@ class _SideNavState extends State<SideNav> {
                                           ),
                                           const SizedBox(height: 10),
                                           const SideNavWalletInfoContainer(),
+                                          //profile nav
                                           Container(
                                             margin: const EdgeInsets.all(12),
                                             child: SideNavItemTile(
+                                              isSelected: widget.selectedIndex==4,
                                               key: ValueKey<HomeNavigationItem>(
                                                 profileHomeNavigationItem,
                                               ),
@@ -237,9 +249,11 @@ class SideNavWalletInfoContainer extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              TextWidget('Black: 25,234,343', style: CustomTextStyles.text12_400_tertiary),
+              TextWidget('Black: 25,234,343',
+                  style: CustomTextStyles.text12_400_tertiary),
               const SizedBox(width: 14),
-              TextWidget('Peers: 5', style: CustomTextStyles.text12_400_tertiary),
+              TextWidget('Peers: 5',
+                  style: CustomTextStyles.text12_400_tertiary),
             ],
           ),
           const SizedBox(height: 14),
@@ -247,7 +261,8 @@ class SideNavWalletInfoContainer extends StatelessWidget {
           const SizedBox(height: 14),
           Row(
             children: [
-              SvgPicture.asset(AssetUtils.getSvgIconPath("ai_expand_logo"), height: 16),
+              SvgPicture.asset(AssetUtils.getSvgIconPath("ai_expand_logo"),
+                  height: 16),
               const SizedBox(width: 6),
               TextWidget(
                 "AiXpand token",
