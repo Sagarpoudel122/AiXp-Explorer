@@ -30,6 +30,7 @@ class ConfigStartUp extends StatefulWidget {
 }
 
 class _ConfigStartUpState extends State<ConfigStartUp> {
+  bool isLoading = true;
   List<NetmonBox> netmonStatusList = [];
   final period = const Duration(seconds: 5);
   Map<String, NetmonBoxDetails> netmonStatus = {};
@@ -203,6 +204,9 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
     );
     return E2Listener(
       onPayload: (message) {
+        setState(() {
+          isLoading = true;
+        });
         final Map<String, dynamic> convertedMessage =
             MqttMessageEncoderDecoder.raw(message);
         if (convertedMessage['IS_SUPERVISOR'] == true &&
@@ -238,6 +242,9 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
             });
           }
         } else {}
+        setState(() {
+          isLoading = false;
+        });
       },
       builder: (context) {
         return DashboardBodyContainer(
@@ -252,125 +259,134 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
               ),
               const SizedBox(height: 14),
               Expanded(
-                child: FLRTable<CommandLauncherData, CommandLauncherColumns>(
-                  expandLastColumn: true,
-                  columns: CommandLauncherColumns.values,
-                  columnsLeft: const [],
-                  columnsRight: const [],
-                  visibleColumns: CommandLauncherColumns.values.toSet(),
-                  sortingColumns: const {},
-                  sortedColumn: null,
-                  items: netmonStatusList
-                      .map((e) => CommandLauncherData(
-                            edgeNode: e.boxId,
-                            configStartupFile: 'configStartupFile',
-                          ))
-                      .toList(),
-                  rowBuilder: (item, columns) {
-                    return columns.map((column) {
-                      return switch (column) {
-                        CommandLauncherColumns.edgeNode => Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 8),
-                            child: TextWidget(item.edgeNode,
-                                style: CustomTextStyles.text14_400),
-                          ),
-                        CommandLauncherColumns.configStartupFile => Padding(
-                            padding: const EdgeInsets.only(left: 16, right: 8),
-                            child: Row(
-                              children: [
-                                AppButtonSecondary(
-                                  onPressed: () {
-                                    showAppDialog(
-                                      context: context,
-                                      content: AppDialogWidget(
-                                        isActionbuttonReversed: true,
-                                        positiveActionButtonAction: () async {
-                                          final json = getJsonData();
-                                          String jsonString = jsonEncode(json);
-                                          await saveJSONToFile(
-                                            jsonString,
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : FLRTable<CommandLauncherData, CommandLauncherColumns>(
+                        expandLastColumn: true,
+                        columns: CommandLauncherColumns.values,
+                        columnsLeft: const [],
+                        columnsRight: const [],
+                        visibleColumns: CommandLauncherColumns.values.toSet(),
+                        sortingColumns: const {},
+                        sortedColumn: null,
+                        items: netmonStatusList
+                            .map((e) => CommandLauncherData(
+                                  edgeNode: e.boxId,
+                                  configStartupFile: 'configStartupFile',
+                                ))
+                            .toList(),
+                        rowBuilder: (item, columns) {
+                          return columns.map((column) {
+                            return switch (column) {
+                              CommandLauncherColumns.edgeNode => Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 16, right: 8),
+                                  child: TextWidget(item.edgeNode,
+                                      style: CustomTextStyles.text14_400),
+                                ),
+                              CommandLauncherColumns.configStartupFile =>
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 16, right: 8),
+                                  child: Row(
+                                    children: [
+                                      AppButtonSecondary(
+                                        onPressed: () {
+                                          showAppDialog(
+                                            context: context,
+                                            content: AppDialogWidget(
+                                              isActionbuttonReversed: true,
+                                              positiveActionButtonAction:
+                                                  () async {
+                                                final json = getJsonData();
+                                                String jsonString =
+                                                    jsonEncode(json);
+                                                await saveJSONToFile(
+                                                  jsonString,
+                                                );
+                                                Navigator.pop(context);
+                                              },
+                                              positiveActionButtonText:
+                                                  "Download Json",
+                                              negativeActionButtonText: "Close",
+                                              title:
+                                                  "Config Startup file for ${item.edgeNode}",
+                                              content: SizedBox(
+                                                  height: 500,
+                                                  child: SingleChildScrollView(
+                                                      child: SizedBox(
+                                                    width: double.maxFinite,
+                                                    child: XMLViwer(
+                                                      content: jsonEncode(
+                                                          getJsonData()),
+                                                      type: "json",
+                                                    ),
+                                                  ))),
+                                            ),
                                           );
-                                          Navigator.pop(context);
                                         },
-                                        positiveActionButtonText:
-                                            "Download Json",
-                                        negativeActionButtonText: "Close",
-                                        title:
-                                            "Config Startup file for ${item.edgeNode}",
-                                        content: SizedBox(
-                                            height: 500,
-                                            child: SingleChildScrollView(
-                                                child: SizedBox(
-                                              width: double.maxFinite,
-                                              child: XMLViwer(
-                                                content:
-                                                    jsonEncode(getJsonData()),
-                                                type: "json",
-                                              ),
-                                            ))),
+                                        text: 'View',
+                                        height: 30,
+                                        minWidth: 100,
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/svg/eye.svg',
+                                          height: 14,
+                                          width: 14,
+                                          colorFilter: const ColorFilter.mode(
+                                              Colors.white, BlendMode.srcIn),
+                                        ),
                                       ),
-                                    );
-                                  },
-                                  text: 'View',
-                                  height: 30,
-                                  minWidth: 100,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/svg/eye.svg',
-                                    height: 14,
-                                    width: 14,
-                                    colorFilter: const ColorFilter.mode(
-                                        Colors.white, BlendMode.srcIn),
+                                      const SizedBox(width: 8),
+                                      AppButtonSecondary(
+                                        onPressed: () {
+                                          editData(item: item);
+                                        },
+                                        text: 'Edit',
+                                        height: 30,
+                                        minWidth: 100,
+                                        icon: SvgPicture.asset(
+                                          'assets/icons/svg/edit.svg',
+                                          height: 14,
+                                          width: 14,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(width: 8),
-                                AppButtonSecondary(
-                                  onPressed: () {
-                                    editData(item: item);
-                                  },
-                                  text: 'Edit',
-                                  height: 30,
-                                  minWidth: 100,
-                                  icon: SvgPicture.asset(
-                                    'assets/icons/svg/edit.svg',
-                                    height: 14,
-                                    width: 14,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                      };
-                    }).toList();
-                  },
-                  headerBuilder: (header) {
-                    return TableHeaderItemWidget(
-                      title: header.title,
-                      showSort: header.canSortBy,
-                      isSorted: header.isSortedBy,
-                      sortIsAscending: true,
-                    );
-                  },
-                  headerTitle: (columnType) {
-                    return switch (columnType) {
-                      CommandLauncherColumns.edgeNode => 'Edge Node',
-                      CommandLauncherColumns.configStartupFile =>
-                        'Config Startup File',
-                    };
-                  },
-                  columnWidth: (columnType) {
-                    final size = MediaQuery.of(context).size;
-                    return switch (columnType) {
-                      CommandLauncherColumns.edgeNode => size.width / 2.5,
-                      CommandLauncherColumns.configStartupFile =>
-                        size.width / 2.5,
-                    };
-                  },
-                  onTap: (value) async {},
-                  onRefresh: () {},
-                  rowHeight: (_) => Dimens.tableBodyRowHeight + 10,
-                  isLoading: false,
-                  labels: flrTableLabels,
-                ),
+                            };
+                          }).toList();
+                        },
+                        headerBuilder: (header) {
+                          return TableHeaderItemWidget(
+                            title: header.title,
+                            showSort: header.canSortBy,
+                            isSorted: header.isSortedBy,
+                            sortIsAscending: true,
+                          );
+                        },
+                        headerTitle: (columnType) {
+                          return switch (columnType) {
+                            CommandLauncherColumns.edgeNode => 'Edge Node',
+                            CommandLauncherColumns.configStartupFile =>
+                              'Config Startup File',
+                          };
+                        },
+                        columnWidth: (columnType) {
+                          final size = MediaQuery.of(context).size;
+                          return switch (columnType) {
+                            CommandLauncherColumns.edgeNode => size.width / 2.5,
+                            CommandLauncherColumns.configStartupFile =>
+                              size.width / 2.5,
+                          };
+                        },
+                        onTap: (value) async {},
+                        onRefresh: () {},
+                        rowHeight: (_) => Dimens.tableBodyRowHeight + 10,
+                        isLoading: false,
+                        labels: flrTableLabels,
+                      ),
               )
 
               /// Todo: Table here
