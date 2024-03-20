@@ -102,8 +102,23 @@ class CommandLauncherPage extends StatelessWidget {
                                   showAppDialog(
                                       context: context,
                                       content: AppDialogWidget(
-                                          title: "Logs for ${item.edgeNode} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
-                                          content: Container()));
+                                          appDialogType: AppDialogType.medium,
+                                          headerButtons: [
+                                            AppDialogHeaderButtons(
+                                                icon: Icons.copy, onTap: () {}),
+                                            AppDialogHeaderButtons(
+                                                icon: Icons.download_sharp,
+                                                onTap: () {}),
+                                          ],
+                                          title:
+                                              "Logs for ${item.edgeNode} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
+                                          content: Container(
+                                            height: 475,
+                                            padding: const EdgeInsets.all(16),
+
+                                            child: Text(
+                                                "Logs will be available in the logs section"),
+                                          )));
                                 },
                                 text: 'Get Logs',
                                 height: 30,
