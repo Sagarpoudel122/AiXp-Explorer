@@ -26,7 +26,9 @@ class AppDialogWidget extends StatelessWidget {
     this.isSubmitting = false,
     this.appDialogType = AppDialogType.small,
     this.isActionbuttonReversed = false,
+
     this.headerButtons,
+
   });
   final List<AppDialogHeaderButtons>? headerButtons;
   final Widget content;

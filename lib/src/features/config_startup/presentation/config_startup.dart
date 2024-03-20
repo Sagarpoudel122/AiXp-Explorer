@@ -1,3 +1,4 @@
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -14,6 +15,7 @@ import 'package:e2_explorer/src/features/common_widgets/table/table_header_item_
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/edit_dialouges.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
+
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
@@ -202,6 +204,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
         loading: (BuildContext context) => 'Loading',
       ),
     );
+
     return E2Listener(
       onPayload: (message) {
         setState(() {
@@ -399,6 +402,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
           ),
         );
       },
+
     );
   }
 }

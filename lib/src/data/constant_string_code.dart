@@ -27,6 +27,7 @@ String xml = """
 String jsonString = """
 {
  "EE_ID": "XXXXXXXXXX",
+
   "SECURED": false,
   "IO_FORMATTER": "cavi2",
   "MAIN_LOOP_RESOLUTION": 5,
@@ -44,5 +45,6 @@ String jsonString = """
       "PLUGINS_ON_THREADS1": false
    }
   }
+
 }
 """;

@@ -21,10 +21,12 @@ class XMLViwer extends StatelessWidget {
       ),
       // Define text styles for other syntax elements as needed
     };
+
     return HighlightView(
         type == "json"
             ? const JsonEncoder.withIndent('  ').convert(jsonDecode(content))
             : content,
+
         theme: customTheme,
         language: type,
         padding: const EdgeInsets.all(12),
