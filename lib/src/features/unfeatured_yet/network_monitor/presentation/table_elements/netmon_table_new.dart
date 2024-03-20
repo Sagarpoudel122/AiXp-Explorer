@@ -67,6 +67,8 @@ class _NetmonTableNewState extends State<NetmonTableNew> {
     //
     // await _onEdit(ioDevice);
     widget.onBoxSelected?.call(widget.netmonBoxes[index].boxId);
+   
+    
   }
 
   void _onRefresh() {
