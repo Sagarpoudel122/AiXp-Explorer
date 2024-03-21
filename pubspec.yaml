@@ -35,6 +35,14 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_highlight: ^0.7.0
 
+  # EC Generation
+  pointycastle: ^3.7.4
+  basic_utils: ^5.7.0
+
+
+
+
+
 dev_dependencies:
   #flutter_test:
    # sdk: flutter
