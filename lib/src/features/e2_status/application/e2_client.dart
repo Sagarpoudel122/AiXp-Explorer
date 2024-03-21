@@ -44,9 +44,6 @@ class E2Client {
 
   static String getBoxName(Map<String, dynamic> message) {
     try {
-      // print('\n\n\n====================================================================');
-      // print(message);
-      // print('====================================================================\n\n\n');
       final cavi2BoxName = message['sender']?['hostId'];
       final rawBoxName = message['EE_ID'];
       if (cavi2BoxName != null) {
@@ -74,7 +71,6 @@ class E2Client {
 
   MessageFilter? selectBoxFiltersByName(String boxName) => boxFilters[boxName];
 
-  String? selectedBoxName;
   late GenericSession session;
 
   bool _isConnected = false;
@@ -165,8 +161,7 @@ class E2Client {
 
   void _onHeartbeat(Map<String, dynamic> message) {
     final boxName = getBoxName(message);
-    final currentBox =
-        boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
+    final currentBox = boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
     currentBox.addHeartbeat(message);
     loadFilters(boxName, currentBox.heartbeatMessages.last);
 
@@ -176,8 +171,7 @@ class E2Client {
 
   void _onNotification(Map<String, dynamic> message) {
     final boxName = getBoxName(message);
-    final currentBox =
-        boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
+    final currentBox = boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
     currentBox.addNotification(message);
     notifiers.notifications.emit(message);
     notifiers.all.emit(message);
@@ -197,8 +191,7 @@ class E2Client {
       return;
     }
 
-    final currentBox =
-        boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
+    final currentBox = boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
     // print(currentBox);
     try {
       currentBox.addPayloadToPipeline(message['EE_PAYLOAD_PATH'][1], message);

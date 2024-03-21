@@ -1,4 +1,5 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:e2_explorer/src/features/notifications/index.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
@@ -11,7 +12,7 @@ Future<void> clearServersAndDefaultServer() async {
   const String mqttServersKey = 'mqtt_servers';
   const String selectedServerNameKey = 'selected_server_name';
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  await prefs.remove(mqttServersKey);
+  // await prefs.remove(mqttServersKey);
   await prefs.remove(selectedServerNameKey);
 }
 
@@ -21,6 +22,19 @@ void main() async {
   /// Check which theme to use and initialize the colors according to theme.
   await ThemeUtils.initialize();
   // await clearServersAndDefaultServer();
+  ToastManager.initialize(
+    getNavigatorKey: () {
+      final GlobalKey<NavigatorState> key = rootNavigatorKey;
+      final OverlayState? rootNavigatorOverlay = key.currentState?.overlay;
+      if (rootNavigatorOverlay == null) {
+        return homeNavigatorKey;
+      }
+      return rootNavigatorKey;
+    },
+    labels: ToastManagerLabels(
+      clearAll: (BuildContext context) => 'Clear All',
+    ),
+  );
   runApp(const MyApp());
 
   doWhenWindowReady(() {

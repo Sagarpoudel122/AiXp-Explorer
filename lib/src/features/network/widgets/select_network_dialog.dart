@@ -1,9 +1,11 @@
 import 'package:e2_explorer/src/features/unfeatured_yet/connection/data/mqtt_server_repository.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../common_widgets/app_dialog_widget.dart';
 import '../../e2_status/application/e2_client.dart';
+import '../../notifications/index.dart';
 import '../../unfeatured_yet/connection/domain/models/mqtt_server.dart';
 import 'add_network_dialog_content.dart';
 import 'networks_listing_widget.dart';
@@ -62,16 +64,7 @@ class _SelectNetworkDialogState extends State<SelectNetworkDialog> {
                   title: 'Mainnet',
                   servers: servers,
                   selectedItem: selectedServerName,
-                  onSelectionChanged: (MqttServer server) async {
-                    E2Client.changeConnectionData(server);
-                    final E2Client client = E2Client();
-                    await client.connect();
-                    if (client.isConnected) {
-                      setState(() {
-                        selectedServerName = server.name;
-                      });
-                    }
-                  },
+                  onSelectionChanged: onSelectionChanged,
                 ),
                 const NetworksListingWidget(
                   title: 'Testnet',
@@ -84,5 +77,39 @@ class _SelectNetworkDialogState extends State<SelectNetworkDialog> {
       ),
       title: 'Select title',
     );
+  }
+
+  void onSelectionChanged(MqttServer server) async {
+    try {
+      if (mounted) {
+        setState(() {
+          selectedServerName = server.name;
+        });
+      } else {
+        selectedServerName = server.name;
+      }
+      E2Client.changeConnectionData(server);
+      final E2Client client = E2Client();
+      // removing heartbeat, payload & notification data stored for the current server.
+      client
+        ..boxMessages.clear()
+        ..boxFilters.clear();
+      await Future.wait([
+        MqttServerRepository().saveSelectedServerName(server.name),
+        client.connect(),
+      ]);
+      if (mounted) {
+        setState(() {});
+      }
+    } catch (e) {
+      print(e);
+      Toast(
+        type: ToastType.error,
+        title: e.toString(),
+      ).show();
+      if (mounted) {
+        setState(() {});
+      }
+    }
   }
 }

@@ -3,6 +3,8 @@ import 'package:e2_explorer/src/features/unfeatured_yet/connection/domain/models
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
 
+import '../../e2_status/application/e2_client.dart';
+
 class NetworksListingWidget extends StatelessWidget {
   const NetworksListingWidget({
     super.key,
@@ -49,7 +51,17 @@ class NetworksListingWidget extends StatelessWidget {
                   width: 30,
                   alignment: Alignment.topLeft,
                   child: itemSelected(item.name)
-                      ? const Icon(Icons.check_rounded, color: Color(0xFF49D688))
+                      ? (isLoading(item.name)
+
+                          /// If the server is selected and is loading/connecting, show loading indicator.
+                          ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+
+                          /// else the server is selected & is connected, show tick icon
+                          : const Icon(Icons.check_rounded, color: Color(0xFF49D688)))
                       : const SizedBox(),
                 ),
                 TextWidget(
@@ -68,6 +80,11 @@ class NetworksListingWidget extends StatelessWidget {
   }
 
   bool itemSelected(String item) => selectedItem != null && selectedItem == item;
+
+  bool isLoading(String item) {
+    final E2Client client = E2Client();
+    return client.server.name == item && !client.isConnected;
+  }
 }
 
 class ActiveStatusDot extends StatelessWidget {
