@@ -17,14 +17,13 @@ import '../features/wallet/presentation/copy_code.dart';
 
 part 'route_names.dart';
 
-final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'home');
+final GlobalKey<NavigatorState> homeNavigatorKey =
+    GlobalKey<NavigatorState>(debugLabel: 'home');
 
 class AppRoutes {
   const AppRoutes._();
 
   static final GoRouter routes = GoRouter(
-    navigatorKey: rootNavigatorKey,
     initialLocation: RouteLocations.connection,
     redirect: (context, state) {
       return null;

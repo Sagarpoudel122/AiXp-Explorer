@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:collection/collection.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
@@ -18,8 +17,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../../notifications/index.dart';
 import 'widgets/connection_button.dart';
+import 'package:collection/collection.dart';
 
 class ConnectionPageOld extends StatefulWidget {
   const ConnectionPageOld({super.key});
@@ -187,30 +186,18 @@ class _ConnectionPageState extends State<ConnectionPage> {
   }
 
   Future<void> _connectToDefaultServer() async {
-    try {
-      // /// Todo: remove this once testing complete
-      // setState(() {
-      //   errorMessage = 'Error!';
-      // });
-      // return;
-      final servers = await MqttServerRepository().getMqttServers();
-      final initialSelectedName = await MqttServerRepository().getSelectedServerName();
-      MqttServer? selectedServer = servers.firstWhereOrNull(
-        (element) => element.name == initialSelectedName,
-      );
-      if (servers.isEmpty || initialSelectedName == null || selectedServer == null) {
-        /// add new default server
-        await _addDefaultServer();
-        await _connectToDefaultServer();
-      } else {
-        /// default server found, connect to it
-        await _connectToServer(selectedServer);
-      }
-    } catch (e) {
-      print('Error occurred: ${e.toString()}');
-      setState(() {
-        errorMessage = e.toString();
-      });
+    final servers = await MqttServerRepository().getMqttServers();
+    final initialSelectedName = await MqttServerRepository().getSelectedServerName();
+    MqttServer? selectedServer = servers.firstWhereOrNull(
+      (element) => element.name == initialSelectedName,
+    );
+    if (servers.isEmpty || initialSelectedName == null || selectedServer == null) {
+      /// add new default server
+      await _addDefaultServer();
+      _connectToDefaultServer();
+    } else {
+      /// default server found, connect to it
+      _connectToServer(selectedServer);
     }
   }
 
@@ -219,6 +206,8 @@ class _ConnectionPageState extends State<ConnectionPage> {
     final E2Client client = E2Client();
     await client.connect();
     if (client.isConnected) {
+      /// ToDO set on page render
+
       if (!Platform.isMacOS) appWindow.hide();
       // const newSize = Size(1400, 800);
       // appWindow.minSize = newSize;
@@ -228,18 +217,10 @@ class _ConnectionPageState extends State<ConnectionPage> {
         context.goNamed(RouteNames.network);
         // context.goNamed(RouteNames.walletPage);
       }
-      Toast(
-        type: ToastType.success,
-        title: "Connected to server '${server.name}' !",
-      ).show();
     } else {
       setState(() {
         errorMessage = "Could not connect to the server '${server.name}' !";
       });
-      Toast(
-        type: ToastType.error,
-        title: "Could not connect to the server '${server.name}' !",
-      ).show();
       print('failed to connect');
     }
   }
@@ -247,8 +228,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
   Future<void> _addDefaultServer() async {
     final MqttServer defaultServer = MqttServer(
       name: 'Staging',
-      // host: 'optizone-api-stg.hyperfy.tech',
-      // host: '80.96.152.121',
       host: 'mqtt.staging.hyperfy.tech',
       port: 1883,
       username: 'rootdev',
@@ -266,7 +245,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
         child: errorMessage == null
             ? const CircularProgressIndicator()
             : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextWidget(errorMessage!, style: CustomTextStyles.text16_600),
                   const SizedBox(height: 15),

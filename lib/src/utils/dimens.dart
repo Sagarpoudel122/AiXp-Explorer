@@ -1,6 +1,5 @@
-class Dimens {
+class Dimens{
   static const double sideNavWidth = 233;
-
   // taken from investigator, remove unnecessary ones
   static const double tableHeaderRowHeight = 40;
   static const double tableBodyRowHeight = 40;
@@ -16,7 +15,4 @@ class Dimens {
   static const double alertDialogLargeWidth = alertDialogMediumWidth * 1.6;
   static const double alertDialogBorderRadius = 4;
 
-  static double desktopWidth = 1024;
-  static double tabletWidth = 900;
-  static double handsetWidth = 320;
 }
