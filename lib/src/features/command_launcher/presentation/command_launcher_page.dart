@@ -1,11 +1,14 @@
+import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
+import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_with_animation.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/table_header_item_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
+import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
+import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +29,8 @@ class CommandLauncherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final E2Client _client = E2Client();
+
     return Scaffold(
       body: DashboardBodyContainer(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
@@ -79,6 +84,10 @@ class CommandLauncherPage extends StatelessWidget {
                           child: Row(
                             children: [
                               AppButtonSecondary(
+                                onPressed: () {
+                                  _client.session.sendCommand(
+                                      ActionCommands.stop(targetId: ""));
+                                },
                                 text: 'Restart',
                                 height: 30,
                                 minWidth: 100,
@@ -90,6 +99,28 @@ class CommandLauncherPage extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               AppButtonSecondary(
+                                onPressed: () {
+                                  showAppDialog(
+                                      context: context,
+                                      content: AppDialogWidget(
+                                          appDialogType: AppDialogType.medium,
+                                          headerButtons: [
+                                            AppDialogHeaderButtons(
+                                                icon: Icons.copy, onTap: () {}),
+                                            AppDialogHeaderButtons(
+                                                icon: Icons.download_sharp,
+                                                onTap: () {}),
+                                          ],
+                                          title:
+                                              "Logs for ${item.edgeNode} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
+                                          content: Container(
+                                            height: 475,
+                                            padding: const EdgeInsets.all(16),
+
+                                            child: Text(
+                                                "Logs will be available in the logs section"),
+                                          )));
+                                },
                                 text: 'Get Logs',
                                 height: 30,
                                 minWidth: 100,
@@ -110,10 +141,10 @@ class CommandLauncherPage extends StatelessWidget {
                                   width: 14,
                                 ),
                               ),
-                              SizedBox(width: 8),
+                              const SizedBox(width: 8),
                               IconButton(
                                 onPressed: () {},
-                                icon: Icon(Icons.more_vert),
+                                icon: const Icon(Icons.more_vert),
                               ),
                             ],
                           ),

@@ -26,8 +26,11 @@ class AppDialogWidget extends StatelessWidget {
     this.isSubmitting = false,
     this.appDialogType = AppDialogType.small,
     this.isActionbuttonReversed = false,
-  });
 
+    this.headerButtons,
+
+  });
+  final List<AppDialogHeaderButtons>? headerButtons;
   final Widget content;
   final bool isActionbuttonReversed;
   final String title;
@@ -125,6 +128,11 @@ class AppDialogWidget extends StatelessWidget {
                           ),
                         ),
 
+                        if (headerButtons != null)
+                          ...headerButtons!
+                              .map((e) => appHeaderButtons(context, e))
+                              .toList(),
+
                         /// close icon
                         closeButton(context)
                       ],
@@ -209,9 +217,29 @@ class AppDialogWidget extends StatelessWidget {
     );
   }
 
+  InkWell appHeaderButtons(
+      BuildContext context, AppDialogHeaderButtons headerButton) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(50),
+      splashColor: Colors.transparent,
+      onTap: () => headerButton.onTap(),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Icon(headerButton.icon,
+            size: 18, color: AppColors.textPrimaryColor),
+      ),
+    );
+  }
+
   void popIfPossible(BuildContext context) {
     if (Navigator.of(context).canPop()) {
       Navigator.of(context).pop();
     }
   }
+}
+
+class AppDialogHeaderButtons {
+  IconData icon;
+  Function onTap;
+  AppDialogHeaderButtons({required this.icon, required this.onTap});
 }

@@ -31,6 +31,13 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
         SizedBox(
           width: Dimens.sideNavWidth,
           child: SideNav(
+            onItemTapped: (p0) {
+              print("jbafjasbfjbsajhfbas");
+              setState(() {
+                _navIndex = p0;
+              });
+            
+            },
             selectedIndex: _navIndex,
             isExpanded: false,
             items: widget.pages.map(
@@ -43,15 +50,23 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                     matchingRoutePrefixes: [],
                     enableLowerDivider: e.includeBottomDivider,
                     subitems: e.children!
+                        .asMap() // Convert the list to a map to access both item and index
                         .map(
-                          (e) => HomeNavigationSubItem(
-                            label: (context) => Text(e.title),
-                            onNavigate: () {
-                              context.goNamed(e.path);
-                            },
-                            routeNamePrefix: '',
+                          (index, subItem) => MapEntry(
+                            index,
+                            HomeNavigationSubItem(
+                              label: (context) => Text(subItem.title),
+                              onNavigate: () {
+                           
+                                context.goNamed(subItem.path);
+                                _navIndex =
+                                    index; // Store the index of the subitem
+                              },
+                              routeNamePrefix: '',
+                            ),
                           ),
                         )
+                        .values
                         .toList(),
                   );
                 } else {
@@ -62,6 +77,7 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                     matchingRoutePrefixes: [],
                     onNavigate: () {
                       context.goNamed(e.path);
+                      _navIndex = widget.pages.indexOf(e);
                     },
                     enableLowerDivider: e.includeBottomDivider,
                   );

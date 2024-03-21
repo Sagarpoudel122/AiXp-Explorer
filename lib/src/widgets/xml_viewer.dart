@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e2_explorer/src/styles/text_styles.dart';
 
 import 'package:flutter/material.dart';
@@ -19,7 +21,12 @@ class XMLViwer extends StatelessWidget {
       ),
       // Define text styles for other syntax elements as needed
     };
-    return HighlightView(content,
+
+    return HighlightView(
+        type == "json"
+            ? const JsonEncoder.withIndent('  ').convert(jsonDecode(content))
+            : content,
+
         theme: customTheme,
         language: type,
         padding: const EdgeInsets.all(12),

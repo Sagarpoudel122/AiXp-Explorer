@@ -44,8 +44,8 @@ class DashboardPage extends StatelessWidget {
             title: 'Command Launcher',
             // icon: CarbonIcons.query_queue,
             svgIconPath: AssetUtils.getSidebarIconPath('command_launcher'),
-            pageWidget: const NetworkPage(),
-            path: RouteNames.network,
+            pageWidget: const CommandLauncherPage(),
+            path: RouteNames.commandLauncher,
           ),
           const NavigationItem(
             title: 'Message viewer',
@@ -53,6 +53,7 @@ class DashboardPage extends StatelessWidget {
             pageWidget: PayloadViewer(boxName: ''),
             path: RouteNames.payloadViewer,
           ),
+
 
           /// old ones
           ///
