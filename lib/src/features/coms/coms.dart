@@ -18,7 +18,7 @@ class _CommsState extends State<Comms> {
 
   int selectedIndex = 0;
 
-  void changeOmdex(int index) {
+  void changeImdex(int index) {
     setState(() {
       selectedIndex = index;
     });
@@ -30,6 +30,7 @@ class _CommsState extends State<Comms> {
       required bool isSelected,
     }) {
       return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
           color: isSelected ? const Color(0xFF2E2C6A) : null,
           borderRadius: BorderRadius.circular(10),
@@ -67,13 +68,14 @@ class _CommsState extends State<Comms> {
               child: ListView.separated(
                 itemBuilder: (context, index) {
                   return InkWell(
-                    onTap: () => changeOmdex(index),
+                    onTap: () => changeImdex(index),
                     child: listTile(
                       isSelected: index == selectedIndex,
                     ),
                   );
                 },
-                separatorBuilder: (context, index) => const SizedBox(height: 10),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
                 itemCount: 26,
               ),
             ),
@@ -87,7 +89,10 @@ class _CommsState extends State<Comms> {
                 borderRadius: BorderRadius.circular(16),
                 color: AppColors.containerBgColor,
               ),
-              child: XMLViwer(content: xml,type: "xml",),
+              child: XMLViwer(
+                content: xml,
+                type: "xml",
+              ),
             ),
           ),
         ],

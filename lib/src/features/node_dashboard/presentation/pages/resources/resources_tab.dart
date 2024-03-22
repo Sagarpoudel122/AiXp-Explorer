@@ -8,7 +8,7 @@ class ResourcesTab extends StatelessWidget {
   const ResourcesTab(
       {super.key, required this.boxName, required this.nodeHistoryModel});
   final String boxName;
-  final NodeHistoryModel nodeHistoryModel;
+  final NodeHistoryModel? nodeHistoryModel;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class ResourcesTab extends StatelessWidget {
             children: [
               Expanded(
                 child: LineChartWidget(
-                  data: nodeHistoryModel.nodeHistory.gpuLoadHist
+                  data: nodeHistoryModel!.nodeHistory.gpuLoadHist
                       .map((e) => e.toDouble())
                       .toList(),
                   title: 'GPU',
@@ -31,7 +31,7 @@ class ResourcesTab extends StatelessWidget {
               const SizedBox(width: 34),
               Expanded(
                 child: LineChartWidget(
-                  data: nodeHistoryModel.nodeHistory.cpuHist,
+                  data: nodeHistoryModel!.nodeHistory.cpuHist,
                   title: 'CPU',
                   borderColor: AppColors.lineChartMagentaBorderColor,
                   gradient: AppColors.lineChartMagentaGradient,
@@ -44,7 +44,7 @@ class ResourcesTab extends StatelessWidget {
             children: [
               Expanded(
                 child: LineChartWidget(
-                  data: nodeHistoryModel.nodeHistory.cpuHist,
+                  data: nodeHistoryModel!.nodeHistory.cpuHist,
                   title: 'RAM',
                   borderColor: AppColors.lineChartPinkBorderColor,
                   gradient: AppColors.lineChartPinkGradient,
@@ -53,7 +53,7 @@ class ResourcesTab extends StatelessWidget {
               const SizedBox(width: 34),
               Expanded(
                 child: LineChartWidget(
-                  data: nodeHistoryModel.nodeHistory.gpuLoadHist
+                  data: nodeHistoryModel!.nodeHistory.gpuLoadHist
                       .map((e) => e.toDouble())
                       .toList(),
                   title: 'DISK',
