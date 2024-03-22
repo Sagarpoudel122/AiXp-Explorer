@@ -35,9 +35,11 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_highlight: ^0.7.0
 
-  # EC Generation
+
+  # Elliptic Sign & Verify
   pointycastle: ^3.7.4
   basic_utils: ^5.7.0
+  crypto: ^3.0.3
 
 
 
