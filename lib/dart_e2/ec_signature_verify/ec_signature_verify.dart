@@ -8,10 +8,6 @@ import 'dart:typed_data';
 import 'package:pointycastle/export.dart';
 import 'package:pointycastle/pointycastle.dart';
 
-import 'package:elliptic/elliptic.dart' as elliptic;
-
-var ec = elliptic.getSecp256k1();
-
 class EcSignatureAndVerifier {
   // Initialize elliptic curve parameters for secp256k1
   var secp256k1DomainParameter = ECDomainParameters('secp256k1');
