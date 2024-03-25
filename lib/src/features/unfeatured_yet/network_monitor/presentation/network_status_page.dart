@@ -30,6 +30,7 @@ class NetworkStatusPage extends StatefulWidget {
 }
 
 class _NetworkStatusPageState extends State<NetworkStatusPage> {
+  bool isLoading = true;
   final period = const Duration(seconds: 5);
   Map<String, NetmonBoxDetails> netmonStatus = {};
   List<NetmonBox> netmonStatusList = [];
@@ -59,6 +60,9 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   Widget build(BuildContext context) {
     return E2Listener(
       onPayload: (message) {
+        setState(() {
+          isLoading = true;
+        });
         final Map<String, dynamic> convertedMessage =
             MqttMessageEncoderDecoder.raw(message);
 
@@ -95,6 +99,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
             });
           }
         } else {}
+        isLoading = false;
       },
       // dataFilter: E2ListenerFilters.acceptAll(),
       dataFilter: (data) {
@@ -169,10 +174,14 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
               ),
               const SizedBox(height: 14),
               Expanded(
-                child: NetmonTableNew(
-                  netmonBoxes: netmonStatusList,
-                  onBoxSelected: widget.onBoxSelected,
-                ),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : NetmonTableNew(
+                        netmonBoxes: netmonStatusList,
+                        onBoxSelected: widget.onBoxSelected,
+                      ),
               ),
 
               /// Todo: Table here
