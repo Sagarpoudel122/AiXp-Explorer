@@ -1,3 +1,4 @@
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/clickable_button.dart';
 import 'package:e2_explorer/src/features/common_widgets/copy_widget.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/header.dart';
@@ -16,6 +17,7 @@ class CopyCodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print(kAIXpWallet?.privateKeyHex);
     return StackWalletBackground(
       child: Center(
         child: Column(
@@ -56,15 +58,15 @@ class CopyCodeScreen extends StatelessWidget {
                             color: AppColors.sideNavSelectedTileIndicatorColor),
                         color: AppColors.dropdownFieldFillColor),
                     child: Text(
-                      "04695096745htiewbfiwbdihfbisugeut9i4u034htoibsjdbfkvjsb dkjvbiahepjpaowjrpfewbg564",
+                      kAIXpWallet?.privateKeyHex ?? '',
                       textAlign: TextAlign.center,
                       style: TextStyles.body(),
                     ),
                   ),
                   const SizedBox(height: 22),
-                  const CopyTextWidget(
-                      text:
-                          "04695096745htiewbfiwbdihfbisugeut9i4u034htoibsjdbfkvjsb dkjvbiahepjpaowjrpfewbg564"),
+                  CopyTextWidget(
+                    text: kAIXpWallet?.privateKeyHex ?? '',
+                  ),
                   const Spacer(),
                   ClickableButton(
                     onTap: () => context.goNamed(RouteNames.createWalletReady),

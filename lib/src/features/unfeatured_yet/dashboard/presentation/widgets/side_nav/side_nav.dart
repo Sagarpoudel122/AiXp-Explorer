@@ -1,3 +1,4 @@
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/child_size_listener.dart';
@@ -56,7 +57,7 @@ class _SideNavState extends State<SideNav> {
       matchingRoutePrefixes: [],
       onNavigate: () {
         context.goNamed(profileItem.path);
-            widget.onItemTapped(4);
+        widget.onItemTapped(4);
       },
       enableLowerDivider: profileItem.includeBottomDivider,
     );
@@ -143,7 +144,8 @@ class _SideNavState extends State<SideNav> {
                                           Container(
                                             margin: const EdgeInsets.all(12),
                                             child: SideNavItemTile(
-                                              isSelected: widget.selectedIndex==4,
+                                              isSelected:
+                                                  widget.selectedIndex == 4,
                                               key: ValueKey<HomeNavigationItem>(
                                                 profileHomeNavigationItem,
                                               ),
@@ -243,7 +245,10 @@ class SideNavWalletInfoContainer extends StatelessWidget {
             children: [
               SvgPicture.asset(AssetUtils.getSvgIconPath('wallet_icon')),
               const SizedBox(width: 6),
-              TextWidget('0xD345...34v6', style: CustomTextStyles.text12_600),
+              TextWidget(
+                '${kAIXpWallet?.addressToShow}',
+                style: CustomTextStyles.text12_600,
+              ),
             ],
           ),
           const SizedBox(height: 8),

@@ -6,9 +6,11 @@ import 'package:e2_explorer/src/features/profile/presentation/profile.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/dashboard_page.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_page.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/create_wallet_ready.dart';
+import 'package:e2_explorer/src/features/wallet/presentation/splash_screen.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_create.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_import.dart';
 import 'package:e2_explorer/src/features/wallet/presentation/wallet_page.dart';
+import 'package:e2_explorer/src/features/wallet/presentation/wallet_password_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -24,16 +26,16 @@ class AppRoutes {
   const AppRoutes._();
 
   static final GoRouter routes = GoRouter(
-    initialLocation: RouteLocations.connection,
+    initialLocation: RouteLocations.splashPage,
     redirect: (context, state) {
       return null;
     },
     routes: [
       GoRoute(
-        path: RouteLocations.walletImport,
-        name: RouteNames.walletImport,
+        path: RouteLocations.splashPage,
+        name: RouteNames.splash,
         builder: (BuildContext context, GoRouterState state) {
-          return const WalletImport();
+          return const SplashScreen();
         },
       ),
       GoRoute(
@@ -41,6 +43,20 @@ class AppRoutes {
         name: RouteNames.walletPage,
         builder: (BuildContext context, GoRouterState state) {
           return const WalletPage();
+        },
+      ),
+      GoRoute(
+        path: RouteLocations.walletPassword,
+        name: RouteNames.walletPassword,
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletPasswordScreen();
+        },
+      ),
+      GoRoute(
+        path: RouteLocations.walletImport,
+        name: RouteNames.walletImport,
+        builder: (BuildContext context, GoRouterState state) {
+          return const WalletImport();
         },
       ),
       GoRoute(
