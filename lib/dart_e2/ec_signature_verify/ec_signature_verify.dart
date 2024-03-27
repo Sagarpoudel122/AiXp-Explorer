@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:basic_utils/basic_utils.dart';
 import 'package:convert/convert.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/utils.dart';
 import 'dart:typed_data';
