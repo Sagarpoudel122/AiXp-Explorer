@@ -1,4 +1,3 @@
-import 'package:basic_utils/basic_utils.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_wallet.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
@@ -50,7 +49,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      kAIXpWallet = AixpWallet();
+      kAIXpWallet = AixpWallet(isDebug: true);
     });
     ThemeUtils.themeValueNotifier.addListener(_listenToThemeChanges);
     super.initState();
