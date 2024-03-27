@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -309,7 +308,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                                                 await saveJSONToFile(
                                                   jsonString,
                                                 );
-                                                Navigator.pop(context);
+                                                
                                               },
                                               positiveActionButtonText:
                                                   "Download Json",
@@ -402,7 +401,6 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
           ),
         );
       },
-
     );
   }
 }

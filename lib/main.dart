@@ -30,8 +30,7 @@ void main() async {
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
     appWindow.title = 'E2 Client';
-    appWindow.show();
-    
+    appWindow.show();  
   });
 }
 

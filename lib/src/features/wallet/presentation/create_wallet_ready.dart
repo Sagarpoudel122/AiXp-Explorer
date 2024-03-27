@@ -22,10 +22,10 @@ class CreateWalletReady extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            walletPageHeader(title: "Create New Wallet"),
+            walletPageHeader(title: "Create New Walle hbjbt"),
             Container(
               width: 453,
-              height: 453,
+              height: 900,
               padding: const EdgeInsets.only(
                   top: 71, bottom: 30, left: 41, right: 42),
               decoration: BoxDecoration(

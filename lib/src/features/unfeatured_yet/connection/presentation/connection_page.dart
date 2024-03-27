@@ -227,9 +227,9 @@ class _ConnectionPageState extends State<ConnectionPage> {
 
   Future<void> _addDefaultServer() async {
     final MqttServer defaultServer = MqttServer(
-      name: 'Staging',
-      host: 'mqtt.staging.hyperfy.tech',
-      port: 1883,
+      name: 'stage',
+      host: '80.96.152.121',
+      port: 11883,
       username: 'rootdev',
       password: 's3cret-passw0rd',
     );

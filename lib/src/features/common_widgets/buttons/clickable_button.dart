@@ -15,7 +15,7 @@ class ClickableButton extends StatelessWidget {
     this.textColor = ColorStyles.light100,
     this.fontSize = 14,
     this.backgroundColor = ColorStyles.dark700,
-    this.hoverColor = ColorStyles.dark600,
+    this.hoverColor = const Color(0xFF4E4BDE),
     this.borderColor,
     this.hoverBorderColor,
     this.hoveredTextColor = ColorStyles.light100,
@@ -77,7 +77,7 @@ class ClickableButton extends StatelessWidget {
       },
       style: ClickableStyleHelper(
         defaultColor: backgroundColor,
-        hoverColor: hoverColor,
+        hoverColor: hoverColor.withOpacity(0.6),
         hoverBorderColor: hoverBorderColor,
         defaultBorderColor: borderColor,
       ),
