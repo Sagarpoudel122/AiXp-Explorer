@@ -11,6 +11,17 @@ Uint8List bigIntToUint8List(BigInt bigInt) {
       (i) => int.parse(byteList.substring(i * 2, i * 2 + 2), radix: 16)));
 }
 
+String minimfyAdddressToShow(String walletAddress) {
+  if (walletAddress.length < 3) {
+    return '...';
+  }
+  if (walletAddress.length < 15) {
+    walletAddress.replaceRange((walletAddress.length / 2).round() - 1,
+        (walletAddress.length / 2).round(), '..');
+  }
+  return walletAddress.replaceRange(9, walletAddress.length - 5, '...');
+}
+
 BigInt bytesToBigInt(Uint8List bytes) {
   return BigInt.parse(hex.encode(bytes), radix: 16);
 }

@@ -66,8 +66,12 @@ class _WalletPasswordScreenState extends State<WalletPasswordScreen> {
                     isLoading: isLoading,
                     child: ClickableButton(
                       onTap: () async {
-                        await kAIXpWallet?.loadWallet(passwordController.text);
-                        context.goNamed(RouteNames.connection);
+                        final isSuccess = await kAIXpWallet!
+                            .loadWallet(passwordController.text);
+                        if (isSuccess) {
+                          // ignore: use_build_context_synchronously
+                          context.goNamed(RouteNames.connection);
+                        }
                       },
                       // text: "Create a Wallet",
                       text: 'Unlock Wallet',

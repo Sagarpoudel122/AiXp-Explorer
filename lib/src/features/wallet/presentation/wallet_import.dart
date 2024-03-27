@@ -79,11 +79,13 @@ class WalletImport extends StatelessWidget {
                   const Spacer(),
                   ClickableButton(
                     onTap: () async {
-                      await kAIXpWallet?.importWallet(
+                      final isSuccess = await kAIXpWallet!.importWallet(
                         privateKeyController.text,
                         passwordController.text,
                       );
-                      context.goNamed(RouteNames.connection);
+                      if (isSuccess) {
+                        context.goNamed(RouteNames.connection);
+                      }
                     },
                     text: "Unlock Wallet",
                     backgroundColor: AppColors.buttonPrimaryBgColor,
