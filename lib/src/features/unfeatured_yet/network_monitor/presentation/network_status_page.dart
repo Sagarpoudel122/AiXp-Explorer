@@ -30,12 +30,14 @@ class NetworkStatusPage extends StatefulWidget {
 }
 
 class _NetworkStatusPageState extends State<NetworkStatusPage> {
+  bool isLoading = true;
   final period = const Duration(seconds: 5);
   Map<String, NetmonBoxDetails> netmonStatus = {};
   List<NetmonBox> netmonStatusList = [];
   List<String> supervisorIds = [];
   bool refreshReady = true;
-  final OverlayController _settingsOverlayController = OverlayController('Preferred supervisor');
+  final OverlayController _settingsOverlayController =
+      OverlayController('Preferred supervisor');
 
   // String? preferredSupervisor;
   String? currentSupervisor;
@@ -44,7 +46,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) => refreshReady = true);
+    timer = Timer.periodic(
+        const Duration(seconds: 5), (timer) => refreshReady = true);
   }
 
   @override
@@ -57,7 +60,11 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   Widget build(BuildContext context) {
     return E2Listener(
       onPayload: (message) {
-        final Map<String, dynamic> convertedMessage = MqttMessageEncoderDecoder.raw(message);
+        setState(() {
+          isLoading = true;
+        });
+        final Map<String, dynamic> convertedMessage =
+            MqttMessageEncoderDecoder.raw(message);
 
         if (convertedMessage['IS_SUPERVISOR'] == true &&
             convertedMessage['CURRENT_NETWORK'] != null) {
@@ -66,10 +73,12 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
           /// is displayed using objects in the 'CURRENT_NETWORK' key.
           /// All payload messages received do not contain the
           /// 'CURRENT_NETWORK' key, the one that contains it is used as data for table.
-          final currentNetwork = convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
+          final currentNetwork =
+              convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
           final currentNetworkMap = <String, NetmonBoxDetails>{};
           currentNetwork.forEach((key, value) {
-            currentNetworkMap[key] = NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
+            currentNetworkMap[key] =
+                NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
           });
           if (currentNetworkMap.length > 1) {
             setState(() {
@@ -77,17 +86,20 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
               refreshReady = false;
               netmonStatus = currentNetworkMap;
               netmonStatusList = netmonStatus.entries
-                  .map((entry) => NetmonBox(boxId: entry.key, details: entry.value))
+                  .map((entry) =>
+                      NetmonBox(boxId: entry.key, details: entry.value))
                   .toList();
 
               supervisorIds = netmonStatusList
                   .where((element) =>
-                      element.details.isSupervisor && element.details.working == 'ONLINE')
+                      element.details.isSupervisor &&
+                      element.details.working == 'ONLINE')
                   .map((e) => e.boxId)
                   .toList();
             });
           }
         } else {}
+        isLoading = false;
       },
       // dataFilter: E2ListenerFilters.acceptAll(),
       dataFilter: (data) {
@@ -99,7 +111,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         // }
 
         /// Added a change to accept only preferredSupervisor
-        if (currentSupervisor != null && dataMap['EE_PAYLOAD_PATH']?[0] != currentSupervisor) {
+        if (currentSupervisor != null &&
+            dataMap['EE_PAYLOAD_PATH']?[0] != currentSupervisor) {
           return false;
         }
         // final dataField = dataMap?['data'] as Map<String, dynamic>;
@@ -117,7 +130,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                 padding: const EdgeInsets.only(left: 16, right: 10),
                 child: Row(
                   children: [
-                    TextWidget('Node Dashboard', style: CustomTextStyles.text20_700),
+                    TextWidget('Node Dashboard',
+                        style: CustomTextStyles.text20_700),
                     const Spacer(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -160,10 +174,14 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
               ),
               const SizedBox(height: 14),
               Expanded(
-                child: NetmonTableNew(
-                  netmonBoxes: netmonStatusList,
-                  onBoxSelected: widget.onBoxSelected,
-                ),
+                child: isLoading
+                    ? const Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : NetmonTableNew(
+                        netmonBoxes: netmonStatusList,
+                        onBoxSelected: widget.onBoxSelected,
+                      ),
               ),
 
               /// Todo: Table here
@@ -211,14 +229,18 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                             ? null
                             : () async {
                                 if (!_settingsOverlayController.canOpen) {
-                                  _settingsOverlayController.closeWithResult(null);
+                                  _settingsOverlayController
+                                      .closeWithResult(null);
                                   return;
                                 }
-                                const Alignment targetAnchor = Alignment.bottomRight;
-                                const Alignment followerAnchor = Alignment.bottomLeft;
+                                const Alignment targetAnchor =
+                                    Alignment.bottomRight;
+                                const Alignment followerAnchor =
+                                    Alignment.bottomLeft;
 
                                 final dynamic returnedValue =
-                                    await _settingsOverlayController.showOverlay(
+                                    await _settingsOverlayController
+                                        .showOverlay(
                                   context: context,
                                   isModal: false,
                                   targetAnchor: targetAnchor,
@@ -232,7 +254,8 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                   shellBuilder: (context, content) => content,
                                   contentBuilder: (context, controller) {
                                     return PreferredSupervisorMenu(
-                                      overlayController: _settingsOverlayController,
+                                      overlayController:
+                                          _settingsOverlayController,
                                       supervisors: supervisorIds,
                                       selectedSupervisor: currentSupervisor!,
                                     );

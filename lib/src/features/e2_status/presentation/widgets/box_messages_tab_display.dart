@@ -1,5 +1,6 @@
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -69,7 +70,8 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                   child: FractionallySizedBox(
                     widthFactor: 3 / 3,
                     child: TabBar(
-                      overlayColor: MaterialStateProperty.all(Colors.transparent),
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
                       tabAlignment: TabAlignment.start,
                       padding: EdgeInsets.zero,
                       labelPadding: const EdgeInsets.only(right: 24),
@@ -116,7 +118,14 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                 color: AppColors.buttonSecondaryIconColor,
               ),
               borderColor: Colors.transparent,
-              onPressed: () {},
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomPopup();
+                  },
+                );
+              },
             ),
           ],
         ),
@@ -137,6 +146,101 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
           ),
         )
       ],
+    );
+  }
+}
+
+class CustomPopup extends StatefulWidget {
+  const CustomPopup({super.key});
+
+  @override
+  State<CustomPopup> createState() => _CustomPopupState();
+}
+
+class _CustomPopupState extends State<CustomPopup> {
+  bool isNotiication = false;
+  bool isPayload = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Close the popup when tapped outside
+        Navigator.of(context).pop();
+      },
+      child: Stack(
+        children: [
+          Container(
+            color: Colors.black
+                .withOpacity(0.5), // Semi-transparent black background
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom:
+                MediaQuery.of(context).size.height * 0.55, // Adjust as needed
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                width: 180,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: AppColors.alertDialogBgColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Material(
+                  child: Container(
+                    color: AppColors.alertDialogBgColor,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                                value: isNotiication,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isNotiication = value ?? false;
+                                  });
+                                }),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Notifications",
+                              style: TextStyles.custom(
+                                  fontWeight: FontWeight.w600, fontSize: 14),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                                value: isPayload,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isPayload = value!;
+                                  });
+                                }),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Payload",
+                              style: TextStyles.custom(
+                                  fontWeight: FontWeight.w600, fontSize: 14),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

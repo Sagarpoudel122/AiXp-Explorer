@@ -45,7 +45,7 @@ class _NodeDashBoardState extends State<NodeDashBoard> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Node Dashboard'),
+          const Text('Node Dashboars'),
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

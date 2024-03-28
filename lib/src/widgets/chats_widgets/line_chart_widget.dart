@@ -10,11 +10,13 @@ class LineChartWidget extends StatelessWidget {
     required this.borderColor,
     required this.gradient,
     required this.title,
+    required this.data,
   });
 
   final Color borderColor;
   final Gradient? gradient;
   final String title;
+  final List<double> data;
 
   LineChartBarData get finalData => LineChartBarData(
         isCurved: true,
@@ -42,19 +44,11 @@ class LineChartWidget extends StatelessWidget {
           // ),
           gradient: gradient,
         ),
-        spots: const [
-          FlSpot(-1, 1),
-          FlSpot(0, 1.0),
-          FlSpot(1, 1.4),
-          FlSpot(3, 2.8),
-          FlSpot(4, 1.7),
-          FlSpot(5, 2.8),
-          FlSpot(6, 2.6),
-          FlSpot(7, 3.5),
-          FlSpot(9, 2),
-          FlSpot(10, 3),
-          FlSpot(12, 3),
-        ],
+        spots: data.asMap().entries.map((e) {
+          int index = e.key;
+          double value = e.value;
+          return FlSpot(index.toDouble(), value.toDouble());
+        }).toList(),
       );
 
   LineChartData get sampleData2 => LineChartData(
@@ -66,7 +60,7 @@ class LineChartWidget extends StatelessWidget {
         lineBarsData: lineBarsData2,
         minX: 0,
         maxX: 10,
-        maxY: 6,
+        maxY: 20,
         minY: 0,
       );
 
@@ -172,9 +166,9 @@ class LineChartWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.containerBgColor,
       ),
-        child: AspectRatio(
-          aspectRatio: 1.81,
-          // aspectRatio: 1.23,
+      child: AspectRatio(
+        aspectRatio: 1.81,
+        // aspectRatio: 1.23,
         child: Stack(
           children: <Widget>[
             Padding(

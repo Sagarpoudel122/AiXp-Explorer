@@ -1,18 +1,15 @@
-import 'package:carbon_icons/carbon_icons.dart';
+import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
-import 'package:e2_explorer/src/features/common_widgets/tooltip/icon_button_tooltip.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/debug_viewer.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_status_page.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
-import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
+
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
-
-import '../../../network/widgets/networks_listing_widget.dart';
 
 class NetworkPage extends StatefulWidget {
   const NetworkPage({super.key});
@@ -26,6 +23,32 @@ class _NetworkPageState extends State<NetworkPage> {
   static const _boxDetailsPageIndex = 1;
   String? selectedBoxName;
   int _navIndex = _networkPageIndex;
+  final _client = E2Client();
+  late NodeHistoryModel nodeHistoryModel;
+
+  NodeHistoryModel getNodeHistory() {
+    _client.session.sendCommand(ActionCommands.updateConfig(
+        targetId: "",
+        payload: {
+          "NAME": "admin_pipeline",
+          "SIGNATURE": "NET_MON_01",
+          "INSTANCE_ID": "NET_MON_01_INST",
+          "INSTANCE_CONFIG": {
+            "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
+          }
+        },
+        initiatorId: "",
+        sessionId: ""));
+    NodeHistoryModel nodeHistoryModel =
+        NodeHistoryModel.fromJson(dummyNodeHistoryData);
+    return nodeHistoryModel;
+  }
+
+  @override
+  void initState() {
+    nodeHistoryModel = getNodeHistory();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +68,8 @@ class _NetworkPageState extends State<NetworkPage> {
                 builder: (BuildContext context) {
                   return AlertDialog(
                     title: const Text('Warning'),
-                    content: const Text('The selected box has no messages at the moment!'),
+                    content: const Text(
+                        'The selected box has no messages at the moment!'),
                     actions: <Widget>[
                       TextButton(
                         style: TextButton.styleFrom(
@@ -100,7 +124,8 @@ class _NetworkPageState extends State<NetworkPage> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Icon(Icons.arrow_back, size: 24, color: AppColors.textPrimaryColor),
+                      child: Icon(Icons.arrow_back,
+                          size: 24, color: AppColors.textPrimaryColor),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -122,7 +147,10 @@ class _NetworkPageState extends State<NetworkPage> {
                 ? Expanded(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: DebugViewer(boxName: selectedBoxName),
+                      child: DebugViewer(
+                        boxName: selectedBoxName,
+                        nodeHistoryModel: nodeHistoryModel,
+                      ),
                     ),
                   )
                 : Container(),
