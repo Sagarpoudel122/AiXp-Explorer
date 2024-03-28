@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:e2_explorer/main.dart';
+
 enum CommandAction {
   stop,
   restart,
@@ -106,7 +108,7 @@ class E2Command {
   }
 
   String toJson() {
-    return jsonEncode(toMap());
+    return jsonEncode(kAIXpWallet!.signMessage(toMap()));
   }
 
   /// ToDO: Do we need this?

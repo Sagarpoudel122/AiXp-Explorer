@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:basic_utils/basic_utils.dart';
+import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_signer.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/ec_signature_verify.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/encryption_aes.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/utils.dart';
@@ -9,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AixpWallet {
   final bool isDebug;
+
   AixpWallet({this.isDebug = false});
 
   static const privateKeySharedRef = 'wallet_privatekey';
@@ -80,6 +84,14 @@ class AixpWallet {
     String encryptedPrivatePemData =
         EncryptData.encryptAES(privateKeyPkcs8Pem, password);
     await prefs.setString(privateKeySharedRef, encryptedPrivatePemData);
+  }
+
+  Map<String, dynamic> signMessage(Map<String, dynamic> data) {
+    final signedMessage = AixpSigner(privateKey: privateKey!).signMessage(
+      data,
+      walletAddress,
+    );
+    return signedMessage;
   }
 
   Future<bool> loadWallet(String password) async {

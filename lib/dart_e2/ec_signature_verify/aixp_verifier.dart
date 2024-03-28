@@ -20,7 +20,7 @@ class CustomJsonEncoder {
   static Map<String, dynamic> _handleMap(Map value) {
     Map tmpMap = value as Map;
     if (tmpMap.isNotEmpty) {
-      return _cleanMap(value as Map<String, dynamic>);
+      return cleanedAndRearrangedMap(value as Map<String, dynamic>);
     } else {
       return {};
     }
@@ -41,7 +41,11 @@ class CustomJsonEncoder {
     return value;
   }
 
-  static Map<String, dynamic> _cleanMap(Map<String, dynamic> data) {
+  /// Set keys of in alphabetical/lexicographioc order
+  /// Remove format floate ie. 89.0 -> 89
+  static Map<String, dynamic> cleanedAndRearrangedMap(
+    Map<String, dynamic> data,
+  ) {
     Map<String, dynamic> finalData = {};
     List<String> keys = data.keys.toList();
     keys.sort((a, b) => a.compareTo(b));
@@ -53,7 +57,7 @@ class CustomJsonEncoder {
   }
 
   static String encode(Map<String, dynamic> jsonData) {
-    return jsonEncode(_cleanMap(jsonData));
+    return jsonEncode(cleanedAndRearrangedMap(jsonData));
   }
 }
 
@@ -62,7 +66,6 @@ class AixpVerifier {
   AixpVerifier({this.isDebug = false});
 
   final _ecInstance = EcSignatureAndVerifier();
-
   bool _checkIfVerifiicationNeeded(Map<String, dynamic> jsonData) {
     if (jsonData.containsKey('EE_SIGN') && jsonData.containsKey('EE_SENDER')) {
       return true;

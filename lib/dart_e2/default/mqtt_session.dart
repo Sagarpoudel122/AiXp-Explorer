@@ -7,11 +7,12 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/const/mqtt_config.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_verifier.dart';
 import 'package:e2_explorer/dart_e2/objects/e2_box.dart';
+import 'package:e2_explorer/main.dart';
 import 'package:flutter/foundation.dart';
 
 class MqttSession extends GenericSession {
   /// Message Veirifer
-  final aixpVerifier = AixpVerifier(isDebug: true);
+  final aixpVerifier = AixpVerifier(isDebug: false);
 
   MqttSession({
     required super.server,
@@ -65,7 +66,8 @@ class MqttSession extends GenericSession {
   @override
   void sendCommand(E2Command command) {
     print(
-        'Sent command on lummetry/${command.targetId}/config: ${command.toMap()}');
+      'Sent command on lummetry/${command.targetId}/config: ${command.toJson()}',
+    );
 
     _payloadMqtt.sendOnTopic(
       command.toJson(),
