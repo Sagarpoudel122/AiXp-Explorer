@@ -21,12 +21,14 @@ class BoxMessagesTabDisplay extends StatefulWidget {
     required this.resourcesView,
     required this.pipelinesView,
     required this.commsView,
+    required this.heartBeat,
     this.onTabChanged,
   });
 
   final Widget resourcesView;
   final Widget pipelinesView;
   final Widget commsView;
+  final Widget heartBeat;
 
   // final Widget fullPayloadsView;
   final void Function(BoxViewerTab tab)? onTabChanged;
@@ -43,7 +45,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
     _tabIndex = _tabController.index;
     _tabController.addListener(() {
       if (_tabIndex != _tabController.index) {
@@ -104,6 +106,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                         Text('Resources'),
                         Text('Pipelines'),
                         Text('Comms'),
+                        Text("Heartbeat")
                       ],
                     ),
                   ),
@@ -141,7 +144,9 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
               widget.pipelinesView,
 
               /// Comms tab
-              widget.commsView
+              widget.commsView,
+              //Heartbeat Tab
+              widget.heartBeat
             ],
           ),
         )
