@@ -1,5 +1,7 @@
 import 'package:e2_explorer/src/features/coms/coms.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/box_messages_tab_display.dart';
+import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/command_view.dart';
+import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/heartbeat_view.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/pipeline_screen.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/resources_tab.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
@@ -46,15 +48,9 @@ class DebugViewer extends StatelessWidget {
           key: ValueKey('${boxName ?? ''}3'),
           boxName: boxName!,
         ),
-        heartBeat: Container(
-          color: const Color(0xff161616),
-          child: Center(
-            child: Text(
-              'Heartbeat',
-              style: TextStyles.body(),
-            ),
-          ),
-        ),
+        heartBeat: HeartbeatView(
+            boxName: boxName ?? '', key: ValueKey('${boxName ?? ''}4')),
+        command: CommandView(boxName: '${boxName ?? ''}5'),
         onTabChanged: (tab) {},
       ),
     );
