@@ -50,7 +50,7 @@ class DebugViewer extends StatelessWidget {
         ),
         heartBeat: HeartbeatView(
             boxName: boxName ?? '', key: ValueKey('${boxName ?? ''}4')),
-        command: CommandView(boxName: '${boxName ?? ''}5'),
+        command: CommandView(boxName: boxName ?? ''),
         onTabChanged: (tab) {},
       ),
     );
