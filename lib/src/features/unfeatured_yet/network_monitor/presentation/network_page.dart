@@ -1,4 +1,5 @@
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
+import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -6,7 +7,6 @@ import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/de
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_status_page.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
-
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +19,11 @@ class NetworkPage extends StatefulWidget {
 }
 
 class _NetworkPageState extends State<NetworkPage> {
+  bool isSingleNodeManager = false;
   static const _networkPageIndex = 0;
   static const _boxDetailsPageIndex = 1;
   String? selectedBoxName;
+  NetmonBox? selectedBox;
   int _navIndex = _networkPageIndex;
   final _client = E2Client();
   late NodeHistoryModel nodeHistoryModel;
@@ -57,9 +59,10 @@ class _NetworkPageState extends State<NetworkPage> {
       children: [
         NetworkStatusPage(
           onBoxSelected: (boxName) async {
-            if (E2Client().boxHasMessages(boxName)) {
+            if (E2Client().boxHasMessages(boxName.boxId)) {
               setState(() {
-                selectedBoxName = boxName;
+                selectedBoxName = boxName.boxId;
+                selectedBox = boxName;
                 _navIndex = _boxDetailsPageIndex;
               });
             } else {
@@ -130,9 +133,14 @@ class _NetworkPageState extends State<NetworkPage> {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: TextWidget(
-                      'Monitoring Edge Node ${selectedBoxName ?? ''}',
-                      style: CustomTextStyles.text16_400,
+                    child: Row(
+                      children: [
+                        TextWidget(
+                          'Monitoring Edge Node ${selectedBoxName ?? ''}',
+                          style: CustomTextStyles.text16_400,
+                        ),
+                        const SizedBox(width: 10),
+                      ],
                     ),
                   ),
                   const AppButtonPrimary(

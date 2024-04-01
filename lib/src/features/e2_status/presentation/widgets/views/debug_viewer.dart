@@ -14,7 +14,7 @@ class DebugViewer extends StatelessWidget {
   });
 
   final String? boxName;
-  final NodeHistoryModel?  nodeHistoryModel;
+  final NodeHistoryModel? nodeHistoryModel;
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +46,17 @@ class DebugViewer extends StatelessWidget {
           key: ValueKey('${boxName ?? ''}3'),
           boxName: boxName!,
         ),
+        heartBeat: Container(
+          color: const Color(0xff161616),
+          child: Center(
+            child: Text(
+              'Heartbeat',
+              style: TextStyles.body(),
+            ),
+          ),
+        ),
         onTabChanged: (tab) {},
       ),
     );
   }
 }
-
-

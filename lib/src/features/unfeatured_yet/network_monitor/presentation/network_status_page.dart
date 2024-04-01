@@ -13,9 +13,11 @@ import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart'
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table_new.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/widgets/preferred_supervisor_menu.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/widgets/single_node_page.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class NetworkStatusPage extends StatefulWidget {
   const NetworkStatusPage({
@@ -23,7 +25,7 @@ class NetworkStatusPage extends StatefulWidget {
     required this.onBoxSelected,
   });
 
-  final void Function(String boxName) onBoxSelected;
+  final void Function(NetmonBox) onBoxSelected;
 
   @override
   State<NetworkStatusPage> createState() => _NetworkStatusPageState();
@@ -42,6 +44,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   // String? preferredSupervisor;
   String? currentSupervisor;
   late final Timer timer;
+  bool isSingleNodeManager = false;
 
   @override
   void initState() {
@@ -121,67 +124,106 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         return true;
       },
       builder: (BuildContext context) {
-        var d = DashboardBodyContainer(
+        var d = Container(
+          margin: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: !isSingleNodeManager
+                ? AppColors.containerBgColor
+                : AppColors.scaffoldBackgroundColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 10),
-                child: Row(
-                  children: [
-                    TextWidget('Node Dashboard',
-                        style: CustomTextStyles.text20_700),
-                    const Spacer(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+              Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(
+                        top: 10, left: 16, right: 10, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: AppColors.containerBgColor,
+                      borderRadius: const BorderRadius.only(
+                          topRight: Radius.circular(8),
+                          topLeft: Radius.circular(8)),
+                    ),
+                    child: Row(
                       children: [
-                        RichText(
-                          text: TextSpan(
-                            text: 'Network by ',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                              color: AppColors.textPrimaryColor,
-                            ),
-                            children: [
-                              TextSpan(
-                                text: '@prod_super',
+                        TextWidget('Node Dashboard',
+                            style: CustomTextStyles.text20_700),
+                        const SizedBox(width: 10),
+                        const SizedBox(width: 10),
+                        Row(
+                          children: [
+                            Checkbox(
+                                value: isSingleNodeManager,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isSingleNodeManager = value!;
+                                  });
+                                }),
+                            const Text("Single node manager"),
+                          ],
+                        ),
+                        const Spacer(),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            RichText(
+                              text: TextSpan(
+                                text: 'Network by ',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w400,
                                   color: AppColors.textPrimaryColor,
                                 ),
-                              )
-                            ],
-                          ),
+                                children: [
+                                  TextSpan(
+                                    text: '@prod_super',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.textPrimaryColor,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            TextWidget(
+                              '2023-12-22 14:10:46',
+                              style: CustomTextStyles.text14_700,
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
                         ),
-                        TextWidget(
-                          '2023-12-22 14:10:46',
-                          style: CustomTextStyles.text14_700,
-                          textAlign: TextAlign.end,
-                        ),
+                        const SizedBox(width: 19),
+                        AppButtonPrimary(
+                            text: 'Refresh', onPressed: () {}, height: 32),
                       ],
                     ),
-                    const SizedBox(width: 19),
-                    AppButtonPrimary(
-                      text: 'Refresh',
-                      onPressed: () {},
-                      height: 32,
-                    ),
-                  ],
-                ),
+                  ),
+                  if (!isLoading &&
+                      isSingleNodeManager &&
+                      netmonStatusList.isNotEmpty)
+                    SizedBox(
+                        height: 80,
+                        child: NetmonTableNew(
+                          netmonBoxes: [netmonStatusList[0]],
+                        )),
+                ],
               ),
-              const SizedBox(height: 14),
               Expanded(
                 child: isLoading
                     ? const Center(
                         child: CircularProgressIndicator(),
                       )
-                    : NetmonTableNew(
-                        netmonBoxes: netmonStatusList,
-                        onBoxSelected: widget.onBoxSelected,
-                      ),
+                    : isSingleNodeManager
+                        ? SingleNodeNetworkPage(
+                            netmonBox: netmonStatusList[0],
+                          )
+                        : NetmonTableNew(
+                            netmonBoxes: netmonStatusList,
+                            onBoxSelected: widget.onBoxSelected,
+                          ),
               ),
 
               /// Todo: Table here
@@ -279,7 +321,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
               Expanded(
                 child: NetmonTable(
                   boxStatusList: netmonStatusList,
-                  onBoxSelected: widget.onBoxSelected,
+                  // onBoxSelected: widget.onBoxSelected,
                 ),
               )
             ],
