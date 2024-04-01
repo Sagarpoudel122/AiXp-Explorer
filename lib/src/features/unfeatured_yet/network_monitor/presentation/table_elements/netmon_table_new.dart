@@ -12,10 +12,11 @@ import '../../../../common_widgets/table/sync_scroll_controller.dart';
 import '../../../../common_widgets/table/table_header_item_widget.dart';
 
 class NetmonTableNew extends StatefulWidget {
-  const NetmonTableNew({super.key, required this.netmonBoxes, this.onBoxSelected});
+  const NetmonTableNew(
+      {super.key, required this.netmonBoxes, this.onBoxSelected});
 
   final List<NetmonBox> netmonBoxes;
-  final void Function(String)? onBoxSelected;
+  final void Function(NetmonBox)? onBoxSelected;
 
   @override
   State<NetmonTableNew> createState() => _NetmonTableNewState();
@@ -66,9 +67,7 @@ class _NetmonTableNewState extends State<NetmonTableNew> {
     // final NetmonBox ioDevice = ioDeviceListBloc.state.ioDevices.data[index];
     //
     // await _onEdit(ioDevice);
-    widget.onBoxSelected?.call(widget.netmonBoxes[index].boxId);
-   
-    
+    widget.onBoxSelected?.call(widget.netmonBoxes[index]);
   }
 
   void _onRefresh() {
@@ -135,7 +134,9 @@ class _NetmonTableNewState extends State<NetmonTableNew> {
       columnsLeft: const <NetmonBoxColumn>[NetmonBoxColumn.boxId],
       columnsRight: const <NetmonBoxColumn>[],
       visibleColumns: NetmonBoxColumn.values.toSet(),
-      sortingColumns: NetmonBoxColumn.values.where((NetmonBoxColumn e) => e.sortable).toSet(),
+      sortingColumns: NetmonBoxColumn.values
+          .where((NetmonBoxColumn e) => e.sortable)
+          .toSet(),
       sortedColumn: null,
       // sortedColumn: NetmonBoxColumn.values
       //     .where((NetmonBoxColumn e) => e.sortable)
@@ -183,7 +184,8 @@ class _NetmonTableNewState extends State<NetmonTableNew> {
             case NetmonBoxColumn.boxId:
               return Padding(
                 padding: const EdgeInsets.only(left: 16, right: 8),
-                child: TextWidget(box.boxId, style: CustomTextStyles.text14_400),
+                child:
+                    TextWidget(box.boxId, style: CustomTextStyles.text14_400),
               );
             case NetmonBoxColumn.version:
               return Padding(
@@ -206,7 +208,8 @@ class _NetmonTableNewState extends State<NetmonTableNew> {
             case NetmonBoxColumn.uptime:
               return Padding(
                 padding: const EdgeInsets.only(left: 16, right: 8),
-                child: TextWidget(box.details.uptime, style: CustomTextStyles.text14_400),
+                child: TextWidget(box.details.uptime,
+                    style: CustomTextStyles.text14_400),
               );
             case NetmonBoxColumn.lastSeen:
               return Padding(
@@ -259,7 +262,9 @@ class _NetmonTableNewState extends State<NetmonTableNew> {
                 padding: const EdgeInsets.only(left: 16, right: 8),
                 child: TableStatusButton(
                   text: box.details.isSupervisor ? 'YES' : 'NO',
-                  tsbStatus: box.details.isSupervisor ? TsbStatus.success : TsbStatus.error,
+                  tsbStatus: box.details.isSupervisor
+                      ? TsbStatus.success
+                      : TsbStatus.error,
                 ),
               );
           }
