@@ -104,6 +104,7 @@ class E2Command {
       'PAYLOAD': payload,
       'INITIATOR_ID': initiatorId,
       'SESSION_ID': sessionId,
+      'TIME': DateTime.now().millisecondsSinceEpoch,
     }..removeWhere((key, value) => value == null);
   }
 
