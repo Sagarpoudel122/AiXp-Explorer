@@ -25,7 +25,7 @@ class CreateWalletReady extends StatelessWidget {
             walletPageHeader(title: "Create New Walle hbjbt"),
             Container(
               width: 453,
-              height: 900,
+              height: 450,
               padding: const EdgeInsets.only(
                   top: 71, bottom: 30, left: 41, right: 42),
               decoration: BoxDecoration(
