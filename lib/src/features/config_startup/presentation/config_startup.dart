@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 
@@ -12,8 +13,10 @@ import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_w
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/table_header_item_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
+import 'package:e2_explorer/src/features/config_startup/presentation/config_startup_view.dart';
 import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/edit_dialouges.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
+import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
@@ -37,6 +40,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
   Map<String, NetmonBoxDetails> netmonStatus = {};
   List<String> supervisorIds = [];
   String? currentSupervisor;
+
   Future<void> editData({
     required CommandLauncherData item,
   }) async {
@@ -296,37 +300,9 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                                     children: [
                                       AppButtonSecondary(
                                         onPressed: () {
-                                          showAppDialog(
-                                            context: context,
-                                            content: AppDialogWidget(
-                                              isActionbuttonReversed: true,
-                                              positiveActionButtonAction:
-                                                  () async {
-                                                final json = getJsonData();
-                                                String jsonString =
-                                                    jsonEncode(json);
-                                                await saveJSONToFile(
-                                                  jsonString,
-                                                );
-                                                
-                                              },
-                                              positiveActionButtonText:
-                                                  "Download Json",
-                                              negativeActionButtonText: "Close",
-                                              title:
-                                                  "Config Startup file for ${item.edgeNode}",
-                                              content: SizedBox(
-                                                  height: 500,
-                                                  child: SingleChildScrollView(
-                                                      child: SizedBox(
-                                                    width: double.maxFinite,
-                                                    child: XMLViwer(
-                                                      content: jsonEncode(
-                                                          getJsonData()),
-                                                      type: "json",
-                                                    ),
-                                                  ))),
-                                            ),
+                                          ConfigStartUpViewDialog.viewConfigLog(
+                                            context,
+                                            targetId: item.edgeNode,
                                           );
                                         },
                                         text: 'View',
