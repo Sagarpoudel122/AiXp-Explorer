@@ -4,6 +4,8 @@ import 'package:convert/convert.dart';
 
 const ADDR_PREFIX = 'aixp_';
 
+const INITIATORIDPREFIX = 'explorer_';
+
 Uint8List bigIntToUint8List(BigInt bigInt) {
   // Convert BigInt to a byte list
   var byteList = bigInt.toRadixString(16).padLeft(64, '0'); // Ensure 32 bytes

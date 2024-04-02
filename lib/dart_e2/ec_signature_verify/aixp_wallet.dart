@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:math';
 
 import 'package:basic_utils/basic_utils.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_signer.dart';
@@ -6,22 +6,25 @@ import 'package:e2_explorer/dart_e2/ec_signature_verify/ec_signature_verify.dart
 import 'package:e2_explorer/dart_e2/ec_signature_verify/encryption_aes.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/utils.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
+import 'package:e2_explorer/src/utils/extension_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AixpWallet {
+  //TODO: Make sure isDebug is false on Release Mode
   final bool isDebug;
-
   AixpWallet({this.isDebug = false});
 
   static const privateKeySharedRef = 'wallet_privatekey';
+  static const initiatorIdRef = 'initiator_id_key';
 
   final ecHeaderPrefixForDer = "3056301006072a8648ce3d020106052b8104000a034200";
   final _ecInstance = EcSignatureAndVerifier();
 
   ECPrivateKey? privateKey;
   ECPublicKey? publicKey;
+  String? initiatorId;
 
   /// ECPrivateKey to Hex
   String get privateKeyHex {
@@ -45,6 +48,7 @@ class AixpWallet {
       var keyPair = _ecInstance.generateSecp256k1KeyPair();
       privateKey = keyPair.privateKey as ECPrivateKey;
       publicKey = keyPair.publicKey as ECPublicKey;
+      initiatorId = INITIATORIDPREFIX + Random().nextIntOfDigits(6).toString();
       await _saveData(password);
     } catch (e) {
       rethrow;
@@ -77,6 +81,11 @@ class AixpWallet {
     return prefs.getString(privateKeySharedRef);
   }
 
+  Future<String?> _getInitiatorId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(initiatorIdRef);
+  }
+
   Future _saveData(String password) async {
     final privateKeyPkcs8Pem =
         CryptoUtils.encodePrivateEcdsaKeyToPkcs8(privateKey!);
@@ -84,6 +93,7 @@ class AixpWallet {
     String encryptedPrivatePemData =
         EncryptData.encryptAES(privateKeyPkcs8Pem, password);
     await prefs.setString(privateKeySharedRef, encryptedPrivatePemData);
+    await prefs.setString(initiatorIdRef, initiatorId!);
   }
 
   Map<String, dynamic> signMessage(Map<String, dynamic> data) {
@@ -98,6 +108,7 @@ class AixpWallet {
     try {
       print("----- Load Wallet ------");
       String? privateKeyData = await _getData();
+      initiatorId = await _getInitiatorId();
       if (privateKeyData != null) {
         String descryptedPrivatePemData =
             EncryptData.decryptAES(privateKeyData, password);
@@ -115,13 +126,17 @@ class AixpWallet {
   Future<bool> clearWallet() async {
     try {
       final prefs = await SharedPreferences.getInstance();
+      prefs.remove(initiatorIdRef);
       return prefs.remove(privateKeySharedRef);
     } catch (e) {
       return false;
     }
   }
 
-  Future<bool> importWallet(String privateKeyHex, String password) async {
+  Future<bool> importWallet(
+    String privateKeyHex,
+    String password,
+  ) async {
     try {
       print("----- Import Wallet ------");
       privateKey = ECPrivateKey(
@@ -129,6 +144,7 @@ class AixpWallet {
         _ecInstance.secp256k1DomainParameter,
       );
       publicKey = _ecInstance.derivePublicKey(privateKey!);
+      initiatorId = INITIATORIDPREFIX + Random().nextIntOfDigits(6).toString();
       await _saveData(password);
       consoleKeyInfo();
       return true;

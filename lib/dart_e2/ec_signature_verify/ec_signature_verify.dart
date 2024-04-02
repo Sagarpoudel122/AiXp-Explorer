@@ -130,11 +130,13 @@ class EcSignatureAndVerifier {
     ]).encode();
 
     // Convert the signature bytes to a base64 string
-    return base64Encode(encoded);
+    return base64ToUrlSafeBase64(base64Encode(encoded));
   }
 
   ECSignature parseBase64EncodedSignature(String base64Signature) {
-    Uint8List signatureBytes = base64Decode(base64Signature);
+    Uint8List signatureBytes = base64Decode(
+      urlSafeBase64ToBase64(base64Signature),
+    );
 
     // The signature format and length might vary. This is an example.
     // secp256k1 signatures typically contain two 32-byte components (r and s).
