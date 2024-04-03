@@ -1,12 +1,15 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 const _name = 'admin_pipeline';
@@ -59,18 +62,37 @@ class ConfigStartUpView extends StatefulWidget {
 class _ConfigStartUpViewState extends State<ConfigStartUpView> {
   bool isLoading = true;
   Map<String, dynamic> data = {};
+
+  Future<void> saveJSONToFile(Map data) async {
+    // Convert data to JSON string
+    String jsonString = jsonEncode(data);
+
+    // Get directory where user wants to save the file
+    String? directoryPath = await FilePicker.platform.getDirectoryPath();
+    if (directoryPath != null) {
+      String filePath = '$directoryPath/data.json';
+
+      // Save JSON to a file
+      File file = File(filePath);
+      await file.writeAsString(jsonString);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return E2Listener(
-      onNotification: (data) {
-        final EE_PAYLOAD_PATH =
-            (data['EE_PAYLOAD_PATH'] as List).map((e) => e as String?).toList();
+      onPayload: (data) {
+        final Map<String, dynamic> convertedMessage =
+            MqttMessageEncoderDecoder.raw(data);
+        final EE_PAYLOAD_PATH = (convertedMessage['EE_PAYLOAD_PATH'] as List)
+            .map((e) => e as String?)
+            .toList();
         if (EE_PAYLOAD_PATH.length == 4) {
           if (EE_PAYLOAD_PATH[0] == widget.targetId &&
               EE_PAYLOAD_PATH[1] == _name &&
               EE_PAYLOAD_PATH[2] == _signature &&
               EE_PAYLOAD_PATH[3] == _instanceId) {
-            this.data = data;
+            this.data = convertedMessage;
             isLoading = false;
             setState(() {});
           }
@@ -80,11 +102,7 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
         return AppDialogWidget(
           isActionbuttonReversed: true,
           positiveActionButtonAction: () async {
-            // final json = getJsonData();
-            // String jsonString = jsonEncode(json);
-            // await saveJSONToFile(
-            //   jsonString,
-            // );
+            await saveJSONToFile(data);
           },
           positiveActionButtonText: "Download Json",
           negativeActionButtonText: "Close",

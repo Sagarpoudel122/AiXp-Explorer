@@ -13,7 +13,8 @@ import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_w
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/table_header_item_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
-import 'package:e2_explorer/src/features/config_startup/presentation/config_startup_view.dart';
+import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/config_startup_edit.dart';
+import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/config_startup_view.dart';
 import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/edit_dialouges.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -319,7 +320,11 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                                       const SizedBox(width: 8),
                                       AppButtonSecondary(
                                         onPressed: () {
-                                          editData(item: item);
+                                          ConfigStartUpEditDialog.viewConfigLog(
+                                            context,
+                                            targetId: item.edgeNode,
+                                          );
+                                          // editData(item: item);
                                         },
                                         text: 'Edit',
                                         height: 30,

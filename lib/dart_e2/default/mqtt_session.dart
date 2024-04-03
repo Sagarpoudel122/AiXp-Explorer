@@ -158,7 +158,7 @@ class MqttSession extends GenericSession {
       }
       onHeartbeat.call(message);
     } catch (_, s) {
-      print('Invalid heartbeat received\n$_ $s');
+      print('Invalid heartbeat received');
       // print(s);
     }
   }
