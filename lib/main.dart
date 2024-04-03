@@ -1,10 +1,13 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_wallet.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
 import 'package:e2_explorer/src/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+AixpWallet? kAIXpWallet;
 
 /// Todo: implemented for test. Remove once test completed.
 Future<void> clearServersAndDefaultServer() async {
@@ -20,6 +23,7 @@ void main() async {
 
   /// Check which theme to use and initialize the colors according to theme.
   await ThemeUtils.initialize();
+
   // await clearServersAndDefaultServer();
   runApp(const MyApp());
 
@@ -30,7 +34,7 @@ void main() async {
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
     appWindow.title = 'E2 Client';
-    appWindow.show();  
+    appWindow.show();
   });
 }
 
@@ -44,6 +48,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      kAIXpWallet = AixpWallet(isDebug: true);
+    });
     ThemeUtils.themeValueNotifier.addListener(_listenToThemeChanges);
     super.initState();
   }

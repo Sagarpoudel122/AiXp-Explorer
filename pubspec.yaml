@@ -36,6 +36,16 @@ dependencies:
   flutter_highlight: ^0.7.0
   popover: ^0.3.0
 
+
+  # Elliptic Sign & Verify
+  pointycastle: ^3.7.4
+  basic_utils: ^5.7.0
+  crypto: ^3.0.3
+
+
+
+
+
 dev_dependencies:
   #flutter_test:
    # sdk: flutter

@@ -13,53 +13,53 @@ class WalletPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StackWalletBackground(
-      child:  Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              walletPageHeader(title: "Wallet"),
-              Container(
-                width: 453,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 42, vertical: 120),
-                decoration: BoxDecoration(
-                    color: AppColors.containerBgColor,
-                    borderRadius: BorderRadius.circular(16)),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'CREATE KEYSTORE',
-                      style: TextStyles.body(),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'The password will encrypt your private Key.',
-                      textAlign: TextAlign.center,
-                      style: TextStyles.body(color: AppColors.textSecondaryColor),
-                    ),
-                    const SizedBox(
-                      height: 32,
-                    ),
-                    ClickableButton(
-                      onTap: () => context.goNamed(RouteNames.walletImport),
-                      text: "Import Account",
-                      backgroundColor: AppColors.buttonPrimaryBgColor,
-                    ),
-                    const SizedBox(height: 20),
-                    ClickableButton(
-                      onTap: () => context.goNamed(RouteNames.walletCreate),
-                      text: "Create Account",
-                      backgroundColor: AppColors.buttonPrimaryBgColor,
-                    ),
-                  ],
-                ),
+      child: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            walletPageHeader(title: "Wallet"),
+            Container(
+              width: 453,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 42, vertical: 120),
+              decoration: BoxDecoration(
+                color: AppColors.containerBgColor,
+                borderRadius: BorderRadius.circular(16),
               ),
-            ],
-          ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'CREATE KEYSTORE',
+                    style: TextStyles.body(),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'The password will encrypt your private Key.',
+                    textAlign: TextAlign.center,
+                    style: TextStyles.body(color: AppColors.textSecondaryColor),
+                  ),
+                  const SizedBox(
+                    height: 32,
+                  ),
+                  ClickableButton(
+                    onTap: () => context.goNamed(RouteNames.walletImport),
+                    text: "Import Account",
+                    backgroundColor: AppColors.buttonPrimaryBgColor,
+                  ),
+                  const SizedBox(height: 20),
+                  ClickableButton(
+                    onTap: () => context.goNamed(RouteNames.walletCreate),
+                    text: "Create Account",
+                    backgroundColor: AppColors.buttonPrimaryBgColor,
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      );
-    
+      ),
+    );
   }
 }

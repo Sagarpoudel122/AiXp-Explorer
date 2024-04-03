@@ -57,7 +57,6 @@ class CommandLauncherPage extends StatelessWidget {
                 sortingColumns: const {},
                 sortedColumn: null,
                 items: [
-                  
                   CommandLauncherData(
                     edgeNode: 'Goliath',
                     configStartupFile: 'configStartupFile',
@@ -86,7 +85,8 @@ class CommandLauncherPage extends StatelessWidget {
                               AppButtonSecondary(
                                 onPressed: () {
                                   _client.session.sendCommand(
-                                      ActionCommands.stop(targetId: ""));
+                                    ActionCommands.stop(targetId: ""),
+                                  );
                                 },
                                 text: 'Restart',
                                 height: 30,
@@ -116,7 +116,6 @@ class CommandLauncherPage extends StatelessWidget {
                                           content: Container(
                                             height: 475,
                                             padding: const EdgeInsets.all(16),
-
                                             child: Text(
                                                 "Logs will be available in the logs section"),
                                           )));
