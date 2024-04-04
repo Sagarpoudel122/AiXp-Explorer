@@ -108,8 +108,12 @@ class E2Command {
     }..removeWhere((key, value) => value == null);
   }
 
+  Map<String, dynamic> signedMap() {
+    return kAIXpWallet!.signMessage(toMap());
+  }
+
   String toJson() {
-    return jsonEncode(kAIXpWallet!.signMessage(toMap()));
+    return jsonEncode(signedMap());
   }
 
   /// ToDO: Do we need this?

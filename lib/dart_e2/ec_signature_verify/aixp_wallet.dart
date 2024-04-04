@@ -70,6 +70,7 @@ class AixpWallet {
     if (isDebug) {
       final publicKeyCompredHex = _ecInstance.compressPublicKey(publicKey!);
       print("${privateKeyHex} Private Key Hex");
+      print(initiatorId);
       print("${HexUtils.decode(privateKeyHex)} Private Key Unit8List");
       print(publicKeyCompredHex);
       print("Address: ${_ecInstance.getAddressFromPublicKey(publicKey!)}");
