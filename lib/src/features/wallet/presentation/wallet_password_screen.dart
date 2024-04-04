@@ -1,5 +1,6 @@
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/clickable_button.dart';
+import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/header.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/stack_background.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/wallet_form_field.dart';
@@ -10,90 +11,77 @@ import 'package:e2_explorer/src/utils/form_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class WalletImport extends StatelessWidget {
-  const WalletImport({super.key});
+class WalletPasswordScreen extends StatefulWidget {
+  const WalletPasswordScreen({super.key});
 
   @override
+  State<WalletPasswordScreen> createState() => _WalletPasswordScreenState();
+}
+
+class _WalletPasswordScreenState extends State<WalletPasswordScreen> {
+  bool isLoading = false;
+  final passwordController = TextEditingController();
+  @override
   Widget build(BuildContext context) {
-    final privateKeyController = TextEditingController();
-    final passwordController = TextEditingController();
     return StackWalletBackground(
       child: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            walletPageHeader(title: "Import Your Wallet"),
+            walletPageHeader(title: "PASSWORD"),
             Container(
               width: 453,
-              height: 453,
               padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 31),
               decoration: BoxDecoration(
-                  color: AppColors.containerBgColor,
-                  borderRadius: BorderRadius.circular(16)),
+                color: AppColors.containerBgColor,
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'PRIVATE KEY',
+                    'ENTER PASSWORD',
                     style: TextStyles.body(),
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    'Please add your private key hash',
-                    textAlign: TextAlign.center,
-                    style: TextStyles.body(color: AppColors.textSecondaryColor),
-                  ),
+                  // const SizedBox(height: 10),
+                  // Text(
+                  //   'This password will encrypt your private key.',
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyles.body(color: AppColors.textSecondaryColor),
+                  // ),
                   const SizedBox(
                     height: 32,
                   ),
-                  const SizedBox(height: 20),
-                  // TextFormField(
-                  //   maxLines: 3,
-                  //   decoration: const InputDecoration(
-                  //     hintText: "Enter your private key",
-                  //   ),
-                  // ),
-                  // const SizedBox(height: 20),
-                  // TextFormField(
-                  //   decoration: const InputDecoration(
-                  //     hintText: "Enter your wallet password",
-                  //   ),
-                  // ),
                   WalletFormFieldWidget(
-                    hintText: "Enter your private key",
-                    controller: privateKeyController,
-                    maxLines: 3,
-                    validator: (value) =>
-                        FormUtils.validateRequiredField(context, value),
-                  ),
-                  const SizedBox(height: 18),
-                  WalletFormFieldWidget(
-                    hintText: "Enter your wallet password",
+                    hintText: "Enter your Password",
                     controller: passwordController,
                     obscureText: true,
                     maxLines: 1,
                     validator: (value) =>
                         FormUtils.validatePassword(context, value),
                   ),
-                  const Spacer(),
-                  ClickableButton(
-                    onTap: () async {
-                      final isSuccess = await kAIXpWallet!.importWallet(
-                        privateKeyController.text,
-                        passwordController.text,
-                      );
-                      if (isSuccess) {
-                        context.goNamed(RouteNames.connection);
-                      }
-                    },
-                    text: "Unlock Wallet",
-                    backgroundColor: AppColors.buttonPrimaryBgColor,
+                  const SizedBox(height: 31),
+                  LoadingParentWidget(
+                    isLoading: isLoading,
+                    child: ClickableButton(
+                      onTap: () async {
+                        final isSuccess = await kAIXpWallet!
+                            .loadWallet(passwordController.text);
+                        if (isSuccess) {
+                          // ignore: use_build_context_synchronously
+                          context.goNamed(RouteNames.connection);
+                        }
+                      },
+                      // text: "Create a Wallet",
+                      text: 'Unlock Wallet',
+                      backgroundColor: AppColors.buttonPrimaryBgColor,
+                    ),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

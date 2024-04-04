@@ -1,5 +1,6 @@
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -28,19 +29,23 @@ class _NetworkPageState extends State<NetworkPage> {
   final _client = E2Client();
   late NodeHistoryModel nodeHistoryModel;
 
+  nodeHistoryCommand() {
+    _client.session.sendCommand(
+      ActionCommands.updatePipelineInstance(
+        targetId: selectedBox!.boxId,
+        payload: E2InstanceConfig(
+            name: 'admin_pipeline',
+            signature: 'NET_MON_01',
+            instanceId: 'NET_MON_01_INST',
+            instanceConfig: {
+              "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
+            }),
+        initiatorId: kAIXpWallet?.initiatorId,
+      ),
+    );
+  }
+
   NodeHistoryModel getNodeHistory() {
-    _client.session.sendCommand(ActionCommands.updateConfig(
-        targetId: "",
-        payload: {
-          "NAME": "admin_pipeline",
-          "SIGNATURE": "NET_MON_01",
-          "INSTANCE_ID": "NET_MON_01_INST",
-          "INSTANCE_CONFIG": {
-            "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
-          }
-        },
-        initiatorId: "",
-        sessionId: ""));
     NodeHistoryModel nodeHistoryModel =
         NodeHistoryModel.fromJson(dummyNodeHistoryData);
     return nodeHistoryModel;
@@ -65,6 +70,7 @@ class _NetworkPageState extends State<NetworkPage> {
                 selectedBox = boxName;
                 _navIndex = _boxDetailsPageIndex;
               });
+              nodeHistoryCommand();
             } else {
               await showDialog<void>(
                 context: context,

@@ -19,18 +19,20 @@ class _SingleNodeNetworkPageState extends State<SingleNodeNetworkPage> {
   final _client = E2Client();
 
   NodeHistoryModel getNodeHistory() {
-    _client.session.sendCommand(ActionCommands.updateConfig(
-        targetId: "",
-        payload: {
-          "NAME": "admin_pipeline",
-          "SIGNATURE": "NET_MON_01",
-          "INSTANCE_ID": "NET_MON_01_INST",
-          "INSTANCE_CONFIG": {
-            "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
-          }
-        },
-        initiatorId: "",
-        sessionId: ""));
+    _client.session.sendCommand(
+      ActionCommands.updateConfig(
+          targetId: "",
+          payload: {
+            "NAME": "admin_pipeline",
+            "SIGNATURE": "NET_MON_01",
+            "INSTANCE_ID": "NET_MON_01_INST",
+            "INSTANCE_CONFIG": {
+              "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
+            }
+          },
+          initiatorId: "",
+          sessionId: ""),
+    );
     NodeHistoryModel nodeHistoryModel =
         NodeHistoryModel.fromJson(dummyNodeHistoryData);
     return nodeHistoryModel;

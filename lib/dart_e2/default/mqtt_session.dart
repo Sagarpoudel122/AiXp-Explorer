@@ -5,10 +5,15 @@ import 'package:e2_explorer/dart_e2/base/generic_session.dart';
 import 'package:e2_explorer/dart_e2/comm/mqtt_wrapper.dart';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/const/mqtt_config.dart';
+import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_verifier.dart';
 import 'package:e2_explorer/dart_e2/objects/e2_box.dart';
+import 'package:e2_explorer/main.dart';
 import 'package:flutter/foundation.dart';
 
 class MqttSession extends GenericSession {
+  /// Message Veirifer
+  final aixpVerifier = AixpVerifier(isDebug: false);
+
   MqttSession({
     required super.server,
     void Function(Map<String, dynamic>)? onHeartbeat,
@@ -60,11 +65,17 @@ class MqttSession extends GenericSession {
   /// Sends a command to a specific box.
   @override
   void sendCommand(E2Command command) {
+    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+    String prettyprint = encoder.convert(command.signedMap());
+    print(prettyprint);
     print(
-        'Sent command on lummetry/${command.targetId}/config: ${command.toMap()}');
+      'Sent command on lummetry/${command.targetId}/config: ${command.toJson()}',
+    );
+
     _payloadMqtt.sendOnTopic(
-        command.toJson(), 'lummetry/${command.targetId}/config');
-    // _payloadMqtt.sendOnTopic(command.toJson(), 'lummetry/{}/config');
+      command.toJson(),
+      'lummetry/${command.targetId}/config',
+    );
   }
 
   @override
@@ -73,7 +84,11 @@ class MqttSession extends GenericSession {
     /// Heartbeat connect
     _heartbeatReceiveStream = StreamController<Map<String, dynamic>>();
     _heartbeatReceiveStream?.stream.listen((message) {
-      _onHeartbeatInternal(message);
+      var messageVerifier = aixpVerifier.verifyMessage(message);
+
+      if (messageVerifier) {
+        _onHeartbeatInternal(message);
+      }
     });
     await _heartbeatMqtt.serverConnect(receiveStream: _heartbeatReceiveStream);
     _heartbeatMqtt.subscribe();
@@ -81,16 +96,33 @@ class MqttSession extends GenericSession {
     /// Notification connect
     _notificationReceiveStream = StreamController<Map<String, dynamic>>();
     _notificationReceiveStream?.stream.listen((message) {
-      onNotification(message);
+      var messageVerifier = aixpVerifier.verifyMessage(message);
+      final eePayloadPath = message['EE_PAYLOAD_PATH'];
+
+      if (eePayloadPath[0] == 'gts-test2' &&
+          eePayloadPath[1] == 'admin_pipeline') {
+        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+        String prettyprint = encoder.convert(message);
+        print("$prettyprint");
+      }
+      if (messageVerifier) {
+        onNotification(message);
+      }
     });
     await _notificationMqtt.serverConnect(
-        receiveStream: _notificationReceiveStream);
+      receiveStream: _notificationReceiveStream,
+    );
     _notificationMqtt.subscribe();
 
     /// Payload (Default communicator) connect
     _payloadReceiveStream = StreamController<Map<String, dynamic>>();
     _payloadReceiveStream?.stream.listen((message) {
-      onPayload(message);
+      print("${message['EE_PAYLOAD_PATH']} Payload");
+      var messageVerifier = aixpVerifier.verifyMessage(message);
+      // print("$messageVerifier Message Verifier onPayload");
+      if (messageVerifier) {
+        onPayload(message);
+      }
     });
     await _payloadMqtt.serverConnect(receiveStream: _payloadReceiveStream);
     _payloadMqtt.subscribe();
@@ -136,10 +168,9 @@ class MqttSession extends GenericSession {
             E2Box(name: boxName, isOnline: true, lastHbReceived: timeNow);
       }
       onHeartbeat.call(message);
-    } catch (_,s) {
-      print('Invalid heartbeat received\n$_');
+    } catch (_, s) {
+      print('Invalid heartbeat received');
       // print(s);
-
     }
   }
 

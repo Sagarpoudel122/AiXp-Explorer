@@ -55,7 +55,7 @@ class E2Heartbeat extends E2Message {
   final String timestamp;
   final String timezone;
   final int totalMessages;
-  final int messageId;
+  final String messageId;
   final String? deviceStatus;
   final String? machineIp;
   final double? machineMemory;
@@ -143,7 +143,7 @@ class E2Heartbeat extends E2Message {
 
     return E2Heartbeat(
       payloadPath:
-          (map['EE_PAYLOAD_PATH'] as List).map((e) => e as String).toList(),
+          (map['EE_PAYLOAD_PATH'] as List).map((e) => e as String?).toList(),
       formatter: map['EE_FORMATTER'] as String,
       sign: map['EE_SIGN'] as String,
       sender: map['EE_SENDER'] as String,
@@ -151,7 +151,7 @@ class E2Heartbeat extends E2Message {
       timestamp: map['EE_TIMESTAMP'] as String,
       timezone: map['EE_TIMEZONE'] as String,
       totalMessages: map['EE_TOTAL_MESSAGES'] as int,
-      messageId: map['EE_MESSAGE_ID'] as int,
+      messageId: map['EE_MESSAGE_ID'],
       deviceStatus: map['DEVICE_STATUS'] as String,
       machineIp: map['MACHINE_IP'] as String?,
       machineMemory: map['MACHINE_MEMORY'] as double?,
@@ -177,7 +177,7 @@ class E2Heartbeat extends E2Message {
           E2ConfigPipelines.fromList(map['CONFIG_STREAMS'] as List),
       dctStats: E2DctStats.fromMap(map['DCT_STATS']),
       commStats: E2CommStats.fromMap(map['COMM_STATS']),
-      servingPids: map['SERVING_PIDS'] as List<int>,
+      servingPids: map['SERVING_PIDS'].cast<int>() as List<int>,
       loopsTimings: E2LoopTiming.fromMap(map['LOOPS_TIMINGS']),
       timers: map['TIMERS'] as String,
       deviceLog: map['DEVICE_LOG'] as String,

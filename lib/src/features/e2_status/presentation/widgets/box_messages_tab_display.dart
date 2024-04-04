@@ -8,7 +8,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 enum BoxViewerTab {
   resources,
   pipelines,
-  comms;
+  comms,
+  heartbeat,
+  command;
 
   static BoxViewerTab fromIndex(int index) {
     return BoxViewerTab.values[index];
