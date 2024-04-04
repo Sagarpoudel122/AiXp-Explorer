@@ -22,7 +22,8 @@ class _SelectNetworkDialogState extends State<SelectNetworkDialog> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => fetchServersList());
+    WidgetsBinding.instance
+        .addPostFrameCallback((timeStamp) => fetchServersList());
     super.initState();
   }
 
@@ -70,6 +71,8 @@ class _SelectNetworkDialogState extends State<SelectNetworkDialog> {
                       setState(() {
                         selectedServerName = server.name;
                       });
+                      await MqttServerRepository()
+                          .saveSelectedServerName(server.name);
                     }
                   },
                 ),
