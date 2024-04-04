@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:basic_utils/basic_utils.dart';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/edit_dialouges.dart';
@@ -157,6 +158,33 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
     return textFields;
   }
 
+  void save() {
+    try {
+      data['_P_VERSION'] = '0.1.0.0.1';
+
+      print(data);
+      final jsonEncoded = jsonEncode(data);
+      final base64Encoded = base64.encode(utf8.encode(jsonEncoded));
+      E2Client().session.sendCommand(
+            ActionCommands.updatePipelineInstance(
+              targetId: widget.targetId,
+              payload: E2InstanceConfig(instanceConfig: {
+                "COMMAND": "SAVE_CONFIG",
+                "DATA": base64Encoded
+              }, instanceId: _instanceId, name: _name, signature: _signature),
+              initiatorId: kAIXpWallet?.initiatorId,
+            ),
+          );
+      debugPrint(' saved data: $base64Encoded');
+
+      Navigator.of(context).pop();
+    } catch (e) {
+      // Handle errors, such as invalid JSON or encoding failures
+      debugPrint('Error saving data: $e');
+      // Optionally, you could show an error message to the user
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return E2Listener(
@@ -171,12 +199,8 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
               EE_PAYLOAD_PATH[1] == _name &&
               EE_PAYLOAD_PATH[2] == _signature &&
               EE_PAYLOAD_PATH[3] == _instanceId) {
-            print(base64Decode(data['CONFIG_STARTUP']));
-            this.data = {
-              "EE_ID": widget.targetId,
-              "SECURED": data['CONFIG_STARTUP'],
-              "IO_FORMATTER": data['EE_FORMATTER'],
-            };
+            convertedMessage.removeWhere((key, value) => value == null);
+            this.data = convertedMessage;
             isLoading = false;
             setState(() {});
           }
@@ -188,7 +212,7 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
           positiveActionButtonText: "Save",
           negativeActionButtonText: "Close",
           positiveActionButtonAction: () {
-            // save();
+            save();
           },
           title: "Config Startup file for ${widget.targetId}",
           content: LoadingParentWidget(
