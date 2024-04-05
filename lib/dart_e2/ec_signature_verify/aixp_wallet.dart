@@ -127,7 +127,7 @@ class AixpWallet {
   Future<bool> clearWallet() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      prefs.remove(initiatorIdRef);
+      await prefs.remove(initiatorIdRef);
       return prefs.remove(privateKeySharedRef);
     } catch (e) {
       return false;

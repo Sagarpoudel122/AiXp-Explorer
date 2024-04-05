@@ -1,7 +1,10 @@
+import 'package:e2_explorer/main.dart';
+import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class ProifleUsernamePasswordSection extends StatelessWidget {
   const ProifleUsernamePasswordSection({super.key});
@@ -36,7 +39,12 @@ class ProifleUsernamePasswordSection extends StatelessWidget {
           ),
           const Spacer(),
           InkWell(
-            onTap: () {},
+            onTap: () async {
+              final isSuccess = await kAIXpWallet?.clearWallet();
+              if (isSuccess ?? false) {
+                context.goNamed(RouteNames.splash);
+              }
+            },
             child: Row(
               children: [
                 SvgPicture.asset(AssetUtils.getSvgIconPath("log-out")),
