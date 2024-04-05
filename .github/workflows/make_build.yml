@@ -1,13 +1,12 @@
 on:
   pull_request:
     branches:
-      - main
+      - deploy
       - new-ui
   push:
     branches:
-      - main
+      - deploy
       - new-ui
-      - develop
 
 name: "Build & Release"
 
@@ -28,11 +27,15 @@ jobs:
       - name: Build for Windows
         run: flutter build windows --release
 
+      - name: Zip artifacts
+        run: |
+          mkdir -p release
+          Compress-Archive -Path build/windows/x64/runner/Release -DestinationPath release/windows_artifacts.zip
+
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: |
-            build/windows/runner/Release/*.exe
+          artifacts: release/windows_artifacts.zip
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
           "allowUpdates": true
@@ -58,11 +61,15 @@ jobs:
       - name: Build for Linux
         run: flutter build linux --release
 
+      - name: Zip artifacts
+        run: |
+          mkdir -p release
+          zip -r release/linux_artifacts.zip build/linux/x64/release/*
+
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: |
-            build/linux/x64/release/*.tar.gz
+          artifacts: release/linux_artifacts.zip
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
           "allowUpdates": true
@@ -83,11 +90,15 @@ jobs:
       - name: Build for macOS
         run: flutter build macos --release
 
+      - name: Zip artifacts
+        run: |
+          mkdir -p release
+          zip -r release/macos_artifacts.zip build/macos/Build/Products/Release/*
+
       - name: Push to Releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: |
-            build/macos/Build/Products/Release/*.app
+          artifacts: release/macos_artifacts.zip
           tag: v1.0.${{ github.run_number }}
           token: ${{ secrets.TOKEN }}
           "allowUpdates": true
