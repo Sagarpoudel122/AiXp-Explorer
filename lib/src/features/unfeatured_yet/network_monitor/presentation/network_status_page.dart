@@ -102,7 +102,9 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
             });
           }
         } else {}
-        isLoading = false;
+        setState(() {
+          isLoading = false;
+        });
       },
       // dataFilter: E2ListenerFilters.acceptAll(),
       dataFilter: (data) {
