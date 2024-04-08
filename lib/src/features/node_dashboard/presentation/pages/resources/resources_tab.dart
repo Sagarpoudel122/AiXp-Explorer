@@ -24,7 +24,7 @@ class ResourcesTab extends StatefulWidget {
 
 class _ResourcesTabState extends State<ResourcesTab> {
   bool isLoading = true;
-  Map<String, dynamic> data = {};
+
   NodeHistoryModel? nodeHistoryModel;
   final _signature = 'NET_MON_01';
   final _name = "admin_pipeline";
@@ -37,20 +37,19 @@ class _ResourcesTabState extends State<ResourcesTab> {
         onPayload: (payload) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(payload);
-          final eePlayLoadPath = (convertedMessage['eE_PAYLOAD_PATH'] as List)
+          final eePayloadPath = (convertedMessage['EE_PAYLOAD_PATH'] as List)
               .map((e) => e as String?)
               .toList();
-          if (eePlayLoadPath.length == 4) {
-            if (eePlayLoadPath[0] == widget.boxName &&
-                eePlayLoadPath[1] == _name &&
-                eePlayLoadPath[2] == _signature &&
-                eePlayLoadPath[3] == _instanceId) {
+          if (eePayloadPath.length == 4) {
+            if (eePayloadPath[0] == widget.boxName &&
+                eePayloadPath[1] == _name &&
+                eePayloadPath[2] == _signature &&
+                eePayloadPath[3] == _instanceId) {
               setState(() {
                 isLoading = true;
               });
               convertedMessage.removeWhere((key, value) => value == null);
-              data = convertedMessage;
-              nodeHistoryModel = NodeHistoryModel.fromJson(data);
+              nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
               isLoading = false;
               setState(() {});
             }

@@ -211,9 +211,6 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
 
     return E2Listener(
       onPayload: (message) {
-        setState(() {
-          isLoading = true;
-        });
         final Map<String, dynamic> convertedMessage =
             MqttMessageEncoderDecoder.raw(message);
         if (convertedMessage['IS_SUPERVISOR'] == true &&
