@@ -63,14 +63,15 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
   Widget build(BuildContext context) {
     return E2Listener(
       onPayload: (message) {
-        setState(() {
-          isLoading = true;
-        });
         final Map<String, dynamic> convertedMessage =
             MqttMessageEncoderDecoder.raw(message);
 
         if (convertedMessage['IS_SUPERVISOR'] == true &&
             convertedMessage['CURRENT_NETWORK'] != null) {
+          setState(() {
+            isLoading = true;
+          });
+
           /// Key 'CURRENT_NETWORK' contains list of json that contains details about each row in the
           /// [NetmonTable()] or [NetmonTableNew()]. Basically, the records in netmon table
           /// is displayed using objects in the 'CURRENT_NETWORK' key.

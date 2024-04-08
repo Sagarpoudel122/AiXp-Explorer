@@ -21,6 +21,7 @@ class RouteNames {
   static const String nodeDashboard = "/nodeDashboard";
   static const String comms = 'comms';
   static const String configStartUp = 'configStartUp';
+  static const networkDetails = 'networkDetails';
 }
 
 class RouteLocations {
@@ -43,4 +44,5 @@ class RouteLocations {
   static const String comms = '/comms';
   static const String nodeDashboard = "/nodeDashboard";
   static const String configStartUp = '/configStartUp';
+  static const String networkDetails = '/networkDetails';
 }

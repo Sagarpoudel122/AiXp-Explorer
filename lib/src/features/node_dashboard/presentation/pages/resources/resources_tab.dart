@@ -1,26 +1,37 @@
+import 'dart:convert';
+
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../../../../../styles/color_styles.dart';
 import '../../../../../widgets/chats_widgets/line_chart_widget.dart';
 
 class ResourcesTab extends StatefulWidget {
-  const ResourcesTab(
-      {super.key, required this.boxName, required this.nodeHistoryModel});
+  const ResourcesTab({
+    super.key,
+    required this.boxName,
+  });
   final String boxName;
-  final NodeHistoryModel? nodeHistoryModel;
-
+  static getResourceTab() {}
   @override
   State<ResourcesTab> createState() => _ResourcesTabState();
 }
 
 class _ResourcesTabState extends State<ResourcesTab> {
-  bool isLoading = false;
+  bool isLoading = true;
   Map<String, dynamic> data = {};
+  NodeHistoryModel? nodeHistoryModel;
+  final _signature = 'NET_MON_01';
+  final _name = "admin_pipeline";
+  final _instanceId = "NET_MON_01_INST";
   @override
   Widget build(BuildContext context) {
+    print("building ........");
     return SingleChildScrollView(
       child: E2Listener(
         onPayload: (payload) {
@@ -29,72 +40,94 @@ class _ResourcesTabState extends State<ResourcesTab> {
           final EE_PAYLOAD_PATH = (convertedMessage['EE_PAYLOAD_PATH'] as List)
               .map((e) => e as String?)
               .toList();
-
           if (EE_PAYLOAD_PATH.length == 4) {
             if (EE_PAYLOAD_PATH[0] == widget.boxName &&
-                EE_PAYLOAD_PATH[1] == 'admin_pipeline' &&
-                EE_PAYLOAD_PATH[2] == 'NET_MON_01' &&
-                EE_PAYLOAD_PATH[3] == 'NET_MON_01_INST') {
+                EE_PAYLOAD_PATH[1] == _name &&
+                EE_PAYLOAD_PATH[2] == _signature &&
+                EE_PAYLOAD_PATH[3] == _instanceId) {
+              setState(() {
+                isLoading = true;
+              });
               convertedMessage.removeWhere((key, value) => value == null);
               this.data = convertedMessage;
+
+              nodeHistoryModel = NodeHistoryModel.fromJson(this.data);
+
               isLoading = false;
               setState(() {});
             }
           }
         },
         builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: LineChartWidget(
-                      data: widget.nodeHistoryModel!.nodeHistory.gpuLoadHist
-                          .map((e) => e.toDouble())
-                          .toList(),
-                      title: 'GPU',
-                      borderColor: AppColors.lineChartGreenBorderColor,
-                      gradient: AppColors.lineChartGreenGradient,
+          return isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LineChartWidget(
+                            data: nodeHistoryModel?.nodeHistory.gpuLoadHist
+                                    .map((e) => e.toDouble())
+                                    .toList() ??
+                                [],
+                            timestamps:
+                                nodeHistoryModel!.nodeHistory.timestamps,
+                            title: 'GPU',
+                            borderColor: AppColors.lineChartGreenBorderColor,
+                            gradient: AppColors.lineChartGreenGradient,
+                          ),
+                        ),
+                        const SizedBox(width: 34),
+                        Expanded(
+                          child: LineChartWidget(
+                            timestamps:
+                                nodeHistoryModel!.nodeHistory.timestamps,
+                            data: nodeHistoryModel?.nodeHistory.cpuHist
+                                    .map((e) => e.toDouble())
+                                    .toList() ??
+                                [],
+                            title: 'CPU',
+                            borderColor: AppColors.lineChartMagentaBorderColor,
+                            gradient: AppColors.lineChartMagentaGradient,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(width: 34),
-                  Expanded(
-                    child: LineChartWidget(
-                      data: widget.nodeHistoryModel!.nodeHistory.cpuHist,
-                      title: 'CPU',
-                      borderColor: AppColors.lineChartMagentaBorderColor,
-                      gradient: AppColors.lineChartMagentaGradient,
+                    const SizedBox(height: 34),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: LineChartWidget(
+                            timestamps:
+                                nodeHistoryModel!.nodeHistory.timestamps,
+                            data: nodeHistoryModel?.nodeHistory.memAvailHist
+                                    .map((e) => e.toDouble())
+                                    .toList() ??
+                                [],
+                            title: 'RAM',
+                            borderColor: AppColors.lineChartPinkBorderColor,
+                            gradient: AppColors.lineChartPinkGradient,
+                          ),
+                        ),
+                        const SizedBox(width: 34),
+                        Expanded(
+                          child: LineChartWidget(
+                            timestamps:
+                                nodeHistoryModel!.nodeHistory.timestamps,
+                            data: [],
+                            title: 'DISK',
+                            borderColor: AppColors.lineChartBlueBorderColor,
+                            gradient: AppColors.lineChartBlueGradient,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 34),
-              Row(
-                children: [
-                  Expanded(
-                    child: LineChartWidget(
-                      data: widget.nodeHistoryModel!.nodeHistory.cpuHist,
-                      title: 'RAM',
-                      borderColor: AppColors.lineChartPinkBorderColor,
-                      gradient: AppColors.lineChartPinkGradient,
-                    ),
-                  ),
-                  const SizedBox(width: 34),
-                  Expanded(
-                    child: LineChartWidget(
-                      data: widget.nodeHistoryModel!.nodeHistory.gpuLoadHist
-                          .map((e) => e.toDouble())
-                          .toList(),
-                      title: 'DISK',
-                      borderColor: AppColors.lineChartBlueBorderColor,
-                      gradient: AppColors.lineChartBlueGradient,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
+                  ],
+                );
         },
       ),
     );

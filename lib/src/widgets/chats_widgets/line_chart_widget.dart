@@ -1,22 +1,24 @@
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../styles/color_styles.dart';
 
 class LineChartWidget extends StatelessWidget {
-  const LineChartWidget({
-    super.key,
-    required this.borderColor,
-    required this.gradient,
-    required this.title,
-    required this.data,
-  });
+  const LineChartWidget(
+      {super.key,
+      required this.borderColor,
+      required this.gradient,
+      required this.title,
+      required this.data,
+      required this.timestamps});
 
   final Color borderColor;
   final Gradient? gradient;
   final String title;
   final List<double> data;
+  final List<String> timestamps;
 
   LineChartBarData get finalData => LineChartBarData(
         isCurved: true,
@@ -59,7 +61,7 @@ class LineChartWidget extends StatelessWidget {
         borderData: borderData,
         lineBarsData: lineBarsData2,
         minX: 0,
-        maxX: 10,
+        maxX: (timestamps.length.toDouble() - 1),
         maxY: 20,
         minY: 0,
       );
@@ -93,8 +95,23 @@ class LineChartWidget extends StatelessWidget {
         showTitles: true,
         reservedSize: 32,
         interval: 1,
-        getTitlesWidget: bottomTitleWidgets,
+        getTitlesWidget: (value, meta) {
+          int index = value.toInt();
+          if (index >= 0 && index < timestamps.length) {
+            return InkWell(child: Text(getTimeStamps(timestamps[index])));
+          } else {
+            return InkWell(
+                onTap: () => print("No data available"), child: Text("blank"));
+          }
+        },
       );
+
+  String getTimeStamps(String timeStamps) {
+    String timestamp = timeStamps;
+    DateTime parsedDateTime = DateTime.parse(timestamp);
+    String timeString = DateFormat.Hm().format(parsedDateTime);
+    return timeString;
+  }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
     const style = TextStyle(
