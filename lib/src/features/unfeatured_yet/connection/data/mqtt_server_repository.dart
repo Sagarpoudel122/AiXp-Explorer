@@ -118,4 +118,6 @@ class MqttServerRepository {
     }
     return null;
   }
+
+  getSelectedServer() {}
 }

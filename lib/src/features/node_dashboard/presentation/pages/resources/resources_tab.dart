@@ -37,22 +37,20 @@ class _ResourcesTabState extends State<ResourcesTab> {
         onPayload: (payload) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(payload);
-          final EE_PAYLOAD_PATH = (convertedMessage['EE_PAYLOAD_PATH'] as List)
+          final eePlayLoadPath = (convertedMessage['eE_PAYLOAD_PATH'] as List)
               .map((e) => e as String?)
               .toList();
-          if (EE_PAYLOAD_PATH.length == 4) {
-            if (EE_PAYLOAD_PATH[0] == widget.boxName &&
-                EE_PAYLOAD_PATH[1] == _name &&
-                EE_PAYLOAD_PATH[2] == _signature &&
-                EE_PAYLOAD_PATH[3] == _instanceId) {
+          if (eePlayLoadPath.length == 4) {
+            if (eePlayLoadPath[0] == widget.boxName &&
+                eePlayLoadPath[1] == _name &&
+                eePlayLoadPath[2] == _signature &&
+                eePlayLoadPath[3] == _instanceId) {
               setState(() {
                 isLoading = true;
               });
               convertedMessage.removeWhere((key, value) => value == null);
-              this.data = convertedMessage;
-
-              nodeHistoryModel = NodeHistoryModel.fromJson(this.data);
-
+              data = convertedMessage;
+              nodeHistoryModel = NodeHistoryModel.fromJson(data);
               isLoading = false;
               setState(() {});
             }
