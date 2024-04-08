@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:e2_explorer/dart_e2/base/generic_session.dart';
 import 'package:e2_explorer/dart_e2/default/mqtt_session.dart';
 import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
