@@ -8,7 +8,6 @@ import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_prima
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/icon_button_tooltip.dart';
-import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/table_elements/netmon_table_new.dart';
@@ -18,7 +17,7 @@ import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 import 'package:provider/provider.dart';
 
 class NetworkStatusPage extends StatefulWidget {
@@ -34,11 +33,6 @@ class NetworkStatusPage extends StatefulWidget {
 }
 
 class _NetworkStatusPageState extends State<NetworkStatusPage> {
-  bool isLoading = true;
-  final period = const Duration(seconds: 5);
-  Map<String, NetmonBoxDetails> netmonStatus = {};
-  List<NetmonBox> netmonStatusList = [];
-  List<String> supervisorIds = [];
   bool refreshReady = true;
   final OverlayController _settingsOverlayController =
       OverlayController('Preferred supervisor');
@@ -55,8 +49,6 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         const Duration(seconds: 5), (timer) => refreshReady = true);
   }
 
-  final provider = NetworkProvider();
-
   @override
   void dispose() {
     // timer.cancel();
@@ -70,41 +62,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
         onPayload: (message) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(message);
-
-          if (convertedMessage['IS_SUPERVISOR'] == true &&
-              convertedMessage['CURRENT_NETWORK'] != null) {
-            /// Key 'CURRENT_NETWORK' contains list of json that contains details about each row in the
-            /// [NetmonTable()] or [NetmonTableNew()]. Basically, the records in netmon table
-            /// is displayed using objects in the 'CURRENT_NETWORK' key.
-            /// All payload messages received do not contain the
-            /// 'CURRENT_NETWORK' key, the one that contains it is used as data for table.
-            final currentNetwork =
-                convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
-            final currentNetworkMap = <String, NetmonBoxDetails>{};
-            currentNetwork.forEach((key, value) {
-              currentNetworkMap[key] =
-                  NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
-            });
-            if (currentNetworkMap.length > 1) {
-              setState(() {
-                currentSupervisor = convertedMessage['EE_PAYLOAD_PATH']?[0];
-                refreshReady = false;
-                netmonStatus = currentNetworkMap;
-                netmonStatusList = netmonStatus.entries
-                    .map((entry) =>
-                        NetmonBox(boxId: entry.key, details: entry.value))
-                    .toList();
-
-                supervisorIds = netmonStatusList
-                    .where((element) =>
-                        element.details.isSupervisor &&
-                        element.details.working == 'ONLINE')
-                    .map((e) => e.boxId)
-                    .toList();
-              });
-            }
-            provider.toggleLoading();
-          } else {}
+          provider.updateNetmonStatusList(convertedMessage: convertedMessage);
         },
         // dataFilter: E2ListenerFilters.acceptAll(),
         dataFilter: (data) {
@@ -203,13 +161,13 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                         ],
                       ),
                     ),
-                    if (!isLoading &&
+                    if (!provider.isLoading &&
                         isSingleNodeManager &&
-                        netmonStatusList.isNotEmpty)
+                        provider.netmonStatusList.isNotEmpty)
                       SizedBox(
                           height: 80,
                           child: NetmonTableNew(
-                            netmonBoxes: [netmonStatusList[0]],
+                            netmonBoxes: [provider.netmonStatusList[0]],
                           )),
                   ],
                 ),
@@ -220,10 +178,10 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                         )
                       : isSingleNodeManager
                           ? SingleNodeNetworkPage(
-                              netmonBox: netmonStatusList[0],
+                              netmonBox: provider.netmonStatusList[0],
                             )
                           : NetmonTableNew(
-                              netmonBoxes: netmonStatusList,
+                              netmonBoxes: provider.netmonStatusList,
                               onBoxSelected: widget.onBoxSelected,
                             ),
                 ),
@@ -300,7 +258,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                       return PreferredSupervisorMenu(
                                         overlayController:
                                             _settingsOverlayController,
-                                        supervisors: supervisorIds,
+                                        supervisors: provider.supervisorIds,
                                         selectedSupervisor: currentSupervisor!,
                                       );
                                     },
@@ -322,7 +280,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                 ),
                 Expanded(
                   child: NetmonTable(
-                    boxStatusList: netmonStatusList,
+                    boxStatusList: provider.netmonStatusList,
                     // onBoxSelected: widget.onBoxSelected,
                   ),
                 )

@@ -20,12 +20,14 @@ import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class ConfigStartUp extends StatefulWidget {
   const ConfigStartUp({super.key});
@@ -35,12 +37,7 @@ class ConfigStartUp extends StatefulWidget {
 }
 
 class _ConfigStartUpState extends State<ConfigStartUp> {
-  bool isLoading = true;
-  List<NetmonBox> netmonStatusList = [];
   final period = const Duration(seconds: 5);
-  Map<String, NetmonBoxDetails> netmonStatus = {};
-  List<String> supervisorIds = [];
-  String? currentSupervisor;
 
   Future<void> editData({
     required CommandLauncherData item,
@@ -209,180 +206,146 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
       ),
     );
 
-    return E2Listener(
-      onPayload: (message) {
-        final Map<String, dynamic> convertedMessage =
-            MqttMessageEncoderDecoder.raw(message);
-        if (convertedMessage['IS_SUPERVISOR'] == true &&
-            convertedMessage['CURRENT_NETWORK'] != null) {
-          setState(() {
-            isLoading = true;
-          });
-
-          /// Key 'CURRENT_NETWORK' contains list of json that contains details about each row in the
-          /// [NetmonTable()] or [NetmonTableNew()]. Basically, the records in netmon table
-          /// is displayed using objects in the 'CURRENT_NETWORK' key.
-          /// All payload messages received do not contain the
-          /// 'CURRENT_NETWORK' key, the one that contains it is used as data for table.
-          final currentNetwork =
-              convertedMessage['CURRENT_NETWORK'] as Map<String, dynamic>;
-          final currentNetworkMap = <String, NetmonBoxDetails>{};
-          currentNetwork.forEach((key, value) {
-            currentNetworkMap[key] =
-                NetmonBoxDetails.fromMap(value as Map<String, dynamic>);
-          });
-          if (currentNetworkMap.length > 1) {
-            setState(() {
-              currentSupervisor = convertedMessage['EE_PAYLOAD_PATH']?[0];
-              bool refreshReady = true;
-              netmonStatus = currentNetworkMap;
-              netmonStatusList = netmonStatus.entries
-                  .map((entry) =>
-                      NetmonBox(boxId: entry.key, details: entry.value))
-                  .toList();
-
-              supervisorIds = netmonStatusList
-                  .where((element) =>
-                      element.details.isSupervisor &&
-                      element.details.working == 'ONLINE')
-                  .map((e) => e.boxId)
-                  .toList();
-            });
-          }
-          setState(() {
-            isLoading = false;
-          });
-        } else {}
-      },
-      builder: (context) {
-        return DashboardBodyContainer(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.only(left: 16, right: 10),
-                child: TextWidget('Config Startup',
-                    style: CustomTextStyles.text20_700),
-              ),
-              const SizedBox(height: 14),
-              Expanded(
-                child: isLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : FLRTable<CommandLauncherData, CommandLauncherColumns>(
-                        expandLastColumn: true,
-                        columns: CommandLauncherColumns.values,
-                        columnsLeft: const [],
-                        columnsRight: const [],
-                        visibleColumns: CommandLauncherColumns.values.toSet(),
-                        sortingColumns: const {},
-                        sortedColumn: null,
-                        items: netmonStatusList
-                            .map((e) => CommandLauncherData(
-                                  edgeNode: e.boxId,
-                                  configStartupFile: 'configStartupFile',
-                                ))
-                            .toList(),
-                        rowBuilder: (item, columns) {
-                          return columns.map((column) {
-                            return switch (column) {
-                              CommandLauncherColumns.edgeNode => Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 16, right: 8),
-                                  child: TextWidget(item.edgeNode,
-                                      style: CustomTextStyles.text14_400),
-                                ),
-                              CommandLauncherColumns.configStartupFile =>
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 16, right: 8),
-                                  child: Row(
-                                    children: [
-                                      AppButtonSecondary(
-                                        onPressed: () {
-                                          ConfigStartUpViewDialog.viewConfigLog(
-                                            context,
-                                            targetId: item.edgeNode,
-                                          );
-                                        },
-                                        text: 'View',
-                                        height: 30,
-                                        minWidth: 100,
-                                        icon: SvgPicture.asset(
-                                          'assets/icons/svg/eye.svg',
-                                          height: 14,
-                                          width: 14,
-                                          colorFilter: const ColorFilter.mode(
-                                              Colors.white, BlendMode.srcIn),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      AppButtonSecondary(
-                                        onPressed: () {
-                                          ConfigStartUpEditDialog.viewConfigLog(
-                                            context,
-                                            targetId: item.edgeNode,
-                                          );
-                                          // editData(item: item);
-                                        },
-                                        text: 'Edit',
-                                        height: 30,
-                                        minWidth: 100,
-                                        icon: SvgPicture.asset(
-                                          'assets/icons/svg/edit.svg',
-                                          height: 14,
-                                          width: 14,
-                                        ),
-                                      ),
-                                    ],
+    return Consumer<NetworkProvider>(builder: (context, provider, child) {
+      return E2Listener(
+        onPayload: (message) {
+          final Map<String, dynamic> convertedMessage =
+              MqttMessageEncoderDecoder.raw(message);
+          provider.updateNetmonStatusList(convertedMessage: convertedMessage);
+        },
+        builder: (context) {
+          return DashboardBodyContainer(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 12),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 10),
+                  child: TextWidget('Config Startup',
+                      style: CustomTextStyles.text20_700),
+                ),
+                const SizedBox(height: 14),
+                Expanded(
+                  child: provider.isLoading
+                      ? const Center(
+                          child: CircularProgressIndicator(),
+                        )
+                      : FLRTable<CommandLauncherData, CommandLauncherColumns>(
+                          expandLastColumn: true,
+                          columns: CommandLauncherColumns.values,
+                          columnsLeft: const [],
+                          columnsRight: const [],
+                          visibleColumns: CommandLauncherColumns.values.toSet(),
+                          sortingColumns: const {},
+                          sortedColumn: null,
+                          items: provider.netmonStatusList
+                              .map((e) => CommandLauncherData(
+                                    edgeNode: e.boxId,
+                                    configStartupFile: 'configStartupFile',
+                                  ))
+                              .toList(),
+                          rowBuilder: (item, columns) {
+                            return columns.map((column) {
+                              return switch (column) {
+                                CommandLauncherColumns.edgeNode => Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16, right: 8),
+                                    child: TextWidget(item.edgeNode,
+                                        style: CustomTextStyles.text14_400),
                                   ),
-                                ),
+                                CommandLauncherColumns.configStartupFile =>
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 16, right: 8),
+                                    child: Row(
+                                      children: [
+                                        AppButtonSecondary(
+                                          onPressed: () {
+                                            ConfigStartUpViewDialog
+                                                .viewConfigLog(
+                                              context,
+                                              targetId: item.edgeNode,
+                                            );
+                                          },
+                                          text: 'View',
+                                          height: 30,
+                                          minWidth: 100,
+                                          icon: SvgPicture.asset(
+                                            'assets/icons/svg/eye.svg',
+                                            height: 14,
+                                            width: 14,
+                                            colorFilter: const ColorFilter.mode(
+                                                Colors.white, BlendMode.srcIn),
+                                          ),
+                                        ),
+                                        const SizedBox(width: 8),
+                                        AppButtonSecondary(
+                                          onPressed: () {
+                                            ConfigStartUpEditDialog
+                                                .viewConfigLog(
+                                              context,
+                                              targetId: item.edgeNode,
+                                            );
+                                            // editData(item: item);
+                                          },
+                                          text: 'Edit',
+                                          height: 30,
+                                          minWidth: 100,
+                                          icon: SvgPicture.asset(
+                                            'assets/icons/svg/edit.svg',
+                                            height: 14,
+                                            width: 14,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                              };
+                            }).toList();
+                          },
+                          headerBuilder: (header) {
+                            return TableHeaderItemWidget(
+                              title: header.title,
+                              showSort: header.canSortBy,
+                              isSorted: header.isSortedBy,
+                              sortIsAscending: true,
+                            );
+                          },
+                          headerTitle: (columnType) {
+                            return switch (columnType) {
+                              CommandLauncherColumns.edgeNode => 'Edge Node',
+                              CommandLauncherColumns.configStartupFile =>
+                                'Config Startup File',
                             };
-                          }).toList();
-                        },
-                        headerBuilder: (header) {
-                          return TableHeaderItemWidget(
-                            title: header.title,
-                            showSort: header.canSortBy,
-                            isSorted: header.isSortedBy,
-                            sortIsAscending: true,
-                          );
-                        },
-                        headerTitle: (columnType) {
-                          return switch (columnType) {
-                            CommandLauncherColumns.edgeNode => 'Edge Node',
-                            CommandLauncherColumns.configStartupFile =>
-                              'Config Startup File',
-                          };
-                        },
-                        columnWidth: (columnType) {
-                          final size = MediaQuery.of(context).size;
-                          return switch (columnType) {
-                            CommandLauncherColumns.edgeNode => size.width / 2.5,
-                            CommandLauncherColumns.configStartupFile =>
-                              size.width / 2.5,
-                          };
-                        },
-                        onTap: (value) async {},
-                        onRefresh: () {},
-                        rowHeight: (_) => Dimens.tableBodyRowHeight + 10,
-                        isLoading: false,
-                        labels: flrTableLabels,
-                      ),
-              )
+                          },
+                          columnWidth: (columnType) {
+                            final size = MediaQuery.of(context).size;
+                            return switch (columnType) {
+                              CommandLauncherColumns.edgeNode =>
+                                size.width / 2.5,
+                              CommandLauncherColumns.configStartupFile =>
+                                size.width / 2.5,
+                            };
+                          },
+                          onTap: (value) async {},
+                          onRefresh: () {},
+                          rowHeight: (_) => Dimens.tableBodyRowHeight + 10,
+                          isLoading: false,
+                          labels: flrTableLabels,
+                        ),
+                )
 
-              /// Todo: Table here
-              // Container(
-              //   color: Colors.green,
-              //   width: double.maxFinite,
-              //   height: 500,
-              // )
-            ],
-          ),
-        );
-      },
-    );
+                /// Todo: Table here
+                // Container(
+                //   color: Colors.green,
+                //   width: double.maxFinite,
+                //   height: 500,
+                // )
+              ],
+            ),
+          );
+        },
+      );
+    });
   }
 }

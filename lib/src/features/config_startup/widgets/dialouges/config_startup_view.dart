@@ -31,6 +31,7 @@ class ConfigStartUpViewDialog {
             ),
           ),
         );
+    _showDialog(context, targetId: targetId);
   }
 
   static Future<void> _showDialog(
