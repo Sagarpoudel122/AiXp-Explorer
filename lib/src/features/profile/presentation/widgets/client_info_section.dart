@@ -1,3 +1,4 @@
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/profile/widgtes/receive_dialouge.dart';
 import 'package:e2_explorer/src/features/profile/widgtes/send_profile_dialouge.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
@@ -56,7 +57,7 @@ class ClientInfoSection extends StatelessWidget {
           ),
           const SizedBox(height: 2),
           SelectableText(
-            "0xD3455346bfeiurbviuerbvn",
+            kAIXpWallet?.walletAddress ?? '',
             style: TextStyles.bodyStrong(),
           ),
           const SizedBox(height: 24),
