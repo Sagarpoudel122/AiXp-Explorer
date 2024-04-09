@@ -60,13 +60,12 @@ class CommandLauncherPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 14),
-                  provider.isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : Expanded(
-                          child: FLRTable<CommandLauncherData,
-                              CommandLauncherColumns>(
+                  Expanded(
+                    child: provider.isLoading
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : FLRTable<CommandLauncherData, CommandLauncherColumns>(
                             columns: CommandLauncherColumns.values,
                             columnsLeft: const [],
                             columnsRight: const [],
@@ -200,7 +199,7 @@ class CommandLauncherPage extends StatelessWidget {
                             isLoading: false,
                             labels: flrTableLabels,
                           ),
-                        )
+                  )
                 ],
               ),
             ),

@@ -33,35 +33,35 @@ class _ResourcesTabState extends State<ResourcesTab> {
   final _instanceId = "NET_MON_01_INST";
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: E2Listener(
-        onPayload: (payload) {
-          final Map<String, dynamic> convertedMessage =
-              MqttMessageEncoderDecoder.raw(payload);
-          final eePayloadPath = (convertedMessage['EE_PAYLOAD_PATH'] as List)
-              .map((e) => e as String?)
-              .toList();
-          if (eePayloadPath.length == 4) {
-            if (eePayloadPath[0] == widget.boxName &&
-                eePayloadPath[1] == _name &&
-                eePayloadPath[2] == _signature &&
-                eePayloadPath[3] == _instanceId) {
-              setState(() {
-                isLoading = true;
-              });
-              convertedMessage.removeWhere((key, value) => value == null);
-              nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
-              isLoading = false;
-              setState(() {});
-            }
+    return E2Listener(
+      onPayload: (payload) {
+        final Map<String, dynamic> convertedMessage =
+            MqttMessageEncoderDecoder.raw(payload);
+        final eePayloadPath = (convertedMessage['EE_PAYLOAD_PATH'] as List)
+            .map((e) => e as String?)
+            .toList();
+        if (eePayloadPath.length == 4) {
+          if (eePayloadPath[0] == widget.boxName &&
+              eePayloadPath[1] == _name &&
+              eePayloadPath[2] == _signature &&
+              eePayloadPath[3] == _instanceId) {
+            setState(() {
+              isLoading = true;
+            });
+            convertedMessage.removeWhere((key, value) => value == null);
+            nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
+            isLoading = false;
+            setState(() {});
           }
-        },
-        builder: (context) {
-          return isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Column(
+        }
+      },
+      builder: (context) {
+        return isLoading
+            ? const Center(
+                child: CircularProgressIndicator(),
+              )
+            : SingleChildScrollView(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
@@ -125,9 +125,9 @@ class _ResourcesTabState extends State<ResourcesTab> {
                       ],
                     ),
                   ],
-                );
-        },
-      ),
+                ),
+              );
+      },
     );
   }
 }
