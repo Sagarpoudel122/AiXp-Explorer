@@ -41,8 +41,8 @@ class _ConnectionPageOldState extends State<ConnectionPageOld> {
   }
 
   Future<void> _getSelectedServer(Duration duration) async {
-    selectedServer =
-        (await MqttServerRepository().getSelectedMqttServer()) ?? MqttServer.defaultServer;
+    selectedServer = (await MqttServerRepository().getSelectedMqttServer()) ??
+        MqttServer.defaultServer;
     setState(() {
       isLoading = false;
     });
@@ -84,7 +84,8 @@ class _ConnectionPageOldState extends State<ConnectionPageOld> {
                           if (serverNullable != null) {
                             final server = serverNullable.value;
                             setState(() {
-                              selectedServer = server ?? MqttServer.defaultServer;
+                              selectedServer =
+                                  server ?? MqttServer.defaultServer;
                             });
                           }
                         },
@@ -182,16 +183,20 @@ class _ConnectionPageState extends State<ConnectionPage> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _connectToDefaultServer());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _connectToDefaultServer());
   }
 
   Future<void> _connectToDefaultServer() async {
     final servers = await MqttServerRepository().getMqttServers();
-    final initialSelectedName = await MqttServerRepository().getSelectedServerName();
+    final initialSelectedName =
+        await MqttServerRepository().getSelectedServerName();
     MqttServer? selectedServer = servers.firstWhereOrNull(
       (element) => element.name == initialSelectedName,
     );
-    if (servers.isEmpty || initialSelectedName == null || selectedServer == null) {
+    if (servers.isEmpty ||
+        initialSelectedName == null ||
+        selectedServer == null) {
       /// add new default server
       await _addDefaultServer();
       _connectToDefaultServer();
@@ -245,7 +250,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
         child: errorMessage == null
             ? const CircularProgressIndicator()
             : Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   TextWidget(errorMessage!, style: CustomTextStyles.text16_600),
                   const SizedBox(height: 15),

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:e2_explorer/src/features/network/widgets/select_network_dialog.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/connection/data/mqtt_server_repository.dart';
 import 'package:flutter/material.dart';
 
 import '../../../styles/color_styles.dart';
@@ -9,8 +10,28 @@ import '../../../widgets/transparent_inkwell_widget.dart';
 import '../../common_widgets/text_widget.dart';
 import 'networks_listing_widget.dart';
 
-class SelectedNetworkDropdownWidget extends StatelessWidget {
+class SelectedNetworkDropdownWidget extends StatefulWidget {
   const SelectedNetworkDropdownWidget({super.key});
+
+  @override
+  State<SelectedNetworkDropdownWidget> createState() =>
+      _SelectedNetworkDropdownWidgetState();
+}
+
+class _SelectedNetworkDropdownWidgetState
+    extends State<SelectedNetworkDropdownWidget> {
+  String? selectedServer;
+
+  Future getSelectedServer() async {
+    selectedServer = await MqttServerRepository().getSelectedServerName();
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    getSelectedServer();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +54,7 @@ class SelectedNetworkDropdownWidget extends StatelessWidget {
             const ActiveStatusDot(isActive: true),
             const SizedBox(width: 14),
             TextWidget(
-              'Mainnet | Staging',
+              'Mainnet | ${selectedServer ?? '...'}',
               style: CustomTextStyles.text12_600,
             ),
             const Spacer(),

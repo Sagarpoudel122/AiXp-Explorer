@@ -15,32 +15,10 @@ class SingleNodeNetworkPage extends StatefulWidget {
 }
 
 class _SingleNodeNetworkPageState extends State<SingleNodeNetworkPage> {
-  late NodeHistoryModel nodeHistoryModel;
   final _client = E2Client();
-
-  NodeHistoryModel getNodeHistory() {
-    _client.session.sendCommand(
-      ActionCommands.updateConfig(
-          targetId: "",
-          payload: {
-            "NAME": "admin_pipeline",
-            "SIGNATURE": "NET_MON_01",
-            "INSTANCE_ID": "NET_MON_01_INST",
-            "INSTANCE_CONFIG": {
-              "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
-            }
-          },
-          initiatorId: "",
-          sessionId: ""),
-    );
-    NodeHistoryModel nodeHistoryModel =
-        NodeHistoryModel.fromJson(dummyNodeHistoryData);
-    return nodeHistoryModel;
-  }
 
   @override
   void initState() {
-    nodeHistoryModel = getNodeHistory();
     super.initState();
   }
 
@@ -53,7 +31,6 @@ class _SingleNodeNetworkPageState extends State<SingleNodeNetworkPage> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: DebugViewer(
               boxName: widget.netmonBox.boxId,
-              nodeHistoryModel: nodeHistoryModel,
             ),
           ),
         )

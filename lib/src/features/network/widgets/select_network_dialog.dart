@@ -1,5 +1,7 @@
 import 'package:e2_explorer/src/features/unfeatured_yet/connection/data/mqtt_server_repository.dart';
+import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../common_widgets/app_dialog_widget.dart';
@@ -22,7 +24,8 @@ class _SelectNetworkDialogState extends State<SelectNetworkDialog> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => fetchServersList());
+    WidgetsBinding.instance
+        .addPostFrameCallback((timeStamp) => fetchServersList());
     super.initState();
   }
 
@@ -70,7 +73,11 @@ class _SelectNetworkDialogState extends State<SelectNetworkDialog> {
                       setState(() {
                         selectedServerName = server.name;
                       });
-                    }
+                      await MqttServerRepository()
+                          .saveSelectedServerName(server.name);
+                      if (!context.mounted) return;
+                      context.goNamed(RouteNames.connection);
+                    } else {}
                   },
                 ),
                 const NetworksListingWidget(

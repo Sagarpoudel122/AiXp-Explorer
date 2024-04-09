@@ -38,22 +38,18 @@ class _NetworkPageState extends State<NetworkPage> {
             signature: 'NET_MON_01',
             instanceId: 'NET_MON_01_INST',
             instanceConfig: {
-              "INSTANCE_COMMAND": {"node": "gts-ws", "request": "history"}
+              "INSTANCE_COMMAND": {
+                "node": selectedBox!.boxId,
+                "request": "history"
+              }
             }),
         initiatorId: kAIXpWallet?.initiatorId,
       ),
     );
   }
 
-  NodeHistoryModel getNodeHistory() {
-    NodeHistoryModel nodeHistoryModel =
-        NodeHistoryModel.fromJson(dummyNodeHistoryData);
-    return nodeHistoryModel;
-  }
-
   @override
   void initState() {
-    nodeHistoryModel = getNodeHistory();
     super.initState();
   }
 
@@ -163,7 +159,6 @@ class _NetworkPageState extends State<NetworkPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: DebugViewer(
                         boxName: selectedBoxName,
-                        nodeHistoryModel: nodeHistoryModel,
                       ),
                     ),
                   )

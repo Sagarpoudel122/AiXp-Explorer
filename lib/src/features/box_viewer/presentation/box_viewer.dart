@@ -30,7 +30,6 @@ class _BoxViewerState extends State<BoxViewer> {
             child: _selectedBox != null
                 // ? BoxViewer(boxName: _selectedBox!)
                 ? DebugViewer(
-                    nodeHistoryModel: null,
                     boxName: _selectedBox!,
                   )
                 : const Center(

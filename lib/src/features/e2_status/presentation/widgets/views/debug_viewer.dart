@@ -4,7 +4,6 @@ import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/co
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/heartbeat_view.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/pipeline_screen.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/resources_tab.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -12,11 +11,9 @@ class DebugViewer extends StatelessWidget {
   const DebugViewer({
     super.key,
     required this.boxName,
-    required this.nodeHistoryModel,
   });
 
   final String? boxName;
-  final NodeHistoryModel? nodeHistoryModel;
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +33,12 @@ class DebugViewer extends StatelessWidget {
       height: double.infinity,
       child: BoxMessagesTabDisplay(
         resourcesView: ResourcesTab(
-          nodeHistoryModel: nodeHistoryModel,
           key: ValueKey('${boxName ?? ''}1'),
           boxName: boxName!,
         ),
         pipelinesView: PipeLine(
           key: ValueKey('${boxName ?? ''}2'),
-          // boxName: boxName!,
+          // boxName: boxName!,z
         ),
         commsView: Comms(
           key: ValueKey('${boxName ?? ''}3'),
