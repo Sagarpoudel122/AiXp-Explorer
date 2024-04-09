@@ -24,7 +24,6 @@ class _SelectedNetworkDropdownWidgetState
 
   Future getSelectedServer() async {
     selectedServer = await MqttServerRepository().getSelectedServerName();
-    print("this is selected Server $selectedServer");
     setState(() {});
   }
 

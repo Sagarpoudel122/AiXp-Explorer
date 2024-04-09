@@ -33,7 +33,6 @@ class _ResourcesTabState extends State<ResourcesTab> {
   final _instanceId = "NET_MON_01_INST";
   @override
   Widget build(BuildContext context) {
-    print("building ........");
     return SingleChildScrollView(
       child: E2Listener(
         onPayload: (payload) {
