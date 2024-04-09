@@ -43,7 +43,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabIndex = _tabController.index;
     _tabController.addListener(() {
       if (_tabIndex != _tabController.index) {
