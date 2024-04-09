@@ -8,9 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 enum BoxViewerTab {
   resources,
   pipelines,
-  comms,
-  heartbeat,
-  command;
+  comms;
 
   static BoxViewerTab fromIndex(int index) {
     return BoxViewerTab.values[index];
@@ -18,20 +16,17 @@ enum BoxViewerTab {
 }
 
 class BoxMessagesTabDisplay extends StatefulWidget {
-  const BoxMessagesTabDisplay(
-      {super.key,
-      required this.resourcesView,
-      required this.pipelinesView,
-      required this.commsView,
-      required this.heartBeat,
-      this.onTabChanged,
-      required this.command});
+  const BoxMessagesTabDisplay({
+    super.key,
+    required this.resourcesView,
+    required this.pipelinesView,
+    required this.commsView,
+    this.onTabChanged,
+  });
 
   final Widget resourcesView;
   final Widget pipelinesView;
   final Widget commsView;
-  final Widget heartBeat;
-  final Widget command;
 
   // final Widget fullPayloadsView;
   final void Function(BoxViewerTab tab)? onTabChanged;
@@ -149,9 +144,6 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
 
               /// Comms tab
               widget.commsView,
-              //Heartbeat Tab
-              widget.heartBeat,
-              widget.command
             ],
           ),
         )
