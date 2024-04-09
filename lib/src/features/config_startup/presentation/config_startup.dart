@@ -215,6 +215,10 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
             MqttMessageEncoderDecoder.raw(message);
         if (convertedMessage['IS_SUPERVISOR'] == true &&
             convertedMessage['CURRENT_NETWORK'] != null) {
+          setState(() {
+            isLoading = true;
+          });
+
           /// Key 'CURRENT_NETWORK' contains list of json that contains details about each row in the
           /// [NetmonTable()] or [NetmonTableNew()]. Basically, the records in netmon table
           /// is displayed using objects in the 'CURRENT_NETWORK' key.
@@ -245,10 +249,10 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                   .toList();
             });
           }
+          setState(() {
+            isLoading = false;
+          });
         } else {}
-        setState(() {
-          isLoading = false;
-        });
       },
       builder: (context) {
         return DashboardBodyContainer(
