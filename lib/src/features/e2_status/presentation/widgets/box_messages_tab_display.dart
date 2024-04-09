@@ -104,8 +104,6 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                         Text('Resources'),
                         Text('Pipelines'),
                         Text('Comms'),
-                        Text("Heartbeat"),
-                        Text("Command")
                       ],
                     ),
                   ),
