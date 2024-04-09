@@ -32,7 +32,6 @@ class _ConfigStartupSettingDialogState
   Widget build(BuildContext context) {
     return SizedBox(
       child: Dialog(
-        backgroundColor: ColorStyles.dark800,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.3,
           child: Column(

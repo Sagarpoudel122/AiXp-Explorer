@@ -1,12 +1,16 @@
+import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/styles/text_styles.dart';
+import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum BoxViewerTab {
-  hardwareInfo,
+  resources,
   pipelines,
-  payload,
-  notification,
+  comms,
   heartbeat,
-  fullPayload;
+  command;
 
   static BoxViewerTab fromIndex(int index) {
     return BoxViewerTab.values[index];
@@ -14,24 +18,21 @@ enum BoxViewerTab {
 }
 
 class BoxMessagesTabDisplay extends StatefulWidget {
-  const BoxMessagesTabDisplay({
-    super.key,
-    required this.hardwareInfoView,
-    required this.pipelinesView,
-    required this.payloadView,
-    required this.notificationView,
-    required this.heartbeatView,
-    required this.commandView,
-    // required this.fullPayloadsView,
-    this.onTabChanged,
-  });
+  const BoxMessagesTabDisplay(
+      {super.key,
+      required this.resourcesView,
+      required this.pipelinesView,
+      required this.commsView,
+      required this.heartBeat,
+      this.onTabChanged,
+      required this.command});
 
-  final Widget hardwareInfoView;
+  final Widget resourcesView;
   final Widget pipelinesView;
-  final Widget payloadView;
-  final Widget notificationView;
-  final Widget heartbeatView;
-  final Widget commandView;
+  final Widget commsView;
+  final Widget heartBeat;
+  final Widget command;
+
   // final Widget fullPayloadsView;
   final void Function(BoxViewerTab tab)? onTabChanged;
 
@@ -47,7 +48,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 6, vsync: this);
+    _tabController = TabController(length: 5, vsync: this);
     _tabIndex = _tabController.index;
     _tabController.addListener(() {
       if (_tabIndex != _tabController.index) {
@@ -64,81 +65,192 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Stack(
-            children: <Widget>[
-              Positioned.fill(
-                child: Align(
-                  alignment: AlignmentDirectional.bottomStart,
-                  child: Container(
-                    color: const Color(0xff282828),
-                    width: double.infinity,
-                    height: 2,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+        Row(
+          children: [
+            Expanded(
+              child: SizedBox(
+                height: 40,
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: FractionallySizedBox(
                     widthFactor: 3 / 3,
                     child: TabBar(
-                      indicatorColor: const Color(0xff0073E6),
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      tabAlignment: TabAlignment.start,
+                      padding: EdgeInsets.zero,
+                      labelPadding: const EdgeInsets.only(right: 24),
+                      isScrollable: true,
+                      dividerHeight: 0,
+                      indicatorWeight: 4,
                       controller: _tabController,
-                      tabs: const <Widget>[
-                        Tab(text: 'Hardware info'),
-                        Tab(text: 'Pipelines'),
-                        Tab(text: 'Payload'),
-                        Tab(text: 'Notification'),
-                        Tab(text: 'Heartbeat'),
-                        Tab(text: 'Commands'),
-                        // Tab(text: 'Full payloads (EXP)'),
+                      indicator: ShapeDecoration(
+                        shape: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.transparent,
+                            width: 4.0,
+                            style: BorderStyle.solid,
+                          ),
+                        ),
+                        gradient: AppColors.tabBarIndicatorGradient,
+                      ),
+                      indicatorPadding: const EdgeInsets.only(top: 20),
+                      labelStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimaryColor,
+                      ),
+                      unselectedLabelStyle: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textSecondaryColor,
+                      ),
+                      tabs: const [
+                        Text('Resources'),
+                        Text('Pipelines'),
+                        Text('Comms'),
+                        Text("Heartbeat"),
+                        Text("Command")
                       ],
                     ),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            AppButtonSecondary(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              text: 'Filter',
+              icon: SvgPicture.asset(
+                AssetUtils.getSvgIconPath('sliders'),
+                color: AppColors.buttonSecondaryIconColor,
+              ),
+              borderColor: Colors.transparent,
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return CustomPopup();
+                  },
+                );
+              },
+            ),
+          ],
         ),
+        const SizedBox(height: 16),
         Expanded(
-          child: IndexedStack(
-            index: _tabIndex,
-            children: <Widget>[
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.hardwareInfoView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.pipelinesView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.payloadView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.notificationView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.heartbeatView,
-              ),
-              ColoredBox(
-                color: const Color(0xff1F1F1F),
-                child: widget.commandView,
-              ),
-              // ColoredBox(
-              //   color: const Color(0xff1F1F1F),
-              //   child: widget.fullPayloadsView,
-              // ),
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              /// Resources tab
+              widget.resourcesView,
+
+              /// Pipelines tab
+              widget.pipelinesView,
+
+              /// Comms tab
+              widget.commsView,
+              //Heartbeat Tab
+              widget.heartBeat,
+              widget.command
             ],
           ),
-        ),
+        )
       ],
+    );
+  }
+}
+
+class CustomPopup extends StatefulWidget {
+  const CustomPopup({super.key});
+
+  @override
+  State<CustomPopup> createState() => _CustomPopupState();
+}
+
+class _CustomPopupState extends State<CustomPopup> {
+  bool isNotiication = false;
+  bool isPayload = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Close the popup when tapped outside
+        Navigator.of(context).pop();
+      },
+      child: Stack(
+        children: [
+          Container(
+            color: Colors.black
+                .withOpacity(0.5), // Semi-transparent black background
+          ),
+          Positioned(
+            right: 0,
+            top: 0,
+            bottom:
+                MediaQuery.of(context).size.height * 0.55, // Adjust as needed
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                width: 180,
+                height: 88,
+                decoration: BoxDecoration(
+                  color: AppColors.alertDialogBgColor,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Material(
+                  child: Container(
+                    color: AppColors.alertDialogBgColor,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                                value: isNotiication,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isNotiication = value ?? false;
+                                  });
+                                }),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Notifications",
+                              style: TextStyles.custom(
+                                  fontWeight: FontWeight.w600, fontSize: 14),
+                            )
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Checkbox(
+                                value: isPayload,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isPayload = value!;
+                                  });
+                                }),
+                            const SizedBox(
+                              width: 8,
+                            ),
+                            Text(
+                              "Payload",
+                              style: TextStyles.custom(
+                                  fontWeight: FontWeight.w600, fontSize: 14),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

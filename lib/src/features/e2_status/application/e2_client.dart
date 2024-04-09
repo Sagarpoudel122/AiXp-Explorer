@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:e2_explorer/dart_e2/base/generic_session.dart';
 import 'package:e2_explorer/dart_e2/default/mqtt_session.dart';
 import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
@@ -42,6 +43,9 @@ class E2Client {
 
   static String getBoxName(Map<String, dynamic> message) {
     try {
+      // print('\n\n\n====================================================================');
+      // print(message);
+      // print('====================================================================\n\n\n');
       final cavi2BoxName = message['sender']?['hostId'];
       final rawBoxName = message['EE_ID'];
       if (cavi2BoxName != null) {
@@ -124,11 +128,9 @@ class E2Client {
         );
 
         ///ToDO maybe do it before?
-
         for (final filter in pluginTypeFilter.children) {
           filter.setParent(pluginTypeFilter);
         }
-
         pluginTypeFilters.add(pluginTypeFilter);
       }
 
@@ -183,6 +185,9 @@ class E2Client {
   void _onPayload(Map<String, dynamic> message) {
     // print(message);
     // final boxName = getBoxName(message);
+    // print('\n\n\n====================================================================');
+    // print(jsonEncode(message));
+    // print('====================================================================\n\n\n');
     String boxName = '';
     try {
       boxName = message['EE_PAYLOAD_PATH'][0];

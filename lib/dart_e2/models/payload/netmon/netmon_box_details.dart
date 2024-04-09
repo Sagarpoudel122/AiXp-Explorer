@@ -1,5 +1,22 @@
 import 'package:flutter/foundation.dart';
 
+enum NetmonBoxColumn {
+  boxId(sortable: true),
+  version(sortable: true),
+  working,
+  uptime,
+  lastSeen,
+  security,
+  score,
+  trust,
+  notes,
+  superColumn;
+
+  const NetmonBoxColumn({this.sortable = false});
+
+  final bool sortable;
+}
+
 class NetmonBox {
   final String boxId;
   final NetmonBoxDetails details;

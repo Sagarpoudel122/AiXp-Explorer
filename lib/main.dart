@@ -1,17 +1,37 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-import 'package:e2_explorer/src/design/layouts/desktop_app_layout.dart';
+import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_wallet.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/themes/app_theme.dart';
+import 'package:e2_explorer/src/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+AixpWallet? kAIXpWallet;
+
+/// Todo: implemented for test. Remove once test completed.
+Future<void> clearServersAndDefaultServer() async {
+  const String mqttServersKey = 'mqtt_servers';
+  const String selectedServerNameKey = 'selected_server_name';
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.remove(mqttServersKey);
+  await prefs.remove(selectedServerNameKey);
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  /// Check which theme to use and initialize the colors according to theme.
+  await ThemeUtils.initialize();
+
+  // await clearServersAndDefaultServer();
   runApp(const MyApp());
 
   doWhenWindowReady(() {
-    // const initialSize = Size(1400, 800);
-    const initialSize = Size(500, 700);
+    const initialSize = Size(1400, 800);
+    // const initialSize = Size(500, 700);
     appWindow.minSize = initialSize;
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
@@ -20,52 +40,58 @@ void main() async {
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      kAIXpWallet = AixpWallet(isDebug: true);
+    });
+    ThemeUtils.themeValueNotifier.addListener(_listenToThemeChanges);
+    super.initState();
+  }
+
+  void _listenToThemeChanges() {
+    ThemeUtils.loadThemeColors();
+    setState(() {});
+    rebuildAllChildren(context);
+  }
+
+  void rebuildAllChildren(BuildContext context) {
+    void rebuild(Element el) {
+      el
+        ..markNeedsBuild()
+        ..visitChildren(rebuild);
+    }
+
+    (context as Element).visitChildren(rebuild);
+  }
+
+  @override
+  void dispose() {
+    ThemeUtils.themeValueNotifier.removeListener(_listenToThemeChanges);
+    super.dispose();
+  }
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MQTT Connection Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'MQTT Connection Demo'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: WindowBorder(
-        width: 1,
-        color: ColorStyles.dark700,
-        child: Container(
-          color: ColorStyles.dark900,
-          // color: const Color.fromRGBO(45, 45, 45, 1.0),
-          child: Center(
-            child: DesktopAppLayout(
-              child: MaterialApp.router(
-                routerConfig: AppRoutes.routes,
-                theme: ThemeData.dark(),
-              ),
-            ),
-            // child: LandingScreen(),
-          ),
-        ),
+    AppColors.initialize();
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => NetworkProvider()),
+      ],
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'MQTT Connection Demo',
+        theme: appTheme,
+        routerConfig: AppRoutes.routes,
       ),
     );
   }

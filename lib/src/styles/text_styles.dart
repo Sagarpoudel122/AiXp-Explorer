@@ -1,4 +1,5 @@
 import 'package:e2_explorer/src/styles/color_styles.dart';
+import 'package:e2_explorer/src/utils/app_config.dart';
 import 'package:flutter/cupertino.dart';
 
 class TextStyles {
@@ -7,7 +8,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w600,
       fontSize: 50.50,
       color: color,
@@ -20,7 +21,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 37.9,
       color: color,
@@ -33,7 +34,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 28.4,
       color: color,
@@ -46,7 +47,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 21.3,
       color: color,
@@ -59,7 +60,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w600,
       fontSize: 21.3,
       color: color,
@@ -72,7 +73,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 16,
       color: color,
@@ -86,7 +87,7 @@ class TextStyles {
     double? letterSpacing,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w500,
       fontSize: 16,
       color: color,
@@ -102,7 +103,7 @@ class TextStyles {
     TextOverflow? overflow,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w600,
       fontSize: 16,
       color: color,
@@ -117,7 +118,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w500,
       fontSize: 14,
       color: color,
@@ -132,7 +133,7 @@ class TextStyles {
     double fontSize = 14,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: fontWeight,
       fontSize: fontSize,
       color: color,
@@ -145,7 +146,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w400,
       fontSize: 14,
       color: color,
@@ -159,7 +160,7 @@ class TextStyles {
     FontWeight fontWeight = FontWeight.w600,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: fontWeight,
       fontSize: 14,
       color: color,
@@ -173,7 +174,7 @@ class TextStyles {
     FontWeight fontWeight = FontWeight.w400,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: fontWeight,
       fontSize: 12,
       color: color,
@@ -188,7 +189,7 @@ class TextStyles {
     double? letterSpacing,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: fontWeight,
       fontSize: 10,
       color: color,
@@ -202,7 +203,7 @@ class TextStyles {
     TextDecoration? decoration,
   }) {
     return TextStyle(
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: FontWeight.w600,
       fontSize: 12,
       color: color,
@@ -217,10 +218,21 @@ class TextStyles {
   }) {
     return TextStyle(
       color: color,
-      fontFamily: 'Inter',
+      fontFamily: AppConfig.appFontFamily,
       fontWeight: fontWeight,
       fontSize: fontSize,
       letterSpacing: -0.02,
+    );
+  }
+
+  static TextStyle sideNavTileTextStyle({required bool isSelected}) {
+    return TextStyle(
+      fontFamily: AppConfig.appFontFamily,
+      fontWeight: FontWeight.w600,
+      fontSize: 14,
+      color: isSelected
+          ? AppColors.sideNavSelectedTileTextColor
+          : AppColors.sideNavUnselectedTileTextColor,
     );
   }
 }

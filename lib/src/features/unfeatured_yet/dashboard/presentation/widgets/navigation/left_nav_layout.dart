@@ -1,10 +1,8 @@
-import 'package:carbon_icons/carbon_icons.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/domain/home_navigation_subitem.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/left_navigation_menu.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/navigation_item.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/dashboard/presentation/widgets/side_nav/side_nav.dart';
-import 'package:e2_explorer/src/routes/routes.dart';
+import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,7 +15,6 @@ class LeftNavLayout extends StatefulWidget {
 
   final List<NavigationItem> pages;
   final Widget child;
-
 
   @override
   State<LeftNavLayout> createState() => _LeftNavLayoutState();
@@ -32,8 +29,15 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
     return Row(
       children: [
         SizedBox(
-          width: 180,
+          width: Dimens.sideNavWidth,
           child: SideNav(
+            onItemTapped: (p0) {
+              print("jbafjasbfjbsajhfbas");
+              setState(() {
+                _navIndex = p0;
+              });
+            
+            },
             selectedIndex: _navIndex,
             isExpanded: false,
             items: widget.pages.map(
@@ -41,29 +45,41 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
                 if (e.children != null) {
                   return HomeNavigationItem.shell(
                     label: (context) => Text(e.title),
-                    icon: (context) => Icon(e.icon),
+                    iconData: e.icon,
+                    svgIconPath: e.svgIconPath,
                     matchingRoutePrefixes: [],
+                    enableLowerDivider: e.includeBottomDivider,
                     subitems: e.children!
+                        .asMap() // Convert the list to a map to access both item and index
                         .map(
-                          (e) => HomeNavigationSubItem(
-                            label: (context) => Text(e.title),
-                            onNavigate: () {
-                              context.goNamed(e.path);
-                            },
-                            routeNamePrefix: '',
+                          (index, subItem) => MapEntry(
+                            index,
+                            HomeNavigationSubItem(
+                              label: (context) => Text(subItem.title),
+                              onNavigate: () {
+                           
+                                context.goNamed(subItem.path);
+                                _navIndex =
+                                    index; // Store the index of the subitem
+                              },
+                              routeNamePrefix: '',
+                            ),
                           ),
                         )
+                        .values
                         .toList(),
                   );
                 } else {
                   return HomeNavigationItem.simple(
                     label: (context) => Text(e.title),
-                    icon: (context) => Icon(e.icon),
+                    iconData: e.icon,
+                    svgIconPath: e.svgIconPath,
                     matchingRoutePrefixes: [],
                     onNavigate: () {
                       context.goNamed(e.path);
+                      _navIndex = widget.pages.indexOf(e);
                     },
-                    enableLowerDivider: true,
+                    enableLowerDivider: e.includeBottomDivider,
                   );
                 }
               },
@@ -73,7 +89,6 @@ class _LeftNavLayoutState extends State<LeftNavLayout> {
         Expanded(
           child: widget.child,
         ),
-
       ],
     );
   }
