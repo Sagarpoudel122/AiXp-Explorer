@@ -47,13 +47,6 @@ class DashboardPage extends StatelessWidget {
             pageWidget: const CommandLauncherPage(),
             path: RouteNames.commandLauncher,
           ),
-          const NavigationItem(
-            title: 'Message viewer',
-            icon: CarbonIcons.query_queue,
-            pageWidget: PayloadViewer(boxName: ''),
-            path: RouteNames.payloadViewer,
-          ),
-
 
           /// old ones
           ///
