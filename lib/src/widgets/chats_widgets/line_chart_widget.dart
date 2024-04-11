@@ -62,7 +62,9 @@ class LineChartWidget extends StatelessWidget {
         lineBarsData: lineBarsData2,
         minX: 0,
         maxX: (timestamps.length.toDouble() - 1),
-        maxY: 20,
+        maxY: (data.reduce(
+                (value, element) => value > element ? value : element)) +
+            20,
         minY: 0,
       );
 
