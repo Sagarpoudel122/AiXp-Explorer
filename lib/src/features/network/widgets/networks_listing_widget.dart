@@ -1,11 +1,11 @@
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/hf_dropdown.dart';
 import 'package:e2_explorer/src/features/common_widgets/hf_dropdown/overlay_parent.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
+import 'package:e2_explorer/src/features/network/widgets/network_info_dialog.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/connection/domain/models/mqtt_server.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
 class NetworksListingWidget extends StatelessWidget {
   const NetworksListingWidget({
@@ -54,7 +54,6 @@ class NetworksListingWidget extends StatelessWidget {
                   overlay.showOverlay(
                     context: context,
                     width: 200,
-                    // show content in right
                     followerAnchor: Alignment.centerRight,
                     shellBuilder: (context, child) => Container(
                       decoration: BoxDecoration(
@@ -71,39 +70,7 @@ class NetworksListingWidget extends StatelessWidget {
                       child: child,
                     ),
                     contentBuilder: (context, _) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            TextWidget('Network Info',
-                                style: CustomTextStyles.text14_400),
-                            const Divider(
-                              color: ColorStyles.grey,
-                              thickness: 1,
-                            ),
-                            TextWidget(
-                              'Name: ${item.name}',
-                              style: CustomTextStyles.text16_400,
-                            ),
-                            const SizedBox(height: 10),
-                            TextWidget(
-                              'Host: ${item.host}',
-                              style: CustomTextStyles.text14_400,
-                            ),
-                            const SizedBox(height: 10),
-                            TextWidget(
-                              'Port: ${item.port}',
-                              style: CustomTextStyles.text14_400,
-                            ),
-                            const SizedBox(height: 10),
-                            TextWidget(
-                              'Username: ${item.username}',
-                              style: CustomTextStyles.text14_400,
-                            ),
-                          ],
-                        ),
-                      );
+                      return NetworkInfoDialog(server: item);
                     },
                   );
                 } else {
