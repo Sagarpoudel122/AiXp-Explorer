@@ -145,7 +145,10 @@ class _NetworkPageState extends State<NetworkPage> {
                       ],
                     ),
                   ),
-                  const AppButtonPrimary(
+                  AppButtonPrimary(
+                    onPressed: () {
+                      nodeHistoryCommand();
+                    },
                     text: 'Refresh',
                     height: 32,
                   ),

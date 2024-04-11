@@ -5,6 +5,7 @@ import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_wi
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
+import 'package:e2_explorer/src/widgets/chats_widgets/bar_graph.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -48,6 +49,8 @@ class _ResourcesTabState extends State<ResourcesTab> {
             setState(() {
               isLoading = true;
             });
+            Clipboard.setData(ClipboardData(
+                text: JsonEncoder.withIndent(" ").convert(convertedMessage)));
             convertedMessage.removeWhere((key, value) => value == null);
             nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
             isLoading = false;
@@ -113,15 +116,13 @@ class _ResourcesTabState extends State<ResourcesTab> {
                         ),
                         const SizedBox(width: 34),
                         Expanded(
-                          child: LineChartWidget(
-                            timestamps:
-                                nodeHistoryModel!.nodeHistory.timestamps,
-                            data: [],
-                            title: 'DISK',
-                            borderColor: AppColors.lineChartBlueBorderColor,
-                            gradient: AppColors.lineChartBlueGradient,
-                          ),
-                        ),
+                            child: BarChartWidget(
+                          title: 'Disk',
+                          totalDiskSize: nodeHistoryModel!.nodeHistory.totalDisk
+                              .toDouble(),
+                          totalMemorySize:
+                              nodeHistoryModel!.nodeHistory.totalMem.toDouble(),
+                        )),
                       ],
                     ),
                   ],
