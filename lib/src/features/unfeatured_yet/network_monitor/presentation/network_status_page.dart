@@ -162,9 +162,6 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                               ),
                             ],
                           ),
-                          const SizedBox(width: 19),
-                          AppButtonPrimary(
-                              text: 'Refresh', onPressed: () {}, height: 32),
                         ],
                       ),
                     ),
