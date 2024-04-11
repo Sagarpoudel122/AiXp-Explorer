@@ -57,7 +57,7 @@ class _ResourcesTabState extends State<ResourcesTab> {
                                   .toList(),
                               timestamps: resourceProvider
                                   .nodeHistoryModel.nodeHistory.timestamps,
-                              title: 'GPU',
+                              title: 'GPU Load',
                               borderColor: AppColors.lineChartGreenBorderColor,
                               gradient: AppColors.lineChartGreenGradient,
                             ),
@@ -87,15 +87,33 @@ class _ResourcesTabState extends State<ResourcesTab> {
                               timestamps: resourceProvider
                                   .nodeHistoryModel.nodeHistory.timestamps,
                               data: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.memAvailHist
+                                  .nodeHistoryModel.nodeHistory.gpuMemAvailHist
                                   .map((e) => e.toDouble())
                                   .toList(),
-                              title: 'RAM',
+                              title: 'GPU Memory',
                               borderColor: AppColors.lineChartPinkBorderColor,
                               gradient: AppColors.lineChartPinkGradient,
                             ),
                           ),
                           const SizedBox(width: 34),
+                          Expanded(
+                            child: LineChartWidget(
+                              data: resourceProvider
+                                  .nodeHistoryModel.nodeHistory.memAvailHist
+                                  .map((e) => e.toDouble())
+                                  .toList(),
+                              timestamps: resourceProvider
+                                  .nodeHistoryModel.nodeHistory.timestamps,
+                              title: 'RAM',
+                              borderColor: AppColors.lineChartGreenBorderColor,
+                              gradient: AppColors.lineChartGreenGradient,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 34),
+                      Row(
+                        children: [
                           Expanded(
                               child: BarChartWidget(
                             title: "Disk",
@@ -106,6 +124,10 @@ class _ResourcesTabState extends State<ResourcesTab> {
                                 .nodeHistoryModel.nodeHistory.totalMem
                                 .toDouble(),
                           )),
+                          const SizedBox(width: 34),
+                          const Expanded(
+                            child: SizedBox(),
+                          ),
                         ],
                       ),
                     ],
