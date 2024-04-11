@@ -138,7 +138,9 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: '@prod_super',
+                                      text: provider.supervisorIds.isNotEmpty
+                                          ? provider.supervisorIds[0]
+                                          : '...',
                                       style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
@@ -149,7 +151,12 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                 ),
                               ),
                               TextWidget(
-                                '2023-12-22 14:10:46',
+                                provider.netmonStatusList
+                                        .where((element) =>
+                                            element.details.isSupervisor)
+                                        .isNotEmpty
+                                    ? ' ${provider.netmonStatusList.where((element) => element.details.isSupervisor).first.details.uptime}'
+                                    : 'No supervisor',
                                 style: CustomTextStyles.text14_700,
                                 textAlign: TextAlign.end,
                               ),

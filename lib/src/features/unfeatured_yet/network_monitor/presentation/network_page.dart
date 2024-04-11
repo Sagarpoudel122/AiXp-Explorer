@@ -5,12 +5,14 @@ import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_prima
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/debug_viewer.dart';
+import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/provider/resource_provider.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/presentation/network_status_page.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class NetworkPage extends StatefulWidget {
   const NetworkPage({super.key});
@@ -26,27 +28,7 @@ class _NetworkPageState extends State<NetworkPage> {
   String? selectedBoxName;
   NetmonBox? selectedBox;
   int _navIndex = _networkPageIndex;
-  final _client = E2Client();
   late NodeHistoryModel nodeHistoryModel;
-
-  nodeHistoryCommand() {
-    _client.session.sendCommand(
-      ActionCommands.updatePipelineInstance(
-        targetId: selectedBox!.boxId,
-        payload: E2InstanceConfig(
-            name: 'admin_pipeline',
-            signature: 'NET_MON_01',
-            instanceId: 'NET_MON_01_INST',
-            instanceConfig: {
-              "INSTANCE_COMMAND": {
-                "node": selectedBox!.boxId,
-                "request": "history"
-              }
-            }),
-        initiatorId: kAIXpWallet?.initiatorId,
-      ),
-    );
-  }
 
   @override
   void initState() {
@@ -66,7 +48,9 @@ class _NetworkPageState extends State<NetworkPage> {
                 selectedBox = boxName;
                 _navIndex = _boxDetailsPageIndex;
               });
-              nodeHistoryCommand();
+              context
+                  .read<ResourceProvider>()
+                  .nodeHistoryCommand(node: boxName.boxId);
             } else {
               await showDialog<void>(
                 context: context,
@@ -147,7 +131,9 @@ class _NetworkPageState extends State<NetworkPage> {
                   ),
                   AppButtonPrimary(
                     onPressed: () {
-                      nodeHistoryCommand();
+                      context
+                          .read<ResourceProvider>()
+                          .nodeHistoryCommand(node: selectedBoxName!);
                     },
                     text: 'Refresh',
                     height: 32,

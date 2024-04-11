@@ -53,4 +53,4 @@ class NetworkProvider extends ChangeNotifier {
   }
 }
 
-final provider = NetworkProvider();
+final networkProvider = NetworkProvider();
