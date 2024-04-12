@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:basic_utils/basic_utils.dart';
+import 'package:collection/collection.dart';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/main.dart';
@@ -105,6 +106,17 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
     );
   }
 
+  List<Widget> buildTextFieldList(
+    String key,
+    List<dynamic> data, {
+    String prefix = '',
+  }) {
+    return data
+        .mapIndexed((i, e) =>
+            buildTextFields({key: e}, prefix: '${prefix}[${i}]').first)
+        .toList();
+  }
+
   List<Widget> buildTextFields(Map<String, dynamic> data,
       {String prefix = '', Color textColor = Colors.white}) {
     List<Widget> textFields = [];
@@ -115,6 +127,11 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
       if (value is Map<String, dynamic>) {
         // If the value is a nested map, recursively build text fields
         textFields.addAll(buildTextFields(value, prefix: '$prefix$key.'));
+      }
+      if (value is List<dynamic>) {
+        // If the value is a nested map, recursively build text fields
+        textFields
+            .addAll(buildTextFieldList(key, value, prefix: '$prefix$key.'));
       } else {
         textFields.add(
           Column(

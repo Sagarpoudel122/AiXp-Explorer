@@ -85,7 +85,12 @@ class MqttSession extends GenericSession {
     _heartbeatReceiveStream = StreamController<Map<String, dynamic>>();
     _heartbeatReceiveStream?.stream.listen((message) {
       var messageVerifier = aixpVerifier.verifyMessage(message);
-
+      final eePayloadPath = message['EE_PAYLOAD_PATH'];
+      if (eePayloadPath[0] == 'gts-test2') {
+        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+        String prettyprint = encoder.convert(message);
+        print("$prettyprint");
+      }
       if (messageVerifier) {
         _onHeartbeatInternal(message);
       }
@@ -98,7 +103,6 @@ class MqttSession extends GenericSession {
     _notificationReceiveStream?.stream.listen((message) {
       var messageVerifier = aixpVerifier.verifyMessage(message);
       final eePayloadPath = message['EE_PAYLOAD_PATH'];
-
       if (eePayloadPath[0] == 'gts-test2' &&
           eePayloadPath[1] == 'admin_pipeline') {
         JsonEncoder encoder = const JsonEncoder.withIndent('  ');

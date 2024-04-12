@@ -2,6 +2,7 @@ import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/models/e2_message.dart';
 import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
+import 'package:e2_explorer/src/features/e2_status/application/client_messages/notifcation_message.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/payload_message.dart';
 import 'package:e2_explorer/src/features/e2_status/utils/status/pipeline_status.dart';
 
@@ -19,7 +20,7 @@ class BoxMessages {
   // final Map<String, List<Map<String, dynamic>>> payloadMessagesByPipelines = {};
   final List<PayloadMessage> payloadMessages = [];
 
-  final List<Map<String, dynamic>> notificationMessages = [];
+  final List<NotificationMessage> notificationMessages = [];
   final List<E2Heartbeat> heartbeatMessages = [];
 
   @override
@@ -75,7 +76,8 @@ class BoxMessages {
     }
     _totalMessageCount += 1;
     // notificationMessages.insert(0, notification);
-    notificationMessages.add(notification);
+    notificationMessages
+        .add(NotificationMessage.fromNotifcationMap(notification));
   }
 
   void addHeartbeat(Map<String, dynamic> receivedHeartbeat) {

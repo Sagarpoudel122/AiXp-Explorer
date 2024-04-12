@@ -98,7 +98,7 @@ class CommandLauncherPage extends StatelessWidget {
                                             onPressed: () {
                                               _client.session.sendCommand(
                                                 ActionCommands.stop(
-                                                    targetId: ""),
+                                                    targetId: item.edgeNode),
                                               );
                                             },
                                             text: 'Restart',
@@ -113,6 +113,11 @@ class CommandLauncherPage extends StatelessWidget {
                                           const SizedBox(width: 8),
                                           AppButtonSecondary(
                                             onPressed: () {
+                                              _client.session.sendCommand(
+                                                ActionCommands.fullHeartbeat(
+                                                  targetId: item.edgeNode,
+                                                ),
+                                              );
                                               showAppDialog(
                                                   context: context,
                                                   content: AppDialogWidget(

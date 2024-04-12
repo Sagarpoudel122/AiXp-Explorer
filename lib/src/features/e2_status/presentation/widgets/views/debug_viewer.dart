@@ -1,6 +1,8 @@
 import 'package:e2_explorer/src/features/coms/coms.dart';
+import 'package:e2_explorer/src/features/e2_status/application/client_messages/notifcation_message.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/box_messages_tab_display.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/command_view.dart';
+import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/full_payload_view.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/heartbeat_view.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/pipeline_screen.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/resources_tab.dart';
@@ -40,10 +42,13 @@ class DebugViewer extends StatelessWidget {
           key: ValueKey('${boxName ?? ''}2'),
           // boxName: boxName!,z
         ),
-        commsView: Comms(
-          key: ValueKey('${boxName ?? ''}3'),
+        commsView: FullPayloadView(
           boxName: boxName!,
         ),
+        // Comms(
+        //   key: ValueKey('${boxName ?? ''}3'),
+        //   boxName: boxName!,
+        // ),
         onTabChanged: (tab) {},
       ),
     );
