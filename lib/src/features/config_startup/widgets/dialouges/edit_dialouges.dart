@@ -88,7 +88,6 @@ class _EditDialougesState extends State<EditDialouges> {
     List<Widget> textFields = [];
 
     Map<String, dynamic> newJson = data;
-
     data.forEach((key, value) {
       if (value is Map<String, dynamic>) {
         // If the value is a nested map, recursively build text fields
@@ -103,6 +102,12 @@ class _EditDialougesState extends State<EditDialouges> {
               const SizedBox(height: 10),
               if (value is bool)
                 CustomDropDown<bool>(
+                  onChanged: (value) {
+                    String editedKey = prefix.isNotEmpty ? '$prefix$key' : key;
+                    newJson[editedKey] = value;
+                    _jsonData = newJson;
+                  },
+                  value: value,
                   controller: TextEditingController(text: value.toString()),
                   hintText: "Select Option",
                   dropDownItems: const [

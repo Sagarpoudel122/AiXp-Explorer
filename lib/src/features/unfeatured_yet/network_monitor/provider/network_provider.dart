@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -9,6 +11,10 @@ class NetworkProvider extends ChangeNotifier {
   Map<String, NetmonBoxDetails> netmonStatus = {};
   List<String> supervisorIds = [];
   bool refreshReady = true;
+
+  NetmonBox get supervisorNode =>
+      netmonStatusList.where((element) => element.details.isSupervisor).first;
+
   void toggleLoading(bool value) {
     isLoading = value;
     notifyListeners();
@@ -53,4 +59,4 @@ class NetworkProvider extends ChangeNotifier {
   }
 }
 
-final provider = NetworkProvider();
+final networkProvider = NetworkProvider();
