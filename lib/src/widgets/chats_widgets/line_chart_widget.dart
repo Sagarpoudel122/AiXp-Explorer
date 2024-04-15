@@ -185,29 +185,29 @@ class LineChartWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.containerBgColor,
       ),
-      child: AspectRatio(
-        aspectRatio: 1.81,
-        // aspectRatio: 1.23,
-        child: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 26, left: 26),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 18, right: 26, left: 26),
+            child: TextWidget(
+              title,
+              style: CustomTextStyles.text16_600,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          AspectRatio(
+            aspectRatio: 1.87,
+            // aspectRatio: 1.23,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 26),
               child: LineChart(
                 sampleData2,
                 duration: const Duration(milliseconds: 250),
               ),
             ),
-            Positioned(
-              top: 40,
-              left: 18,
-              child: TextWidget(
-                title,
-                style: CustomTextStyles.text16_600,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
