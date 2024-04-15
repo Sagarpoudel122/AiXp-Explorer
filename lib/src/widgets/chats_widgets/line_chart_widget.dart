@@ -2,6 +2,7 @@ import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:meta/meta.dart';
 
 import '../../styles/color_styles.dart';
 
@@ -100,10 +101,15 @@ class LineChartWidget extends StatelessWidget {
         getTitlesWidget: (value, meta) {
           int index = value.toInt();
           if (index >= 0 && index < timestamps.length) {
-            return InkWell(child: Text(getTimeStamps(timestamps[index])));
+            return TextWidget(
+              getTimeStamps(
+                timestamps[index],
+              ),
+              style: CustomTextStyles.text12_400_tertiary,
+            );
           } else {
             return InkWell(
-                onTap: () => print("No data available"), child: Text("blank"));
+                onTap: () => print("No data available"), child: const Text(""));
           }
         },
       );

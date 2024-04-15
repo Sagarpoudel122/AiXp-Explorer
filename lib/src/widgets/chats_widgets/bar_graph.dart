@@ -46,14 +46,33 @@ class BarChartWidget extends StatelessWidget {
                   gridData: const FlGridData(
                     show: false,
                   ),
-                  titlesData: const FlTitlesData(
+                  titlesData: FlTitlesData(
                     show: true,
-                    topTitles:
-                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    leftTitles:
-                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles:
-                        AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    topTitles: const AxisTitles(
+                        sideTitles: SideTitles(showTitles: false)),
+                    leftTitles: const AxisTitles(
+                        sideTitles: SideTitles(showTitles: false)),
+                    rightTitles: const AxisTitles(
+                        sideTitles: SideTitles(showTitles: false)),
+                    bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        String title = '';
+                        switch (value.toInt()) {
+                          case 0:
+                            title = 'Disk';
+                          case 1:
+                            title = "Memory";
+                          default:
+                            title = "";
+                        }
+                        return TextWidget(
+                          title,
+                          style: CustomTextStyles.text12_400_tertiary,
+                        );
+                      },
+                    )),
                   ),
                   borderData: FlBorderData(show: false),
                   barGroups: [
