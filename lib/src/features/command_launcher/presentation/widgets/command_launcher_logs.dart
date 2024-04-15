@@ -8,6 +8,7 @@ import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_wi
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
+import 'package:e2_explorer/src/utils/file_utils.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 
 import 'package:flutter/material.dart';
@@ -74,7 +75,7 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
                 icon: Icons.copy,
                 onTap: () {
                   if (!isLoading) {
-                    // saveJSONToFile(data);
+                    FileUtils.saveJSONToFile(data);
                   }
                 }),
             AppDialogHeaderButtons(
