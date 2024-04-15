@@ -191,7 +191,7 @@ class LineChartWidget extends StatelessWidget {
         child: Stack(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.only(right: 16, left: 6),
+              padding: const EdgeInsets.only(right: 26, left: 26),
               child: LineChart(
                 sampleData2,
                 duration: const Duration(milliseconds: 250),

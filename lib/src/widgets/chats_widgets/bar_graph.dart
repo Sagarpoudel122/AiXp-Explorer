@@ -32,7 +32,7 @@ class BarChartWidget extends StatelessWidget {
                   maxY: (totalDiskSize > totalMemorySize
                           ? totalDiskSize
                           : totalMemorySize) +
-                      20,
+                      500,
                   minY: 0,
                   gridData: const FlGridData(
                     show: false,
@@ -49,19 +49,17 @@ class BarChartWidget extends StatelessWidget {
                   barGroups: [
                     BarChartGroupData(x: 0, barRods: [
                       BarChartRodData(
-                        toY: totalDiskSize,
-                        width: 25,
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: AppColors.lineChartPinkGradient,
-                      )
+                          toY: totalDiskSize,
+                          width: 25,
+                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.lineChartPinkBorderColor)
                     ]),
                     BarChartGroupData(x: 1, barRods: [
                       BarChartRodData(
-                        toY: totalMemorySize,
-                        width: 25,
-                        borderRadius: BorderRadius.circular(4),
-                        gradient: AppColors.lineChartPinkGradient,
-                      )
+                          toY: totalMemorySize,
+                          width: 25,
+                          borderRadius: BorderRadius.circular(4),
+                          color: AppColors.lineChartPinkBorderColor)
                     ])
                   ])),
               Positioned(
