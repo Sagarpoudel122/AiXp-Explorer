@@ -1,7 +1,9 @@
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
+import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 
 import 'package:flutter/material.dart';
@@ -34,18 +36,29 @@ class CommandLauncherLogs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppDialogWidget(
-        appDialogType: AppDialogType.medium,
-        headerButtons: [
-          AppDialogHeaderButtons(icon: Icons.copy, onTap: () {}),
-          AppDialogHeaderButtons(icon: Icons.download_sharp, onTap: () {}),
-        ],
-        title:
-            "Logs for ${"item.edgeNode"} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
-        content: Container(
-          height: 475,
-          padding: const EdgeInsets.all(16),
-          child: Text("Logs will be available in the logs section"),
-        ));
+    return E2Listener(onPayload: (data) {
+      final Map<String, dynamic> convertedMessage =
+          MqttMessageEncoderDecoder.raw(data);
+      final EE_PAYLOAD_PATH = (convertedMessage['EE_PAYLOAD_PATH'] as List)
+          .map((e) => e as String?)
+          .toList();
+      if (convertedMessage["INITIATOR_ID"] == kAIXpWallet?.initiatorId) {
+        print(convertedMessage);
+      }
+    }, builder: (context) {
+      return AppDialogWidget(
+          appDialogType: AppDialogType.medium,
+          headerButtons: [
+            AppDialogHeaderButtons(icon: Icons.copy, onTap: () {}),
+            AppDialogHeaderButtons(icon: Icons.download_sharp, onTap: () {}),
+          ],
+          title:
+              "Logs for ${"item.edgeNode"} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
+          content: Container(
+            height: 475,
+            padding: const EdgeInsets.all(16),
+            child: Text("Logs will be available in the logs section"),
+          ));
+    });
   }
 }

@@ -47,8 +47,8 @@ class _ResourcesTabState extends State<ResourcesTab> {
                                   .nodeHistoryModel.nodeHistory.gpuLoadHist
                                   .map((e) => e.toDouble())
                                   .toList(),
-                              timestamps: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.timestamps,
+                              timestamps: resourceProvider.nodeHistoryModel
+                                  .nodeHistory.convertedTimeStamps,
                               title: 'GPU Load',
                               borderColor: AppColors.lineChartGreenBorderColor,
                               gradient: AppColors.lineChartGreenGradient,
@@ -57,8 +57,8 @@ class _ResourcesTabState extends State<ResourcesTab> {
                           const SizedBox(width: 34),
                           Expanded(
                             child: LineChartWidget(
-                              timestamps: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.timestamps,
+                              timestamps: resourceProvider.nodeHistoryModel
+                                  .nodeHistory.convertedTimeStamps,
                               data: resourceProvider
                                   .nodeHistoryModel.nodeHistory.cpuHist
                                   .map((e) => e.toDouble())
@@ -76,8 +76,8 @@ class _ResourcesTabState extends State<ResourcesTab> {
                         children: [
                           Expanded(
                             child: LineChartWidget(
-                              timestamps: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.timestamps,
+                              timestamps: resourceProvider.nodeHistoryModel
+                                  .nodeHistory.convertedTimeStamps,
                               data: resourceProvider
                                   .nodeHistoryModel.nodeHistory.gpuMemAvailHist
                                   .map((e) => e.toDouble())
@@ -94,8 +94,8 @@ class _ResourcesTabState extends State<ResourcesTab> {
                                   .nodeHistoryModel.nodeHistory.memAvailHist
                                   .map((e) => e.toDouble())
                                   .toList(),
-                              timestamps: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.timestamps,
+                              timestamps: resourceProvider.nodeHistoryModel
+                                  .nodeHistory.convertedTimeStamps,
                               title: 'RAM',
                               borderColor: AppColors.lineChartGreenBorderColor,
                               gradient: AppColors.lineChartGreenGradient,
