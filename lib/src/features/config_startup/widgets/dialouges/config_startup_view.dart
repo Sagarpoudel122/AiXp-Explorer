@@ -107,10 +107,10 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
           positiveActionButtonText: "Download Json",
           negativeActionButtonText: "Close",
           title: "Config Startup file for ${widget.targetId}",
-          content: LoadingParentWidget(
-            isLoading: isLoading,
-            child: SizedBox(
-              height: 500,
+          content: SizedBox(
+            height: 500,
+            child: LoadingParentWidget(
+              isLoading: isLoading,
               child: SingleChildScrollView(
                 child: SizedBox(
                   width: double.maxFinite,

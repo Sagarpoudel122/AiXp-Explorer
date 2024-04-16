@@ -221,11 +221,11 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
             save();
           },
           title: "Config Startup file for ${widget.targetId}",
-          content: LoadingParentWidget(
-            isLoading: isLoading,
-            child: SizedBox(
-              height: 360,
-              width: 902,
+          content: SizedBox(
+            height: 360,
+            width: 902,
+            child: LoadingParentWidget(
+              isLoading: isLoading,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
