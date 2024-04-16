@@ -5,7 +5,8 @@ import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
-
+import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/edit_dialouges.dart';
+import 'package:e2_explorer/src/features/config_startup/widgets/form_builder.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
@@ -228,9 +229,31 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    ...buildTextFields(data),
+                    for (var field in data.entries)
+                      FormBuilder(
+                        type: FormBuilderType.fromInstanceType(field.value),
+                        label: field.key,
+                        initialValue: field.value.toString(),
+                        onChanged: (value, type, index, key) {
+                          if (type == FormBuilderType.list) {
+                            data[field.key][index] = value;
+                          } else if (key != null) {
+                            data[field.key][key] = value;
+                          } else {
+                            data[field.key] = value;
+                          }
+                        },
+                        hint: 'Enter value',
+                        listType: field.value is List
+                            ? (field.key, field.value)
+                            : null,
+                        mapType: field.value is Map
+                            ? (field.key, field.value)
+                            : null,
+                      ),
                   ],
                 ),
+                // child: ,
               ),
             ),
           ),

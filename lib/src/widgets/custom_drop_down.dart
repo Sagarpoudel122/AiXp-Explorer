@@ -31,9 +31,17 @@ class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
         color: AppColors.inputFieldFillColor,
       ),
       child: DropdownButton<T>(
-        value: widget.value,
+        value: widget.controller.text.isNotEmpty
+            ? widget.dropDownItems
+                .firstWhere(
+                  (item) => item.value.toString() == widget.controller.text,
+                  orElse: () => widget.dropDownItems.first,
+                )
+                .value
+            : null,
         onChanged: (newValue) {
-          widget.onChanged(newValue);
+          widget.controller.text = newValue.toString();
+          setState(() {});
         },
         underline: const SizedBox(),
         icon: const Icon(Icons.keyboard_arrow_down_outlined),
