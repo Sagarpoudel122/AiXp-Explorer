@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:e2_explorer/src/data/constant_string_code.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
@@ -20,6 +22,7 @@ class _CommsState extends State<Comms> {
   get itemBuilder => null;
 
   int selectedIndex = 0;
+  NotificationData? _selectedNotificationData;
   void changeImdex(int index) {
     setState(() {
       selectedIndex = index;
@@ -30,38 +33,54 @@ class _CommsState extends State<Comms> {
   Widget build(BuildContext context) {
     final session = E2Client();
 
-    return Container(
-      // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: NotificationAndPayloadList(boxName: widget.boxName),
+    return Row(
+      children: [
+        Expanded(
+          flex: 1,
+          child: NotificationAndPayloadList(
+            boxName: widget.boxName,
+            onChange: (a) {
+              setState(() {
+                _selectedNotificationData = a;
+              });
+            },
+            selectedNotificationData: _selectedNotificationData,
           ),
-          const SizedBox(width: 20),
-          Expanded(
-            flex: 2,
-            child: Container(
-              height: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: AppColors.containerBgColor,
-              ),
-              child: XMLViwer(
-                content: xml,
-                type: "xml",
-              ),
+        ),
+        const SizedBox(width: 20),
+        Expanded(
+          flex: 2,
+          child: Container(
+            height: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              color: AppColors.containerBgColor,
             ),
+            child: _selectedNotificationData != null
+                ? SingleChildScrollView(
+                    child: XMLViwer(
+                      content: jsonEncode(_selectedNotificationData!.data),
+                      type: "json",
+                    ),
+                  )
+                : SizedBox(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 class NotificationAndPayloadList extends StatefulWidget {
   final String boxName;
-  const NotificationAndPayloadList({super.key, required this.boxName});
+  final NotificationData? selectedNotificationData;
+  final Function(NotificationData) onChange;
+  const NotificationAndPayloadList({
+    super.key,
+    required this.boxName,
+    this.selectedNotificationData,
+    required this.onChange,
+  });
 
   @override
   State<NotificationAndPayloadList> createState() =>
@@ -76,23 +95,25 @@ class _NotificationAndPayloadListState
     final data = e2Client.boxMessages[widget.boxName];
     print(data?.notificationMessages);
 
-    List<NotificationData> notficationData = [
+    List<NotificationData> notficationDatas = [
       ...(data?.notificationMessages ?? []).map(
         (e) => NotificationData(
-            id: "",
-            data: e.payload,
-            dateTime: DateTime.now(),
-            notificationType: NotificationType.Notification),
+          id: e.payload['EE_HASH'],
+          data: e.payload,
+          dateTime: e.localTimestamp,
+          notificationType: NotificationType.Notification,
+        ),
       ),
       ...(data?.payloadMessages ?? []).map(
         (e) => NotificationData(
-            id: "",
-            data: e.payload.toMap(),
-            dateTime: e.localTimestamp,
-            notificationType: NotificationType.Payload),
+          id: e.payload.hash ?? '',
+          data: e.payload.toMap(),
+          dateTime: e.localTimestamp,
+          notificationType: NotificationType.Payload,
+        ),
       ),
     ];
-    notficationData.sort((a, b) => b.dateTime.compareTo(a.dateTime));
+    notficationDatas.sort((a, b) => b.dateTime.compareTo(a.dateTime));
     return E2Listener(
       onPayload: (a) {
         setState(() {});
@@ -109,16 +130,18 @@ class _NotificationAndPayloadListState
           ),
           child: ListView.separated(
             itemBuilder: (context, index) {
+              final notifcationData = notficationDatas[index];
               return InkWell(
-                // onTap: () => changeOmdex(index),
+                onTap: () => widget.onChange(notifcationData),
                 child: _NotificationListItem(
-                  notificationData: notficationData[index],
-                  isSelected: false,
+                  notificationData: notifcationData,
+                  isSelected:
+                      widget.selectedNotificationData?.id == notifcationData.id,
                 ),
               );
             },
             separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount: notficationData.length,
+            itemCount: notficationDatas.length,
           ),
         );
       },
@@ -151,7 +174,7 @@ class _NotificationListItem extends StatelessWidget {
             style: TextStyles.small14regular(color: const Color(0xFFDFDFDF)),
           ),
           Text(
-            DateFormat('HH:mm:ss:ms').format(notificationData.dateTime),
+            DateFormat('HH:mm:ss').format(notificationData.dateTime),
             style: TextStyles.small14regular(color: const Color(0xFFDFDFDF)),
           ),
         ],

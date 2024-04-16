@@ -42,7 +42,7 @@ class DebugViewer extends StatelessWidget {
           key: ValueKey('${boxName ?? ''}2'),
           // boxName: boxName!,z
         ),
-        commsView: FullPayloadView(
+        commsView: Comms(
           boxName: boxName!,
         ),
         // Comms(
