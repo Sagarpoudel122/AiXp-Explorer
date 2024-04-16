@@ -2,6 +2,7 @@ import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:meta/meta.dart';
 
 import '../../styles/color_styles.dart';
 
@@ -100,10 +101,15 @@ class LineChartWidget extends StatelessWidget {
         getTitlesWidget: (value, meta) {
           int index = value.toInt();
           if (index >= 0 && index < timestamps.length) {
-            return InkWell(child: Text(getTimeStamps(timestamps[index])));
+            return TextWidget(
+              getTimeStamps(
+                timestamps[index],
+              ),
+              style: CustomTextStyles.text12_400_tertiary,
+            );
           } else {
             return InkWell(
-                onTap: () => print("No data available"), child: Text("blank"));
+                onTap: () => print("No data available"), child: const Text(""));
           }
         },
       );
@@ -185,29 +191,29 @@ class LineChartWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         color: AppColors.containerBgColor,
       ),
-      child: AspectRatio(
-        aspectRatio: 1.81,
-        // aspectRatio: 1.23,
-        child: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(right: 16, left: 6),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(top: 18, right: 26, left: 26),
+            child: TextWidget(
+              title,
+              style: CustomTextStyles.text16_600,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          AspectRatio(
+            aspectRatio: 1.87,
+            // aspectRatio: 1.23,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 26),
               child: LineChart(
                 sampleData2,
                 duration: const Duration(milliseconds: 250),
               ),
             ),
-            Positioned(
-              top: 40,
-              left: 18,
-              child: TextWidget(
-                title,
-                style: CustomTextStyles.text16_600,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

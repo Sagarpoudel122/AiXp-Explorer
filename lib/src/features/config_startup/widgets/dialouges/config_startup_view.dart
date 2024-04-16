@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
@@ -8,8 +6,8 @@ import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_wi
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
+import 'package:e2_explorer/src/utils/file_utils.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 const _name = 'admin_pipeline';
@@ -63,21 +61,6 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
   bool isLoading = true;
   Map<String, dynamic> data = {};
 
-  Future<void> saveJSONToFile(Map data) async {
-    // Convert data to JSON string
-    String jsonString = jsonEncode(data);
-
-    // Get directory where user wants to save the file
-    String? directoryPath = await FilePicker.platform.getDirectoryPath();
-    if (directoryPath != null) {
-      String filePath = '$directoryPath/data.json';
-
-      // Save JSON to a file
-      File file = File(filePath);
-      await file.writeAsString(jsonString);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return E2Listener(
@@ -102,15 +85,15 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
         return AppDialogWidget(
           isActionbuttonReversed: true,
           positiveActionButtonAction: () async {
-            await saveJSONToFile(data);
+            await FileUtils.saveJSONToFile(data);
           },
           positiveActionButtonText: "Download Json",
           negativeActionButtonText: "Close",
           title: "Config Startup file for ${widget.targetId}",
-          content: LoadingParentWidget(
-            isLoading: isLoading,
-            child: SizedBox(
-              height: 500,
+          content: SizedBox(
+            height: 500,
+            child: LoadingParentWidget(
+              isLoading: isLoading,
               child: SingleChildScrollView(
                 child: SizedBox(
                   width: double.maxFinite,

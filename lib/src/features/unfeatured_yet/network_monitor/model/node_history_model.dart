@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class NodeHistoryModel {
   NodeHistory nodeHistory;
 
@@ -7,7 +9,7 @@ class NodeHistoryModel {
 
   factory NodeHistoryModel.fromJson(Map<String, dynamic> json) {
     return NodeHistoryModel(
-      nodeHistory: NodeHistory.fromJson(json['NODE_HISTORY']),
+      nodeHistory: NodeHistory.fromJson(json),
     );
   }
 }
@@ -21,6 +23,7 @@ class NodeHistory {
   List<String> timestamps;
   num totalDisk;
   num totalMem;
+  List<String> convertedTimeStamps;
 
   NodeHistory({
     required this.cpuHist,
@@ -31,9 +34,13 @@ class NodeHistory {
     required this.timestamps,
     required this.totalDisk,
     required this.totalMem,
+    required this.convertedTimeStamps,
   });
 
   factory NodeHistory.fromJson(Map<String, dynamic> json) {
+    final timezone = json["EE_TIMEZONE"];
+    json = json['NODE_HISTORY'];
+
     return NodeHistory(
       cpuHist: List<num>.from(json['cpu_hist']),
       gpuLoadHist: List<num>.from(json['gpu_load_hist']),
@@ -45,7 +52,21 @@ class NodeHistory {
       timestamps: List<String>.from(json['timestamps']),
       totalDisk: json['total_disk'],
       totalMem: json['total_mem'],
+      convertedTimeStamps: List<String>.from(json['timestamps']
+          .map((e) => _parseLocalTimestamp(e, timezone).toString())),
     );
+  }
+
+  static DateTime _parseLocalTimestamp(String timestamp, String timezone) {
+    final timestampWithTimezone = timestamp;
+    final utcOffset = int.parse(timezone.substring(3));
+    final dateFormat = DateFormat('yyyy-MM-dd HH:mm:ss');
+    final dateTime =
+        dateFormat.parseUtc(timestampWithTimezone.substring(0, 19));
+    final dateTimeWithOffset =
+        dateTime.copyWith(hour: dateTime.hour - utcOffset);
+    final localDateTime = dateTimeWithOffset.toLocal();
+    return localDateTime;
   }
 }
 
