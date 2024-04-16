@@ -3,14 +3,13 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 enum BoxViewerTab {
   resources,
   pipelines,
-  comms,
-  heartbeat,
-  command;
+  comms;
 
   static BoxViewerTab fromIndex(int index) {
     return BoxViewerTab.values[index];
@@ -18,20 +17,17 @@ enum BoxViewerTab {
 }
 
 class BoxMessagesTabDisplay extends StatefulWidget {
-  const BoxMessagesTabDisplay(
-      {super.key,
-      required this.resourcesView,
-      required this.pipelinesView,
-      required this.commsView,
-      required this.heartBeat,
-      this.onTabChanged,
-      required this.command});
+  const BoxMessagesTabDisplay({
+    super.key,
+    required this.resourcesView,
+    required this.pipelinesView,
+    required this.commsView,
+    this.onTabChanged,
+  });
 
   final Widget resourcesView;
   final Widget pipelinesView;
   final Widget commsView;
-  final Widget heartBeat;
-  final Widget command;
 
   // final Widget fullPayloadsView;
   final void Function(BoxViewerTab tab)? onTabChanged;
@@ -48,7 +44,7 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _tabIndex = _tabController.index;
     _tabController.addListener(() {
       if (_tabIndex != _tabController.index) {
@@ -109,30 +105,31 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                         Text('Resources'),
                         Text('Pipelines'),
                         Text('Comms'),
-                        Text("Heartbeat"),
-                        Text("Command")
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-            AppButtonSecondary(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              text: 'Filter',
-              icon: SvgPicture.asset(
-                AssetUtils.getSvgIconPath('sliders'),
-                color: AppColors.buttonSecondaryIconColor,
+            Visibility(
+              visible: _tabIndex != 0,
+              child: AppButtonSecondary(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                text: 'Filter',
+                icon: SvgPicture.asset(
+                  AssetUtils.getSvgIconPath('sliders'),
+                  color: AppColors.buttonSecondaryIconColor,
+                ),
+                borderColor: Colors.transparent,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomPopup();
+                    },
+                  );
+                },
               ),
-              borderColor: Colors.transparent,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return CustomPopup();
-                  },
-                );
-              },
             ),
           ],
         ),
@@ -149,9 +146,6 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
 
               /// Comms tab
               widget.commsView,
-              //Heartbeat Tab
-              widget.heartBeat,
-              widget.command
             ],
           ),
         )
