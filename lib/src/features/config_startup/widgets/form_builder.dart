@@ -91,9 +91,23 @@ class _FormBuilderState extends State<FormBuilder> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 10),
-              Text(widget.label),
-              const SizedBox(height: 10),
+              Builder(
+                builder: (context) {
+                  if (widget.type != FormBuilderType.list &&
+                      widget.type != FormBuilderType.map) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 10),
+                        Text(widget.label),
+                        const SizedBox(height: 10),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
+              ),
               Builder(builder: (context) {
                 return switch (widget.type) {
                   FormBuilderType.text => TextField(
