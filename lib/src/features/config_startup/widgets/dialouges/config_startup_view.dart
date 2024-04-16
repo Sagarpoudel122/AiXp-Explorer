@@ -8,6 +8,7 @@ import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_wi
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
+import 'package:e2_explorer/src/utils/file_utils.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -63,21 +64,6 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
   bool isLoading = true;
   Map<String, dynamic> data = {};
 
-  Future<void> saveJSONToFile(Map data) async {
-    // Convert data to JSON string
-    String jsonString = jsonEncode(data);
-
-    // Get directory where user wants to save the file
-    String? directoryPath = await FilePicker.platform.getDirectoryPath();
-    if (directoryPath != null) {
-      String filePath = '$directoryPath/data.json';
-
-      // Save JSON to a file
-      File file = File(filePath);
-      await file.writeAsString(jsonString);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return E2Listener(
@@ -102,7 +88,7 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
         return AppDialogWidget(
           isActionbuttonReversed: true,
           positiveActionButtonAction: () async {
-            await saveJSONToFile(data);
+            await FileUtils.saveJSONToFile(data);
           },
           positiveActionButtonText: "Download Json",
           negativeActionButtonText: "Close",
