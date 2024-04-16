@@ -3,6 +3,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 enum BoxViewerTab {
@@ -110,22 +111,25 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                 ),
               ),
             ),
-            AppButtonSecondary(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              text: 'Filter',
-              icon: SvgPicture.asset(
-                AssetUtils.getSvgIconPath('sliders'),
-                color: AppColors.buttonSecondaryIconColor,
+            Visibility(
+              visible: _tabIndex != 0,
+              child: AppButtonSecondary(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                text: 'Filter',
+                icon: SvgPicture.asset(
+                  AssetUtils.getSvgIconPath('sliders'),
+                  color: AppColors.buttonSecondaryIconColor,
+                ),
+                borderColor: Colors.transparent,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return CustomPopup();
+                    },
+                  );
+                },
               ),
-              borderColor: Colors.transparent,
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return CustomPopup();
-                  },
-                );
-              },
             ),
           ],
         ),
