@@ -118,6 +118,8 @@ class _FormBuilderState extends State<FormBuilder> {
                       controller: _controller,
                     ),
                   FormBuilderType.boolean => CustomDropDown<bool>(
+                      onChanged: (value) {},
+                      value: true,
                       controller: _controller,
                       hintText: "Select Option",
                       dropDownItems: const [
