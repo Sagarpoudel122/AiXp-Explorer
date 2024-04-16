@@ -8,10 +8,14 @@ class CustomDropDown<T> extends StatefulWidget {
     required this.hintText,
     required this.controller,
     required this.dropDownItems,
+    required this.onChanged,
+    required this.value,
   });
   final String hintText;
   final TextEditingController controller;
   final List<DropdownMenuItem<T>> dropDownItems;
+  final void Function(T?) onChanged;
+  final T? value;
 
   @override
   State<CustomDropDown<T>> createState() => _CustomDropDownState<T>();

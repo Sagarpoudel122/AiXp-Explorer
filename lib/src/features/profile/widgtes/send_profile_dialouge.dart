@@ -21,9 +21,11 @@ class SendProfileDialouge extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             CustomDropDown(
+              onChanged: (value) {},
+              value: "",
               hintText: "Select Asets",
               controller: TextEditingController(),
-              dropDownItems: const[],
+              dropDownItems: const [],
             ),
             const SizedBox(height: 16),
             TextFormField(

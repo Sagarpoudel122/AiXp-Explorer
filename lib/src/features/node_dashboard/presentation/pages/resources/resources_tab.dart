@@ -1,17 +1,9 @@
-import 'dart:convert';
-
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
-import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/provider/resource_provider.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
 import 'package:e2_explorer/src/widgets/chats_widgets/bar_graph.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../styles/color_styles.dart';
 import '../../../../../widgets/chats_widgets/line_chart_widget.dart';
 
@@ -57,7 +49,7 @@ class _ResourcesTabState extends State<ResourcesTab> {
                                   .toList(),
                               timestamps: resourceProvider
                                   .nodeHistoryModel.nodeHistory.timestamps,
-                              title: 'GPU',
+                              title: 'GPU Load',
                               borderColor: AppColors.lineChartGreenBorderColor,
                               gradient: AppColors.lineChartGreenGradient,
                             ),
@@ -87,15 +79,33 @@ class _ResourcesTabState extends State<ResourcesTab> {
                               timestamps: resourceProvider
                                   .nodeHistoryModel.nodeHistory.timestamps,
                               data: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.memAvailHist
+                                  .nodeHistoryModel.nodeHistory.gpuMemAvailHist
                                   .map((e) => e.toDouble())
                                   .toList(),
-                              title: 'RAM',
+                              title: 'GPU Memory',
                               borderColor: AppColors.lineChartPinkBorderColor,
                               gradient: AppColors.lineChartPinkGradient,
                             ),
                           ),
                           const SizedBox(width: 34),
+                          Expanded(
+                            child: LineChartWidget(
+                              data: resourceProvider
+                                  .nodeHistoryModel.nodeHistory.memAvailHist
+                                  .map((e) => e.toDouble())
+                                  .toList(),
+                              timestamps: resourceProvider
+                                  .nodeHistoryModel.nodeHistory.timestamps,
+                              title: 'RAM',
+                              borderColor: AppColors.lineChartGreenBorderColor,
+                              gradient: AppColors.lineChartGreenGradient,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 34),
+                      Row(
+                        children: [
                           Expanded(
                               child: BarChartWidget(
                             title: "Disk",
@@ -106,6 +116,10 @@ class _ResourcesTabState extends State<ResourcesTab> {
                                 .nodeHistoryModel.nodeHistory.totalMem
                                 .toDouble(),
                           )),
+                          const SizedBox(width: 34),
+                          const Expanded(
+                            child: SizedBox(),
+                          ),
                         ],
                       ),
                     ],

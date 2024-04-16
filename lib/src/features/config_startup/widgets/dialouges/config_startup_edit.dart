@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:basic_utils/basic_utils.dart';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/main.dart';
@@ -13,7 +12,7 @@ import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart'
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
-import 'package:e2_explorer/src/widgets/xml_viewer.dart';
+
 import 'package:flutter/material.dart';
 
 const _name = 'admin_pipeline';
@@ -126,6 +125,13 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
               const SizedBox(height: 10),
               if (value is bool)
                 CustomDropDown<bool>(
+                  onChanged: (value) {
+                    String editedKey = prefix.isNotEmpty ? '$prefix$key' : key;
+                    newJson[editedKey] = value;
+                    data = newJson;
+                    setState(() {});
+                  },
+                  value: value,
                   controller: TextEditingController(text: value.toString()),
                   hintText: "Select Option",
                   dropDownItems: const [

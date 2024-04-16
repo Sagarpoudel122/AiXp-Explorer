@@ -29,7 +29,10 @@ class BarChartWidget extends StatelessWidget {
           child: Stack(
             children: [
               BarChart(BarChartData(
-                  maxY: 100,
+                  maxY: (totalDiskSize > totalMemorySize
+                          ? totalDiskSize
+                          : totalMemorySize) +
+                      20,
                   minY: 0,
                   gridData: const FlGridData(
                     show: false,
