@@ -1,3 +1,4 @@
+import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
 
@@ -99,7 +100,7 @@ class _FormBuilderState extends State<FormBuilder> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const SizedBox(height: 10),
-                        Text(widget.label),
+                        getTextColor(widget.label),
                         const SizedBox(height: 10),
                       ],
                     );
@@ -147,7 +148,7 @@ class _FormBuilderState extends State<FormBuilder> {
                                   (widget.listType?.$2 ?? []).indexOf(item);
                               return FormBuilder(
                                 type: FormBuilderType.fromInstanceType(item),
-                                label: '${widget.label}:[$index]',
+                                label: '${widget.label}.[$index]',
                                 initialValue: item.toString(),
                                 onChanged: (value, __, _, key) {
                                   widget.onChanged?.call(
@@ -182,6 +183,45 @@ class _FormBuilderState extends State<FormBuilder> {
           );
         }
       },
+    );
+  }
+
+  Widget getTextColor(String text) {
+    List<String> texts = text.split(".");
+    List<Color> colors = [
+      Colors.white,
+      const Color(0xFFFFD600),
+      const Color(0xFFFF2C78),
+    ]; // Define colors
+
+    List<InlineSpan> textSpans = [];
+
+    for (int i = 0; i < texts.length; i++) {
+      textSpans.add(
+        TextSpan(
+          text: texts[i],
+          style: TextStyles.body(
+            color: i == 0
+                ? Colors.white
+                : colors[(i - 1) % (colors.length - 1) + 1],
+          ),
+        ),
+      );
+      if (i != texts.length - 1) {
+        textSpans.add(
+          TextSpan(
+              text: ".",
+              style: TextStyles.body(
+                color: i == 0
+                    ? Colors.white
+                    : colors[(i - 1) % (colors.length - 1) + 1],
+              )),
+        );
+      }
+    }
+
+    return RichText(
+      text: TextSpan(children: textSpans),
     );
   }
 }
