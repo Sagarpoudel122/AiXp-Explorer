@@ -2,7 +2,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropDown<T> extends StatelessWidget {
+class CustomDropDown<T> extends StatefulWidget {
   const CustomDropDown({
     super.key,
     required this.hintText,
@@ -14,6 +14,11 @@ class CustomDropDown<T> extends StatelessWidget {
   final List<DropdownMenuItem<T>> dropDownItems;
 
   @override
+  State<CustomDropDown<T>> createState() => _CustomDropDownState<T>();
+}
+
+class _CustomDropDownState<T> extends State<CustomDropDown<T>> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -22,22 +27,23 @@ class CustomDropDown<T> extends StatelessWidget {
         color: AppColors.inputFieldFillColor,
       ),
       child: DropdownButton<T>(
-        value: controller.text.isNotEmpty
-            ? dropDownItems
+        value: widget.controller.text.isNotEmpty
+            ? widget.dropDownItems
                 .firstWhere(
-                  (item) => item.value == controller.text,
-                  orElse: () => dropDownItems.first,
+                  (item) => item.value.toString() == widget.controller.text,
+                  orElse: () => widget.dropDownItems.first,
                 )
                 .value
             : null,
         onChanged: (newValue) {
-          controller.text = newValue.toString();
+          widget.controller.text = newValue.toString();
+          setState(() {});
         },
         underline: const SizedBox(),
         icon: const Icon(Icons.keyboard_arrow_down_outlined),
-        items: dropDownItems,
+        items: widget.dropDownItems,
         hint: Text(
-          hintText,
+          widget.hintText,
           style: TextStyles.body(color: AppColors.inputFieldHintTextColor),
         ),
         isExpanded: true,
