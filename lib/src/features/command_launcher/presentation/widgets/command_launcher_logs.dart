@@ -14,6 +14,7 @@ import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
 class CommandLauncherLogViewDialouge {
   static viewLogs(BuildContext context, {required String targetId}) {
     E2Client().session.sendCommand(
@@ -45,11 +46,14 @@ class CommandLauncherLogs extends StatefulWidget {
   State<CommandLauncherLogs> createState() => _CommandLauncherLogsState();
 }
 
+
+
 class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
   bool isLoading = true;
   Map<String, dynamic> data = {};
   @override
   Widget build(BuildContext context) {
+
     return E2Listener(
         onPayload: (message) {},
         onHeartbeat: (message) {
@@ -102,5 +106,6 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
                     ),
                   )));
         });
+
   }
 }
