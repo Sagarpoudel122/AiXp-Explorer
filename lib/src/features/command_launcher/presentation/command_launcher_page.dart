@@ -1,9 +1,8 @@
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
-import 'package:e2_explorer/src/features/command_launcher/presentation/widgets/command_launcher_action_menu.dart';
+import 'package:e2_explorer/src/features/command_launcher/presentation/widgets/command_launcher_logs.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
-import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_with_animation.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
@@ -13,7 +12,6 @@ import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
-import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
@@ -124,30 +122,9 @@ class CommandLauncherPage extends StatelessWidget {
                                                   targetId: item.edgeNode,
                                                 ),
                                               );
-                                              showAppDialog(
-                                                  context: context,
-                                                  content: AppDialogWidget(
-                                                      appDialogType:
-                                                          AppDialogType.medium,
-                                                      headerButtons: [
-                                                        AppDialogHeaderButtons(
-                                                            icon: Icons.copy,
-                                                            onTap: () {}),
-                                                        AppDialogHeaderButtons(
-                                                            icon: Icons
-                                                                .download_sharp,
-                                                            onTap: () {}),
-                                                      ],
-                                                      title:
-                                                          "Logs for ${item.edgeNode} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
-                                                      content: Container(
-                                                        height: 475,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16),
-                                                        child: const Text(
-                                                            "Logs will be available in the logs section"),
-                                                      )));
+                                              CommandLauncherLogViewDialouge
+                                                  .viewLogs(context,
+                                                      targetId: item.edgeNode);
                                             },
                                             text: 'Get Logs',
                                             height: 30,
@@ -170,10 +147,9 @@ class CommandLauncherPage extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(width: 8),
-                                          CommandLauncherActionMenu(
-                                            onSelected: (value) {
-                                              debugPrint('Selected: $value');
-                                            },
+                                          IconButton(
+                                            onPressed: () {},
+                                            icon: const Icon(Icons.more_vert),
                                           ),
                                         ],
                                       ),

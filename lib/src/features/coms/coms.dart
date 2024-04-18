@@ -10,7 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'package:json_data_explorer/json_data_explorer.dart';
+import 'package:provider/provider.dart' as p;
 
 class Comms extends StatefulWidget {
   const Comms({super.key, required this.boxName});
@@ -32,44 +33,76 @@ class _CommsState extends State<Comms> {
     });
   }
 
+  final DataExplorerStore store = DataExplorerStore();
+
   @override
   Widget build(BuildContext context) {
     final session = E2Client();
 
-    return Row(
-      children: [
-        Expanded(
-          flex: 1,
-          child: NotificationAndPayloadList(
-            boxName: widget.boxName,
-            onChange: (a) {
-              setState(() {
-                _selectedNotificationData = a;
-              });
-            },
-            selectedNotificationData: _selectedNotificationData,
-          ),
-        ),
-        const SizedBox(width: 20),
-        Expanded(
-          flex: 2,
-          child: Container(
-            height: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              color: AppColors.containerBgColor,
+    return p.ChangeNotifierProvider.value(
+      value: store,
+      child: p.Consumer<DataExplorerStore>(
+          builder: (context, DataExplorerStore value, child) {
+        return Row(
+          children: [
+            Expanded(
+              flex: 1,
+              child: NotificationAndPayloadList(
+                boxName: widget.boxName,
+                onChange: (a) {
+                  setState(() {
+                    _selectedNotificationData = a;
+                    value.buildNodes(a.data);
+                  });
+                },
+                selectedNotificationData: _selectedNotificationData,
+              ),
             ),
-            child: _selectedNotificationData != null
-                ? SingleChildScrollView(
-                    child: XMLViwer(
-                      content: jsonEncode(_selectedNotificationData!.data),
-                      type: "json",
-                    ),
-                  )
-                : SizedBox(),
-          ),
-        ),
-      ],
+            const SizedBox(width: 20),
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  color: AppColors.containerBgColor,
+                ),
+                child: _selectedNotificationData != null
+                    ? JsonDataExplorer(
+                        itemSpacing: 10,
+                        nodes: value.displayNodes,
+                        theme: DataExplorerTheme(
+                          rootKeyTextStyle: const TextStyle(
+                            color: ColorStyles.light100,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          propertyKeyTextStyle: const TextStyle(
+                            color: ColorStyles.light100,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                          valueTextStyle: const TextStyle(
+                            color: ColorStyles.yellow,
+                            fontSize: 16,
+                          ),
+                          highlightColor:
+                              ColorStyles.primaryColor.withOpacity(.5),
+                        ),
+                      )
+                    : SizedBox(
+                        child: Text('Select a notification to view its payload',
+                            style: TextStyles.small14regular(
+                              color: const Color(0xFFDFDFDF),
+                            )),
+                      ),
+              ),
+            ),
+          ],
+        );
+      }),
     );
   }
 }
