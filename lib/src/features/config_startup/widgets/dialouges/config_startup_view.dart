@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -75,7 +76,9 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
               EE_PAYLOAD_PATH[1] == _name &&
               EE_PAYLOAD_PATH[2] == _signature &&
               EE_PAYLOAD_PATH[3] == _instanceId) {
-            this.data = convertedMessage;
+            this.data = XpandUtils.decodeEncryptedGzipMessage(
+              convertedMessage['CONFIG_STARTUP'],
+            );
             isLoading = false;
             setState(() {});
           }
