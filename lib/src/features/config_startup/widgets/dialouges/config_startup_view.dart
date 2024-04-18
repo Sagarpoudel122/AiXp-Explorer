@@ -68,6 +68,8 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
   Map<String, dynamic> data = {};
   final DataExplorerStore store = DataExplorerStore();
 
+  bool copied = false;
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider.value(
@@ -128,31 +130,42 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
                           child: JsonDataExplorer(
                             itemSpacing: 10,
                             nodes: value.displayNodes,
-                            trailingBuilder: (context, node) => node.isFocused
-                                ? Padding(
-                                    padding: const EdgeInsets.only(
-                                      right: 20,
-                                      top: 6,
-                                    ),
-                                    child: Align(
-                                      alignment: Alignment.centerRight,
-                                      child: IconButton(
-                                        padding: EdgeInsets.zero,
-                                        constraints:
-                                            const BoxConstraints(maxHeight: 20),
-                                        icon: const Icon(
-                                          Icons.copy,
-                                          size: 20,
-                                        ),
-                                        onPressed: () => Clipboard.setData(
-                                          ClipboardData(
-                                            text: jsonEncode(node.value),
+                            trailingBuilder: (context, node) {
+                              return !(node.isRoot) && node.isFocused
+                                  ? Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 20,
+                                        top: 6,
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.centerRight,
+                                        child: IconButton(
+                                          padding: EdgeInsets.zero,
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 20),
+                                          icon: Icon(
+                                            copied ? Icons.check : Icons.copy,
+                                            size: 20,
                                           ),
+                                          onPressed: () {
+                                            setState(() {
+                                              copied = true;
+                                            });
+                                            _copyNode(node, context);
+                                            Future.delayed(
+                                              const Duration(seconds: 1),
+                                              () {
+                                                setState(() {
+                                                  copied = false;
+                                                });
+                                              },
+                                            );
+                                          },
                                         ),
                                       ),
-                                    ),
-                                  )
-                                : const SizedBox(),
+                                    )
+                                  : const SizedBox();
+                            },
                             theme: DataExplorerTheme(
                               rootKeyTextStyle: const TextStyle(
                                 color: ColorStyles.light100,
@@ -183,5 +196,17 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
         );
       }),
     );
+  }
+
+  Future<void> _copyNode(NodeViewModelState node, BuildContext context) async {
+    String text;
+    if (node.isRoot) {
+      final value = node.isClass ? 'class' : 'array';
+      debugPrint('key and value is ${node.key}: ${value}');
+      text = '${node.key}: ${node.value}';
+    } else {
+      text = '${node.key}: ${node.value}';
+    }
+    await Clipboard.setData(ClipboardData(text: text));
   }
 }
