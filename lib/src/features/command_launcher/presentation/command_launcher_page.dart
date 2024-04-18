@@ -1,6 +1,7 @@
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
+import 'package:e2_explorer/src/features/command_launcher/presentation/widgets/command_launcher_logs.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_with_animation.dart';
@@ -121,30 +122,9 @@ class CommandLauncherPage extends StatelessWidget {
                                                   targetId: item.edgeNode,
                                                 ),
                                               );
-                                              showAppDialog(
-                                                  context: context,
-                                                  content: AppDialogWidget(
-                                                      appDialogType:
-                                                          AppDialogType.medium,
-                                                      headerButtons: [
-                                                        AppDialogHeaderButtons(
-                                                            icon: Icons.copy,
-                                                            onTap: () {}),
-                                                        AppDialogHeaderButtons(
-                                                            icon: Icons
-                                                                .download_sharp,
-                                                            onTap: () {}),
-                                                      ],
-                                                      title:
-                                                          "Logs for ${item.edgeNode} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
-                                                      content: Container(
-                                                        height: 475,
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16),
-                                                        child: Text(
-                                                            "Logs will be available in the logs section"),
-                                                      )));
+                                              CommandLauncherLogViewDialouge
+                                                  .viewLogs(context,
+                                                      targetId: item.edgeNode);
                                             },
                                             text: 'Get Logs',
                                             height: 30,
