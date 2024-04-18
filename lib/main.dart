@@ -1,14 +1,12 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_wallet.dart';
-import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/provider/resource_provider.dart';
-import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
 import 'package:e2_explorer/src/routes/routes.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
 import 'package:e2_explorer/src/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:provider/provider.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 AixpWallet? kAIXpWallet;

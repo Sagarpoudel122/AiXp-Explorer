@@ -1,5 +1,6 @@
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
+import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/debug_viewer.dart';
@@ -108,6 +109,7 @@ class _NetworkPageState extends ConsumerState<NetworkPage> {
                       setState(() {
                         _navIndex = _networkPageIndex;
                         selectedBoxName = null;
+                        ref.read(filterProvider.notifier).clearFilter();
                       });
                     },
                     child: Padding(

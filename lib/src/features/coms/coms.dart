@@ -8,6 +8,7 @@ import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -73,7 +74,7 @@ class _CommsState extends State<Comms> {
   }
 }
 
-class NotificationAndPayloadList extends StatefulWidget {
+class NotificationAndPayloadList extends ConsumerStatefulWidget {
   final String boxName;
   final NotificationData? selectedNotificationData;
   final Function(NotificationData) onChange;
@@ -85,19 +86,19 @@ class NotificationAndPayloadList extends StatefulWidget {
   });
 
   @override
-  State<NotificationAndPayloadList> createState() =>
+  ConsumerState<NotificationAndPayloadList> createState() =>
       _NotificationAndPayloadListState();
 }
 
 class _NotificationAndPayloadListState
-    extends State<NotificationAndPayloadList> {
+    extends ConsumerState<NotificationAndPayloadList> {
   late List<NotificationData> notficationDatas;
   @override
   Widget build(BuildContext context) {
     final e2Client = E2Client();
     final data = e2Client.boxMessages[widget.boxName];
 
-    final provider = context.watch<FilterProvider>();
+    final state = ref.watch(filterProvider);
 
     notficationDatas = [
       ...(data?.notificationMessages ?? []).map(
@@ -118,14 +119,14 @@ class _NotificationAndPayloadListState
       ),
     ].where((notificationData) {
       // Apply filtering based on provider settings
-      if (!provider.isNotification && !provider.isPayload) {
+      if (!state.isNotification && !state.isPayload) {
         return true; // Show both notifications and payloads
-      } else if (provider.isNotification && provider.isPayload) {
+      } else if (state.isNotification && state.isPayload) {
         return true; // Show all notifications and payloads
-      } else if (provider.isNotification) {
+      } else if (state.isNotification) {
         return notificationData.notificationType ==
             NotificationType.Notification;
-      } else if (provider.isPayload) {
+      } else if (state.isPayload) {
         return notificationData.notificationType == NotificationType.Payload;
       }
       return false; // Default to not showing anything
