@@ -1,6 +1,7 @@
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
+import 'package:e2_explorer/src/features/command_launcher/presentation/widgets/command_launcher_action_menu.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
@@ -169,46 +170,10 @@ class CommandLauncherPage extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(width: 8),
-                                          // IconButton(
-                                          //   onPressed: () {
-                                          //     //   pop
-                                          //   },
-                                          //   icon: const Icon(Icons.more_vert),
-                                          // ),
-                                          PopupMenuButton(
-                                            itemBuilder: (context) {
-                                              return [
-                                                PopupMenuItem(
-                                                  onTap: null,
-                                                  child: AppButtonSecondary(
-                                                    text: 'Instance command',
-                                                    icon: SvgPicture.asset(
-                                                      'assets/icons/svg/log.svg',
-                                                      height: 14,
-                                                      width: 14,
-                                                    ),
-                                                  ),
-                                                ),
-                                                PopupMenuItem(
-                                                  onTap: null,
-                                                  child: AppButtonSecondary(
-                                                    text: 'Pipeline command',
-                                                    icon: SvgPicture.asset(
-                                                      'assets/icons/svg/log.svg',
-                                                      height: 14,
-                                                      width: 14,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ];
+                                          CommandLauncherActionMenu(
+                                            onSelected: (value) {
+                                              debugPrint('Selected: $value');
                                             },
-                                            icon: const Icon(Icons.more_vert),
-                                            color: AppColors
-                                                .scaffoldBackgroundColor,
-                                            onSelected: null,
-                                            padding: const EdgeInsets.all(12),
-                                            offset: const Offset(0, 40),
-                                            elevation: 3,
                                           ),
                                         ],
                                       ),
