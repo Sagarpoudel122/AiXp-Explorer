@@ -1,13 +1,15 @@
 import 'dart:convert';
 
-import 'package:e2_explorer/src/data/constant_string_code.dart';
+import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Comms extends StatefulWidget {
   const Comms({super.key, required this.boxName});
@@ -89,13 +91,15 @@ class NotificationAndPayloadList extends StatefulWidget {
 
 class _NotificationAndPayloadListState
     extends State<NotificationAndPayloadList> {
+  late List<NotificationData> notficationDatas;
   @override
   Widget build(BuildContext context) {
     final e2Client = E2Client();
     final data = e2Client.boxMessages[widget.boxName];
-    print(data?.notificationMessages);
 
-    List<NotificationData> notficationDatas = [
+    final provider = context.watch<FilterProvider>();
+
+    notficationDatas = [
       ...(data?.notificationMessages ?? []).map(
         (e) => NotificationData(
           id: e.payload['EE_HASH'],
@@ -112,7 +116,20 @@ class _NotificationAndPayloadListState
           notificationType: NotificationType.Payload,
         ),
       ),
-    ];
+    ].where((notificationData) {
+      // Apply filtering based on provider settings
+      if (!provider.isNotification && !provider.isPayload) {
+        return true; // Show both notifications and payloads
+      } else if (provider.isNotification && provider.isPayload) {
+        return true; // Show all notifications and payloads
+      } else if (provider.isNotification) {
+        return notificationData.notificationType ==
+            NotificationType.Notification;
+      } else if (provider.isPayload) {
+        return notificationData.notificationType == NotificationType.Payload;
+      }
+      return false; // Default to not showing anything
+    }).toList();
     notficationDatas.sort((a, b) => b.dateTime.compareTo(a.dateTime));
     return E2Listener(
       onPayload: (a) {
@@ -128,20 +145,27 @@ class _NotificationAndPayloadListState
             borderRadius: BorderRadius.circular(16),
             color: AppColors.containerBgColor,
           ),
-          child: ListView.separated(
-            itemBuilder: (context, index) {
-              final notifcationData = notficationDatas[index];
-              return InkWell(
-                onTap: () => widget.onChange(notifcationData),
-                child: _NotificationListItem(
-                  notificationData: notifcationData,
-                  isSelected:
-                      widget.selectedNotificationData?.id == notifcationData.id,
+          child: Column(
+            children: [
+              Expanded(
+                child: ListView.separated(
+                  itemBuilder: (context, index) {
+                    final notifcationData = notficationDatas[index];
+                    return InkWell(
+                      onTap: () => widget.onChange(notifcationData),
+                      child: _NotificationListItem(
+                        notificationData: notifcationData,
+                        isSelected: widget.selectedNotificationData?.id ==
+                            notifcationData.id,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10),
+                  itemCount: notficationDatas.length,
                 ),
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount: notficationDatas.length,
+              ),
+            ],
           ),
         );
       },
@@ -180,7 +204,6 @@ class _NotificationListItem extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }
 

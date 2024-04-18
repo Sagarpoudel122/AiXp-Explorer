@@ -1,4 +1,5 @@
 import 'package:e2_explorer/src/features/coms/coms.dart';
+import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/notifcation_message.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/box_messages_tab_display.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/command_view.dart';
@@ -8,6 +9,7 @@ import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipel
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/resources_tab.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DebugViewer extends StatelessWidget {
   const DebugViewer({
@@ -32,25 +34,27 @@ class DebugViewer extends StatelessWidget {
       );
     }
     return SizedBox(
-      height: double.infinity,
-      child: BoxMessagesTabDisplay(
-        resourcesView: ResourcesTab(
-          key: ValueKey('${boxName ?? ''}1'),
-          boxName: boxName!,
-        ),
-        pipelinesView: PipeLine(
-          key: ValueKey('${boxName ?? ''}2'),
-          // boxName: boxName!,z
-        ),
-        commsView: Comms(
-          boxName: boxName!,
-        ),
-        // Comms(
-        //   key: ValueKey('${boxName ?? ''}3'),
-        //   boxName: boxName!,
-        // ),
-        onTabChanged: (tab) {},
-      ),
-    );
+        height: double.infinity,
+        child: ChangeNotifierProvider(
+          create: (context) => FilterProvider(),
+          child: BoxMessagesTabDisplay(
+            resourcesView: ResourcesTab(
+              key: ValueKey('${boxName ?? ''}1'),
+              boxName: boxName!,
+            ),
+            pipelinesView: PipeLine(
+              key: ValueKey('${boxName ?? ''}2'),
+              // boxName: boxName!,z
+            ),
+            commsView: Comms(
+              boxName: boxName!,
+            ),
+            // Comms(
+            //   key: ValueKey('${boxName ?? ''}3'),
+            //   boxName: boxName!,
+            // ),
+            onTabChanged: (tab) {},
+          ),
+        ));
   }
 }

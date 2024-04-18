@@ -1,10 +1,12 @@
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
+import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 enum BoxViewerTab {
   resources,
@@ -59,103 +61,126 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 40,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: FractionallySizedBox(
-                    widthFactor: 3 / 3,
-                    child: TabBar(
-                      overlayColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      tabAlignment: TabAlignment.start,
-                      padding: EdgeInsets.zero,
-                      labelPadding: const EdgeInsets.only(right: 24),
-                      isScrollable: true,
-                      dividerHeight: 0,
-                      indicatorWeight: 4,
-                      controller: _tabController,
-                      indicator: ShapeDecoration(
-                        shape: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.transparent,
-                            width: 4.0,
-                            style: BorderStyle.solid,
+    return ChangeNotifierProvider(
+      create: (context) => FilterProvider(),
+      child: Column(
+        children: <Widget>[
+          Row(
+            children: [
+              Expanded(
+                child: SizedBox(
+                  height: 40,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: FractionallySizedBox(
+                      widthFactor: 3 / 3,
+                      child: TabBar(
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        tabAlignment: TabAlignment.start,
+                        padding: EdgeInsets.zero,
+                        labelPadding: const EdgeInsets.only(right: 24),
+                        isScrollable: true,
+                        dividerHeight: 0,
+                        indicatorWeight: 4,
+                        controller: _tabController,
+                        indicator: ShapeDecoration(
+                          shape: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.transparent,
+                              width: 4.0,
+                              style: BorderStyle.solid,
+                            ),
                           ),
+                          gradient: AppColors.tabBarIndicatorGradient,
                         ),
-                        gradient: AppColors.tabBarIndicatorGradient,
+                        indicatorPadding: const EdgeInsets.only(top: 20),
+                        labelStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textPrimaryColor,
+                        ),
+                        unselectedLabelStyle: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondaryColor,
+                        ),
+                        tabs: const [
+                          Text('Resources'),
+                          Text('Pipelines'),
+                          Text('Comms'),
+                        ],
                       ),
-                      indicatorPadding: const EdgeInsets.only(top: 20),
-                      labelStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryColor,
-                      ),
-                      unselectedLabelStyle: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondaryColor,
-                      ),
-                      tabs: const [
-                        Text('Resources'),
-                        Text('Pipelines'),
-                        Text('Comms'),
-                      ],
                     ),
                   ),
                 ),
               ),
-            ),
-            Visibility(
-              visible: _tabIndex != 0,
-              child: AppButtonSecondary(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                text: 'Filter',
-                icon: SvgPicture.asset(
-                  AssetUtils.getSvgIconPath('sliders'),
-                  color: AppColors.buttonSecondaryIconColor,
-                ),
-                borderColor: Colors.transparent,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CustomPopup();
-                    },
+              Consumer<FilterProvider>(
+                builder: (context, value, child) {
+                  return Visibility(
+                    visible: _tabIndex != 0,
+                    child: AppButtonSecondary(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      text: 'Filter',
+                      icon: Row(
+                        children: [
+                          if (value.isFilterApplied()) ...[
+                            const Icon(
+                              Icons.fiber_manual_record,
+                              size: 8,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                          ],
+                          SvgPicture.asset(
+                            AssetUtils.getSvgIconPath('sliders'),
+                            color: AppColors.buttonSecondaryIconColor,
+                          ),
+                        ],
+                      ),
+                      borderColor: Colors.transparent,
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return CustomPopup(
+                              provider: value,
+                            );
+                          },
+                        );
+                      },
+                    ),
                   );
                 },
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 16),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
-              /// Resources tab
-              widget.resourcesView,
-
-              /// Pipelines tab
-              widget.pipelinesView,
-
-              /// Comms tab
-              widget.commsView,
+              )
             ],
           ),
-        )
-      ],
+          const SizedBox(height: 16),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                /// Resources tab
+                widget.resourcesView,
+
+                /// Pipelines tab
+                widget.pipelinesView,
+
+                /// Comms tab
+                widget.commsView,
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }
 
 class CustomPopup extends StatefulWidget {
-  const CustomPopup({super.key});
+  const CustomPopup({super.key, required this.provider});
+  final FilterProvider provider;
 
   @override
   State<CustomPopup> createState() => _CustomPopupState();
@@ -201,10 +226,11 @@ class _CustomPopupState extends State<CustomPopup> {
                         Row(
                           children: [
                             Checkbox(
-                                value: isNotiication,
+                                value: widget.provider.isNotification,
                                 onChanged: (value) {
                                   setState(() {
-                                    isNotiication = value ?? false;
+                                    widget.provider
+                                        .changeFilter(isNotification: value);
                                   });
                                 }),
                             const SizedBox(
@@ -220,11 +246,13 @@ class _CustomPopupState extends State<CustomPopup> {
                         Row(
                           children: [
                             Checkbox(
-                                value: isPayload,
+                                value: widget.provider.isPayload,
                                 onChanged: (value) {
                                   setState(() {
-                                    isPayload = value!;
+                                    widget.provider
+                                        .changeFilter(isPayload: value);
                                   });
+                                  Navigator.of(context).pop();
                                 }),
                             const SizedBox(
                               width: 8,
