@@ -89,7 +89,7 @@ class MqttSession extends GenericSession {
       if (eePayloadPath[0] == 'gts-test2') {
         JsonEncoder encoder = const JsonEncoder.withIndent('  ');
         String prettyprint = encoder.convert(message);
-        print("$prettyprint");
+        // print("$prettyprint");
       }
       if (messageVerifier) {
         _onHeartbeatInternal(message);
@@ -121,7 +121,6 @@ class MqttSession extends GenericSession {
     /// Payload (Default communicator) connect
     _payloadReceiveStream = StreamController<Map<String, dynamic>>();
     _payloadReceiveStream?.stream.listen((message) {
-      print("${message['EE_PAYLOAD_PATH']} Payload");
       var messageVerifier = aixpVerifier.verifyMessage(message);
       // print("$messageVerifier Message Verifier onPayload");
       if (messageVerifier) {
