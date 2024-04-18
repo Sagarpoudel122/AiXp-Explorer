@@ -35,6 +35,9 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_highlight: ^0.7.0
   popover: ^0.3.0
+  collection: ^1.18.0
+  uuid: ^4.4.0
+
 
 
   # Elliptic Sign & Verify

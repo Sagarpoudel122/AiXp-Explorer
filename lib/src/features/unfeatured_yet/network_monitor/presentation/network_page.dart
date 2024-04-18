@@ -1,6 +1,4 @@
-import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
-import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';

@@ -101,7 +101,7 @@ class CommandLauncherPage extends StatelessWidget {
                                             onPressed: () {
                                               _client.session.sendCommand(
                                                 ActionCommands.stop(
-                                                    targetId: ""),
+                                                    targetId: item.edgeNode),
                                               );
                                             },
                                             text: 'Restart',
@@ -116,9 +116,35 @@ class CommandLauncherPage extends StatelessWidget {
                                           const SizedBox(width: 8),
                                           AppButtonSecondary(
                                             onPressed: () {
-                                              CommandLauncherLogViewDialouge
-                                                  .viewLogs(context,
-                                                      targetId: item.edgeNode);
+                                              _client.session.sendCommand(
+                                                ActionCommands.fullHeartbeat(
+                                                  targetId: item.edgeNode,
+                                                ),
+                                              );
+                                              showAppDialog(
+                                                  context: context,
+                                                  content: AppDialogWidget(
+                                                      appDialogType:
+                                                          AppDialogType.medium,
+                                                      headerButtons: [
+                                                        AppDialogHeaderButtons(
+                                                            icon: Icons.copy,
+                                                            onTap: () {}),
+                                                        AppDialogHeaderButtons(
+                                                            icon: Icons
+                                                                .download_sharp,
+                                                            onTap: () {}),
+                                                      ],
+                                                      title:
+                                                          "Logs for ${item.edgeNode} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
+                                                      content: Container(
+                                                        height: 475,
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16),
+                                                        child: Text(
+                                                            "Logs will be available in the logs section"),
+                                                      )));
                                             },
                                             text: 'Get Logs',
                                             height: 30,
