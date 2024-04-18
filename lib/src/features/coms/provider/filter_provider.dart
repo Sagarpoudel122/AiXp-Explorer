@@ -12,8 +12,8 @@ class FilterState {
   });
 
   FilterState.initial()
-      : isNotification = false,
-        isPayload = false,
+      : isNotification = true,
+        isPayload = true,
         isFilterApplied = false;
 
   FilterState copyWith({
@@ -40,8 +40,8 @@ class FilterProvider extends StateNotifier<FilterState> {
     state = state.copyWith(
       isNotification: isNotification ?? state.isNotification,
       isPayload: isPayload ?? state.isPayload,
-      isFilterApplied: (isNotification ?? state.isNotification) ||
-          (isPayload ?? state.isPayload),
+      isFilterApplied: !(isNotification ?? state.isNotification) ||
+          !(isPayload ?? state.isPayload),
     );
   }
 
