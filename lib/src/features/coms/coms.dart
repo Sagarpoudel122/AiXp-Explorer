@@ -7,6 +7,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/xml_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -24,6 +25,7 @@ class Comms extends StatefulWidget {
 
 class _CommsState extends State<Comms> {
   get itemBuilder => null;
+  bool copied = false;
 
   int selectedIndex = 0;
   NotificationData? _selectedNotificationData;
@@ -73,6 +75,42 @@ class _CommsState extends State<Comms> {
                     ? JsonDataExplorer(
                         itemSpacing: 10,
                         nodes: value.displayNodes,
+                        trailingBuilder: (context, node) {
+                          return !(node.isRoot) && node.isFocused
+                              ? Padding(
+                                  padding: const EdgeInsets.only(
+                                    right: 20,
+                                    top: 6,
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints:
+                                          const BoxConstraints(maxHeight: 20),
+                                      icon: Icon(
+                                        copied ? Icons.check : Icons.copy,
+                                        size: 20,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          copied = true;
+                                        });
+                                        _copyNode(node, context);
+                                        Future.delayed(
+                                          const Duration(seconds: 1),
+                                          () {
+                                            setState(() {
+                                              copied = false;
+                                            });
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                )
+                              : const SizedBox();
+                        },
                         theme: DataExplorerTheme(
                           rootKeyTextStyle: const TextStyle(
                             color: ColorStyles.light100,
@@ -255,4 +293,16 @@ class NotificationData {
     required this.data,
     required this.dateTime,
   });
+}
+
+Future<void> _copyNode(NodeViewModelState node, BuildContext context) async {
+  String text;
+  if (node.isRoot) {
+    final value = node.isClass ? 'class' : 'array';
+    debugPrint('key and value is ${node.key}: ${value}');
+    text = '${node.key}: ${node.value}';
+  } else {
+    text = '${node.key}: ${node.value}';
+  }
+  await Clipboard.setData(ClipboardData(text: text));
 }
