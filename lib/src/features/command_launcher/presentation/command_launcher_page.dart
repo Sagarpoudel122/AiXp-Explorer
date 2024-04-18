@@ -2,6 +2,7 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
+import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_with_animation.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
@@ -11,6 +12,7 @@ import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
+import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
@@ -142,7 +144,7 @@ class CommandLauncherPage extends StatelessWidget {
                                                         padding:
                                                             const EdgeInsets
                                                                 .all(16),
-                                                        child: Text(
+                                                        child: const Text(
                                                             "Logs will be available in the logs section"),
                                                       )));
                                             },
@@ -167,9 +169,46 @@ class CommandLauncherPage extends StatelessWidget {
                                             ),
                                           ),
                                           const SizedBox(width: 8),
-                                          IconButton(
-                                            onPressed: () {},
+                                          // IconButton(
+                                          //   onPressed: () {
+                                          //     //   pop
+                                          //   },
+                                          //   icon: const Icon(Icons.more_vert),
+                                          // ),
+                                          PopupMenuButton(
+                                            itemBuilder: (context) {
+                                              return [
+                                                PopupMenuItem(
+                                                  onTap: null,
+                                                  child: AppButtonSecondary(
+                                                    text: 'Instance command',
+                                                    icon: SvgPicture.asset(
+                                                      'assets/icons/svg/log.svg',
+                                                      height: 14,
+                                                      width: 14,
+                                                    ),
+                                                  ),
+                                                ),
+                                                PopupMenuItem(
+                                                  onTap: null,
+                                                  child: AppButtonSecondary(
+                                                    text: 'Pipeline command',
+                                                    icon: SvgPicture.asset(
+                                                      'assets/icons/svg/log.svg',
+                                                      height: 14,
+                                                      width: 14,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ];
+                                            },
                                             icon: const Icon(Icons.more_vert),
+                                            color: AppColors
+                                                .scaffoldBackgroundColor,
+                                            onSelected: null,
+                                            padding: const EdgeInsets.all(12),
+                                            offset: const Offset(0, 40),
+                                            elevation: 3,
                                           ),
                                         ],
                                       ),
