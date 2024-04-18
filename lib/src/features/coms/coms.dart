@@ -112,7 +112,7 @@ class _NotificationAndPayloadListState
       ...(data?.payloadMessages ?? []).map(
         (e) => NotificationData(
           id: e.payload.hash ?? '',
-          data: e.payload.toMap(),
+          data: e.payload.messageBody ?? {},
           dateTime: e.localTimestamp,
           notificationType: NotificationType.Payload,
         ),
