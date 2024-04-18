@@ -1,7 +1,6 @@
-import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
-import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_primary.dart';
+import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard_body_container.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/presentation/widgets/views/debug_viewer.dart';
@@ -12,16 +11,17 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
-class NetworkPage extends StatefulWidget {
+class NetworkPage extends ConsumerStatefulWidget {
   const NetworkPage({super.key});
 
   @override
-  State<NetworkPage> createState() => _NetworkPageState();
+  ConsumerState<NetworkPage> createState() => _NetworkPageState();
 }
 
-class _NetworkPageState extends State<NetworkPage> {
+class _NetworkPageState extends ConsumerState<NetworkPage> {
   bool isSingleNodeManager = false;
   static const _networkPageIndex = 0;
   static const _boxDetailsPageIndex = 1;
@@ -48,8 +48,8 @@ class _NetworkPageState extends State<NetworkPage> {
                 selectedBox = boxName;
                 _navIndex = _boxDetailsPageIndex;
               });
-              context
-                  .read<ResourceProvider>()
+              ref
+                  .read(resourceProvider.notifier)
                   .nodeHistoryCommand(node: boxName.boxId);
             } else {
               await showDialog<void>(
@@ -109,6 +109,7 @@ class _NetworkPageState extends State<NetworkPage> {
                       setState(() {
                         _navIndex = _networkPageIndex;
                         selectedBoxName = null;
+                        ref.read(filterProvider.notifier).clearFilter();
                       });
                     },
                     child: Padding(
@@ -131,8 +132,8 @@ class _NetworkPageState extends State<NetworkPage> {
                   ),
                   AppButtonPrimary(
                     onPressed: () {
-                      context
-                          .read<ResourceProvider>()
+                      ref
+                          .read(resourceProvider.notifier)
                           .nodeHistoryCommand(node: selectedBoxName!);
                     },
                     text: 'Refresh',

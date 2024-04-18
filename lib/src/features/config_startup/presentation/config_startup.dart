@@ -16,8 +16,8 @@ import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class ConfigStartUp extends StatefulWidget {
   const ConfigStartUp({super.key});
@@ -57,12 +57,15 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
       ),
     );
 
-    return Consumer<NetworkProvider>(builder: (context, provider, child) {
+    return Consumer(builder: (context, ref, child) {
+      final state = ref.watch(networkProvider);
       return E2Listener(
         onPayload: (message) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(message);
-          provider.updateNetmonStatusList(convertedMessage: convertedMessage);
+          ref
+              .read(networkProvider.notifier)
+              .updateNetmonStatusList(convertedMessage: convertedMessage);
         },
         builder: (context) {
           return DashboardBodyContainer(
@@ -77,7 +80,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                 ),
                 const SizedBox(height: 14),
                 Expanded(
-                  child: provider.isLoading
+                  child: state.isLoading
                       ? const Center(
                           child: CircularProgressIndicator(),
                         )
@@ -89,7 +92,7 @@ class _ConfigStartUpState extends State<ConfigStartUp> {
                           visibleColumns: CommandLauncherColumns.values.toSet(),
                           sortingColumns: const {},
                           sortedColumn: null,
-                          items: provider.netmonStatusList
+                          items: state.netmonStatusList
                               .map((e) => CommandLauncherData(
                                     edgeNode: e.boxId,
                                     configStartupFile: 'configStartupFile',

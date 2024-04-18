@@ -1,9 +1,11 @@
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
+import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/asset_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 enum BoxViewerTab {
@@ -111,26 +113,43 @@ class _BoxMessagesTabDisplayState extends State<BoxMessagesTabDisplay>
                 ),
               ),
             ),
-            Visibility(
-              visible: _tabIndex != 0,
-              child: AppButtonSecondary(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                text: 'Filter',
-                icon: SvgPicture.asset(
-                  AssetUtils.getSvgIconPath('sliders'),
-                  color: AppColors.buttonSecondaryIconColor,
-                ),
-                borderColor: Colors.transparent,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return CustomPopup();
+            Consumer(
+              builder: (context, ref, child) {
+                return Visibility(
+                  visible: _tabIndex != 0,
+                  child: AppButtonSecondary(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    text: 'Filter',
+                    icon: Row(
+                      children: [
+                        if (ref.watch(filterProvider).isFilterApplied) ...[
+                          const Icon(
+                            Icons.fiber_manual_record,
+                            size: 8,
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                        ],
+                        SvgPicture.asset(
+                          AssetUtils.getSvgIconPath('sliders'),
+                          color: AppColors.buttonSecondaryIconColor,
+                        ),
+                      ],
+                    ),
+                    borderColor: Colors.transparent,
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const CustomPopup();
+                        },
+                      );
                     },
-                  );
-                },
-              ),
-            ),
+                  ),
+                );
+              },
+            )
           ],
         ),
         const SizedBox(height: 16),
@@ -192,54 +211,62 @@ class _CustomPopupState extends State<CustomPopup> {
                   color: AppColors.alertDialogBgColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: Material(
-                  child: Container(
-                    color: AppColors.alertDialogBgColor,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: isNotiication,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isNotiication = value ?? false;
-                                  });
-                                }),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              "Notifications",
-                              style: TextStyles.custom(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Checkbox(
-                                value: isPayload,
-                                onChanged: (value) {
-                                  setState(() {
-                                    isPayload = value!;
-                                  });
-                                }),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              "Payload",
-                              style: TextStyles.custom(
-                                  fontWeight: FontWeight.w600, fontSize: 14),
-                            )
-                          ],
-                        )
-                      ],
+                child: Consumer(builder: (context, ref, child) {
+                  final state = ref.watch(filterProvider);
+                  return Material(
+                    child: Container(
+                      color: AppColors.alertDialogBgColor,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                  value: state.isNotification,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      ref
+                                          .read(filterProvider.notifier)
+                                          .changeFilter(isNotification: value);
+                                    });
+                                  }),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                "Notifications",
+                                style: TextStyles.custom(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Checkbox(
+                                  value: state.isPayload,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      ref
+                                          .read(filterProvider.notifier)
+                                          .changeFilter(isPayload: value);
+                                    });
+                                    Navigator.of(context).pop();
+                                  }),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                "Payload",
+                                style: TextStyles.custom(
+                                    fontWeight: FontWeight.w600, fontSize: 14),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }),
               ),
             ),
           ),

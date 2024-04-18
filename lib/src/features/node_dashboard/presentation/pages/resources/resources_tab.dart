@@ -3,7 +3,8 @@ import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart'
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/resources/provider/resource_provider.dart';
 import 'package:e2_explorer/src/widgets/chats_widgets/bar_graph.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../../../styles/color_styles.dart';
 import '../../../../../widgets/chats_widgets/line_chart_widget.dart';
 
@@ -21,17 +22,18 @@ class ResourcesTab extends StatefulWidget {
 class _ResourcesTabState extends State<ResourcesTab> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ResourceProvider>(
-        builder: (context, resourceProvider, child) {
+    return Consumer(builder: (context, ref, child) {
+      final state = ref.watch(resourceProvider);
       return E2Listener(
         onPayload: (payload) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(payload);
-          resourceProvider.getResources(
+
+          ref.read(resourceProvider.notifier).getResources(
               convertedMessage: convertedMessage, boxName: widget.boxName);
         },
         builder: (context) {
-          return resourceProvider.isLoading
+          return state.isLoading
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
@@ -46,12 +48,12 @@ class _ResourcesTabState extends State<ResourcesTab> {
                           children: [
                             Expanded(
                               child: LineChartWidget(
-                                data: resourceProvider
-                                    .nodeHistoryModel.nodeHistory.gpuLoadHist
+                                data: state
+                                    .nodeHistoryModel!.nodeHistory.gpuLoadHist
                                     .map((e) => e.toDouble())
                                     .toList(),
-                                timestamps: resourceProvider.nodeHistoryModel
-                                    .nodeHistory.convertedTimeStamps,
+                                timestamps: state.nodeHistoryModel!.nodeHistory
+                                    .convertedTimeStamps,
                                 title: 'GPU Load',
                                 borderColor:
                                     AppColors.lineChartGreenBorderColor,
@@ -61,10 +63,10 @@ class _ResourcesTabState extends State<ResourcesTab> {
                             const SizedBox(width: 34),
                             Expanded(
                               child: LineChartWidget(
-                                timestamps: resourceProvider.nodeHistoryModel
-                                    .nodeHistory.convertedTimeStamps,
-                                data: resourceProvider
-                                    .nodeHistoryModel.nodeHistory.cpuHist
+                                timestamps: state.nodeHistoryModel!.nodeHistory
+                                    .convertedTimeStamps,
+                                data: state
+                                    .nodeHistoryModel!.nodeHistory.cpuHist
                                     .map((e) => e.toDouble())
                                     .toList(),
                                 title: 'CPU',
@@ -80,10 +82,10 @@ class _ResourcesTabState extends State<ResourcesTab> {
                           children: [
                             Expanded(
                               child: LineChartWidget(
-                                timestamps: resourceProvider.nodeHistoryModel
-                                    .nodeHistory.convertedTimeStamps,
-                                data: resourceProvider.nodeHistoryModel
-                                    .nodeHistory.gpuMemAvailHist
+                                timestamps: state.nodeHistoryModel!.nodeHistory
+                                    .convertedTimeStamps,
+                                data: state.nodeHistoryModel!.nodeHistory
+                                    .gpuMemAvailHist
                                     .map((e) => e.toDouble())
                                     .toList(),
                                 title: 'GPU Memory',
@@ -94,12 +96,12 @@ class _ResourcesTabState extends State<ResourcesTab> {
                             const SizedBox(width: 34),
                             Expanded(
                               child: LineChartWidget(
-                                data: resourceProvider
-                                    .nodeHistoryModel.nodeHistory.memAvailHist
+                                data: state
+                                    .nodeHistoryModel!.nodeHistory.memAvailHist
                                     .map((e) => e.toDouble())
                                     .toList(),
-                                timestamps: resourceProvider.nodeHistoryModel
-                                    .nodeHistory.convertedTimeStamps,
+                                timestamps: state.nodeHistoryModel!.nodeHistory
+                                    .convertedTimeStamps,
                                 title: 'RAM',
                                 borderColor:
                                     AppColors.lineChartGreenBorderColor,
@@ -114,11 +116,11 @@ class _ResourcesTabState extends State<ResourcesTab> {
                             Expanded(
                                 child: BarChartWidget(
                               title: "Disk",
-                              totalDiskSize: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.totalDisk
+                              totalDiskSize: state
+                                  .nodeHistoryModel!.nodeHistory.totalDisk
                                   .toDouble(),
-                              totalMemorySize: resourceProvider
-                                  .nodeHistoryModel.nodeHistory.totalMem
+                              totalMemorySize: state
+                                  .nodeHistoryModel!.nodeHistory.totalMem
                                   .toDouble(),
                             )),
                             const SizedBox(width: 34),
