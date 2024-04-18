@@ -12,16 +12,17 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
-class NetworkPage extends StatefulWidget {
+class NetworkPage extends ConsumerStatefulWidget {
   const NetworkPage({super.key});
 
   @override
-  State<NetworkPage> createState() => _NetworkPageState();
+  ConsumerState<NetworkPage> createState() => _NetworkPageState();
 }
 
-class _NetworkPageState extends State<NetworkPage> {
+class _NetworkPageState extends ConsumerState<NetworkPage> {
   bool isSingleNodeManager = false;
   static const _networkPageIndex = 0;
   static const _boxDetailsPageIndex = 1;
@@ -48,8 +49,8 @@ class _NetworkPageState extends State<NetworkPage> {
                 selectedBox = boxName;
                 _navIndex = _boxDetailsPageIndex;
               });
-              context
-                  .read<ResourceProvider>()
+              ref
+                  .read(resourceProvider.notifier)
                   .nodeHistoryCommand(node: boxName.boxId);
             } else {
               await showDialog<void>(
@@ -131,8 +132,8 @@ class _NetworkPageState extends State<NetworkPage> {
                   ),
                   AppButtonPrimary(
                     onPressed: () {
-                      context
-                          .read<ResourceProvider>()
+                      ref
+                          .read(resourceProvider.notifier)
                           .nodeHistoryCommand(node: selectedBoxName!);
                     },
                     text: 'Refresh',

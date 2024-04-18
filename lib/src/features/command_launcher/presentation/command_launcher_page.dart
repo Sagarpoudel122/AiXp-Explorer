@@ -2,7 +2,7 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/src/features/command_launcher/model/command_launcher_data.dart';
 import 'package:e2_explorer/src/features/command_launcher/presentation/widgets/command_launcher_logs.dart';
-import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
+
 import 'package:e2_explorer/src/features/common_widgets/buttons/app_button_secondary.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/refresh_button_with_animation.dart';
 import 'package:e2_explorer/src/features/common_widgets/table/flr_table.dart';
@@ -12,11 +12,10 @@ import 'package:e2_explorer/src/features/dashboard/presentation/widget/dashboard
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
-import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class CommandLauncherPage extends StatelessWidget {
   const CommandLauncherPage({Key? key}) : super(key: key);
@@ -36,12 +35,15 @@ class CommandLauncherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final E2Client _client = E2Client();
 
-    return Consumer<NetworkProvider>(builder: (context, provider, child) {
+    return Consumer(builder: (context, ref, child) {
+      final state = ref.watch(networkProvider);
       return E2Listener(
         onPayload: (message) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(message);
-          provider.updateNetmonStatusList(convertedMessage: convertedMessage);
+          ref
+              .read(networkProvider.notifier)
+              .updateNetmonStatusList(convertedMessage: convertedMessage);
         },
         builder: (context) {
           return Scaffold(
@@ -62,7 +64,7 @@ class CommandLauncherPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   Expanded(
-                    child: provider.isLoading
+                    child: state.isLoading
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
@@ -74,7 +76,7 @@ class CommandLauncherPage extends StatelessWidget {
                                 CommandLauncherColumns.values.toSet(),
                             sortingColumns: const {},
                             sortedColumn: null,
-                            items: provider.netmonStatusList
+                            items: state.netmonStatusList
                                 .map((e) => CommandLauncherData(
                                       edgeNode: e.boxId,
                                       configStartupFile: "configStartupFile",

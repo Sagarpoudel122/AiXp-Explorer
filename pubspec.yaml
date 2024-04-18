@@ -41,6 +41,7 @@ dependencies:
   pointycastle: ^3.7.4
   basic_utils: ^5.7.0
   crypto: ^3.0.3
+  flutter_riverpod: ^2.5.1
 
 
 

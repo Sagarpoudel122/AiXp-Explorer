@@ -7,6 +7,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/themes/app_theme.dart';
 import 'package:e2_explorer/src/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -28,7 +29,7 @@ void main() async {
   await ThemeUtils.initialize();
 
   // await clearServersAndDefaultServer();
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 
   doWhenWindowReady(() {
     const initialSize = Size(1400, 800);
@@ -85,19 +86,11 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     AppColors.initialize();
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => NetworkProvider()),
-        ChangeNotifierProvider(
-          create: (context) => ResourceProvider(),
-        )
-      ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'MQTT Connection Demo',
-        theme: appTheme,
-        routerConfig: AppRoutes.routes,
-      ),
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'MQTT Connection Demo',
+      theme: appTheme,
+      routerConfig: AppRoutes.routes,
     );
   }
 }
