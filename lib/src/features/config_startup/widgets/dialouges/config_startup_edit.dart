@@ -69,45 +69,6 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
   bool isLoading = true;
   Map<String, dynamic> data = {};
 
-  Widget getTextColor(String text) {
-    List<String> texts = text.split(".");
-    List<Color> colors = [
-      Colors.white,
-      const Color(0xFFFFD600),
-      const Color(0xFFFF2C78),
-    ]; // Define colors
-
-    List<InlineSpan> textSpans = [];
-
-    for (int i = 0; i < texts.length; i++) {
-      textSpans.add(
-        TextSpan(
-          text: texts[i],
-          style: TextStyles.body(
-            color: i == 0
-                ? Colors.white
-                : colors[(i - 1) % (colors.length - 1) + 1],
-          ),
-        ),
-      );
-      if (i != texts.length - 1) {
-        textSpans.add(
-          TextSpan(
-              text: ".",
-              style: TextStyles.body(
-                color: i == 0
-                    ? Colors.white
-                    : colors[(i - 1) % (colors.length - 1) + 1],
-              )),
-        );
-      }
-    }
-
-    return RichText(
-      text: TextSpan(children: textSpans),
-    );
-  }
-
   var a = {
     "EE_ID": "gts-test2",
     "SECURED": true,
