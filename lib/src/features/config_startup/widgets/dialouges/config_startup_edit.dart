@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
@@ -105,66 +106,6 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
     );
   }
 
-  List<Widget> buildTextFields(Map<String, dynamic> data,
-      {String prefix = '', Color textColor = Colors.white}) {
-    List<Widget> textFields = [];
-
-    Map<String, dynamic> newJson = data;
-
-    data.forEach((key, value) {
-      if (value is Map<String, dynamic>) {
-        // If the value is a nested map, recursively build text fields
-        textFields.addAll(buildTextFields(value, prefix: '$prefix$key.'));
-      } else {
-        textFields.add(
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              getTextColor(prefix.isNotEmpty ? '$prefix$key' : key),
-              const SizedBox(height: 10),
-              if (value is bool)
-                CustomDropDown<bool>(
-                  onChanged: (value) {
-                    String editedKey = prefix.isNotEmpty ? '$prefix$key' : key;
-                    newJson[editedKey] = value;
-                    data = newJson;
-                    setState(() {});
-                  },
-                  value: value,
-                  controller: TextEditingController(text: value.toString()),
-                  hintText: "Select Option",
-                  dropDownItems: const [
-                    DropdownMenuItem(
-                      value: true,
-                      child: Text("True"),
-                    ),
-                    DropdownMenuItem(
-                      value: false,
-                      child: Text("False"),
-                    ),
-                  ],
-                )
-              else
-                TextField(
-                  onChanged: (value) {
-                    String editedKey = prefix.isNotEmpty ? '$prefix$key' : key;
-                    newJson[editedKey] = value;
-                    data = newJson;
-                    setState(() {});
-                  },
-                  decoration: const InputDecoration(),
-                  controller: TextEditingController(text: value.toString()),
-                ),
-            ],
-          ),
-        );
-      }
-    });
-
-    return textFields;
-  }
-
   void save() {
     try {
       data['_P_VERSION'] = '0.1.0.0.1';
@@ -193,6 +134,7 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return E2Listener(
       onPayload: (data) {
         final Map<String, dynamic> convertedMessage =
@@ -211,6 +153,15 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
             setState(() {});
           }
         }
+        if (this.data.containsKey('CONFIG_STARTUP') &&
+            this.data['CONFIG_STARTUP'] is String) {
+          final decodedConfig = XpandUtils.decodeEncryptedGzipMessage(
+              this.data['CONFIG_STARTUP']);
+
+          this.data.remove('CONFIG_STARTUP');
+          this.data['CONFIG_STARTUP'] = decodedConfig;
+          setState(() {});
+        }
       },
       builder: (context) {
         return AppDialogWidget(
@@ -222,38 +173,21 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
           },
           title: "Config Startup file for ${widget.targetId}",
           content: SizedBox(
-            height: 360,
-            width: 902,
+            height: size.height * 0.8,
+            width: size.width * 0.8,
             child: LoadingParentWidget(
               isLoading: isLoading,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    for (var field in data.entries)
-                      FormBuilder(
-                        type: FormBuilderType.fromInstanceType(field.value),
-                        label: field.key,
-                        initialValue: field.value.toString(),
-                        onChanged: (value, type, index, key) {
-                          if (type == FormBuilderType.list) {
-                            data[field.key][index] = value;
-                          } else if (key != null) {
-                            data[field.key][key] = value;
-                          } else {
-                            data[field.key] = value;
-                          }
-                        },
-                        hint: 'Enter value',
-                        listType: field.value is List
-                            ? (field.key, field.value)
-                            : null,
-                        mapType: field.value is Map
-                            ? (field.key, field.value)
-                            : null,
-                      ),
+                    JsonFormBuilder(
+                      data: data,
+                      onChanged: (newData) {
+                        data = newData;
+                      },
+                    ),
                   ],
                 ),
-                // child: ,
               ),
             ),
           ),
