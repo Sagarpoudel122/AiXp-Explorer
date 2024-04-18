@@ -155,7 +155,7 @@ class _NetworkStatusPageState extends State<NetworkStatusPage> {
                                         .where((element) =>
                                             element.details.isSupervisor)
                                         .isNotEmpty
-                                    ? ' ${provider.netmonStatusList.where((element) => element.details.isSupervisor).first.details.lastRemoteTime}'
+                                    ? ' ${provider.netmonStatusList.where((element) => element.boxId == provider.supervisorIds[0]).first.details.lastRemoteTime}'
                                     : '',
                                 style: CustomTextStyles.text14_700,
                                 textAlign: TextAlign.end,
