@@ -1,5 +1,51 @@
+import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
+
+class FormTextStyle extends StatelessWidget {
+  final String text;
+  const FormTextStyle({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> texts = text.toUpperCase().split(".");
+    List<Color> colors = [
+      Colors.white,
+      const Color(0xFFFFD600),
+      const Color(0xFFFF2C78),
+    ]; // Define colors
+
+    List<InlineSpan> textSpans = [];
+
+    for (int i = 0; i < texts.length; i++) {
+      textSpans.add(
+        TextSpan(
+          text: texts[i],
+          style: TextStyle(
+            color: i == 0
+                ? Colors.white
+                : colors[(i - 1) % (colors.length - 1) + 1],
+          ),
+        ),
+      );
+      if (i != texts.length - 1) {
+        textSpans.add(
+          TextSpan(
+            text: ".",
+            style: TextStyle(
+              color: i == 0
+                  ? Colors.white
+                  : colors[(i - 1) % (colors.length - 1) + 1],
+            ),
+          ),
+        );
+      }
+    }
+    return RichText(
+      text: TextSpan(children: textSpans),
+    );
+  }
+}
 
 enum FormBuilderType {
   text,
@@ -65,7 +111,7 @@ class _FormBuilderState extends State<FormBuilder> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 10),
-        Text(widget.label),
+        FormTextStyle(text: widget.label),
         const SizedBox(height: 10),
         if (widget.type == FormBuilderType.text)
           TextField(controller: _controller),

@@ -21,8 +21,16 @@ class XpandUtils {
   static Map<String, dynamic> decodeEncryptedGzipMessage(String base64Message) {
     final bytes = base64Decode(base64Message);
     final decodedBytes = GZipCodec().decode(bytes);
-
     final decodedData = utf8.decode(decodedBytes, allowMalformed: true);
     return jsonDecode(decodedData) as Map<String, dynamic>;
+  }
+
+  static String encodeEncryptedGzipMessage(Map<String, dynamic> base64Message) {
+    JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+    // final prettyprint = encoder.convert(base64Message);
+    final prettyprint = jsonEncode(base64Message);
+    final bytes = utf8.encode(prettyprint);
+    final decodedBytes = GZipCodec().encode(bytes);
+    return base64.encode(decodedBytes);
   }
 }
