@@ -71,6 +71,7 @@ class _CommsState extends State<Comms> {
                 ),
                 child: _selectedNotificationData != null
                     ? JsonDataExplorer(
+                        itemSpacing: 10,
                         nodes: value.displayNodes,
                         theme: DataExplorerTheme(
                           rootKeyTextStyle: const TextStyle(
