@@ -109,25 +109,11 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
                 child: LoadingParentWidget(
                   isLoading: isLoading,
                   child: SizedBox(
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                            prefixIcon: Icon(Icons.search),
-                          ),
-                          onChanged: (search) {
-                            value.search(search);
-                          },
-                        ),
-                        const SizedBox(height: 10),
-                        Expanded(
-                          child: ReusableJsonDataExplorer(
-                            nodes: value.displayNodes,
-                          ),
-                        ),
-                      ],
+                    child: Expanded(
+                      child: ReusableJsonDataExplorer(
+                        value: value,
+                        nodes: value.displayNodes,
+                      ),
                     ),
                   ),
                 ),

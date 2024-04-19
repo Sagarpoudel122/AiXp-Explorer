@@ -117,8 +117,10 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
                       padding: const EdgeInsets.all(16),
                       child: LoadingParentWidget(
                         isLoading: isLoading,
-                        child:
-                            ReusableJsonDataExplorer(nodes: value.displayNodes),
+                        child: ReusableJsonDataExplorer(
+                          nodes: value.displayNodes,
+                          value: value,
+                        ),
                       )));
             });
       }),

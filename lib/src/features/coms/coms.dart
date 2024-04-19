@@ -73,7 +73,10 @@ class _CommsState extends State<Comms> {
                   color: AppColors.containerBgColor,
                 ),
                 child: _selectedNotificationData != null
-                    ? ReusableJsonDataExplorer(nodes: value.displayNodes)
+                    ? ReusableJsonDataExplorer(
+                        nodes: value.displayNodes,
+                        value: value,
+                      )
                     : SizedBox(
                         child: Text('Select a notification to view its payload',
                             style: TextStyles.small14regular(
