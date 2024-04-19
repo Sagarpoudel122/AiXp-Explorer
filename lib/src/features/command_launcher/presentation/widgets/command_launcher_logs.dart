@@ -70,26 +70,27 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
                       .map((e) => e as String?)
                       .toList();
               if (eePayloadPath[0] == widget.targetId) {
-                print(eePayloadPath);
-              }
-              // To:Do - Implement the logic to display the logs
-              if (convertedMessage["EE_EVENT_TYPE"] == "HEARTBEAT" &&
-                  eePayloadPath[0] == widget.targetId) {
-                final bool isV2 = convertedMessage['HEARTBEAT_VERSION'] == 'v2';
+                // To:Do - Implement the logic to display the logs
+                if (convertedMessage["EE_EVENT_TYPE"] == "HEARTBEAT" &&
+                    eePayloadPath[0] == widget.targetId) {
+                  final bool isV2 =
+                      convertedMessage['HEARTBEAT_VERSION'] == 'v2';
 
-                if (isV2) {
-                  final metadataEncoded = XpandUtils.decodeEncryptedGzipMessage(
-                      convertedMessage['ENCODED_DATA']);
-                  convertedMessage.remove('ENCODED_DATA');
-                  convertedMessage.addAll(metadataEncoded);
+                  if (isV2) {
+                    final metadataEncoded =
+                        XpandUtils.decodeEncryptedGzipMessage(
+                            convertedMessage['ENCODED_DATA']);
+                    convertedMessage.remove('ENCODED_DATA');
+                    convertedMessage.addAll(metadataEncoded);
+                  }
+
+                  data = convertedMessage;
+
+                  value.buildNodes(data, areAllCollapsed: false);
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
-
-                data = convertedMessage;
-
-                value.buildNodes(data, areAllCollapsed: false);
-                setState(() {
-                  isLoading = false;
-                });
               }
             },
             builder: (context) {

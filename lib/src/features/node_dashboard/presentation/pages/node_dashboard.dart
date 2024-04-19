@@ -36,7 +36,9 @@ class _NodeDashBoardState extends State<NodeDashBoard> {
       Center(
         child: Text("Resources"),
       ),
-      PipeLine(),
+      PipeLine(
+        boxName: '',
+      ),
       Comms(boxName: ''),
     ];
     return Scaffold(

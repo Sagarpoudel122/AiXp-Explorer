@@ -36,7 +36,7 @@ class DebugViewer extends StatelessWidget {
           ),
           pipelinesView: PipeLine(
             key: ValueKey('${boxName ?? ''}2'),
-            // boxName: boxName!,z
+            boxName: boxName!,
           ),
           commsView: Comms(
             boxName: boxName!,
