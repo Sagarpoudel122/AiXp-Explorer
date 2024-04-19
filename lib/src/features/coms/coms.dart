@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e2_explorer/src/features/common_widgets/json_viewer/json_viewer.dart';
 import 'package:e2_explorer/src/features/coms/provider/filter_provider.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
@@ -72,64 +73,7 @@ class _CommsState extends State<Comms> {
                   color: AppColors.containerBgColor,
                 ),
                 child: _selectedNotificationData != null
-                    ? JsonDataExplorer(
-                        itemSpacing: 10,
-                        nodes: value.displayNodes,
-                        trailingBuilder: (context, node) {
-                          return !(node.isRoot) && node.isFocused
-                              ? Padding(
-                                  padding: const EdgeInsets.only(
-                                    right: 20,
-                                    top: 6,
-                                  ),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints:
-                                          const BoxConstraints(maxHeight: 20),
-                                      icon: Icon(
-                                        copied ? Icons.check : Icons.copy,
-                                        size: 20,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          copied = true;
-                                        });
-                                        _copyNode(node, context);
-                                        Future.delayed(
-                                          const Duration(seconds: 1),
-                                          () {
-                                            setState(() {
-                                              copied = false;
-                                            });
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox();
-                        },
-                        theme: DataExplorerTheme(
-                          rootKeyTextStyle: const TextStyle(
-                            color: ColorStyles.light100,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                          propertyKeyTextStyle: const TextStyle(
-                            color: ColorStyles.light100,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 16,
-                          ),
-                          valueTextStyle: const TextStyle(
-                            color: ColorStyles.yellow,
-                            fontSize: 16,
-                          ),
-                          highlightColor:
-                              ColorStyles.primaryColor.withOpacity(.5),
-                        ),
-                      )
+                    ? ReusableJsonDataExplorer(nodes: value.displayNodes)
                     : SizedBox(
                         child: Text('Select a notification to view its payload',
                             style: TextStyles.small14regular(

@@ -2,10 +2,10 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
+import 'package:e2_explorer/src/features/common_widgets/json_viewer/json_viewer.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
-import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/file_utils.dart';
 import 'package:flutter/material.dart';
@@ -123,63 +123,8 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
                         ),
                         const SizedBox(height: 10),
                         Expanded(
-                          child: JsonDataExplorer(
-                            itemSpacing: 10,
+                          child: ReusableJsonDataExplorer(
                             nodes: value.displayNodes,
-                            trailingBuilder: (context, node) {
-                              return !(node.isRoot) && node.isFocused
-                                  ? Padding(
-                                      padding: const EdgeInsets.only(
-                                        right: 20,
-                                        top: 6,
-                                      ),
-                                      child: Align(
-                                        alignment: Alignment.centerRight,
-                                        child: IconButton(
-                                          padding: EdgeInsets.zero,
-                                          constraints: const BoxConstraints(
-                                              maxHeight: 20),
-                                          icon: Icon(
-                                            copied ? Icons.check : Icons.copy,
-                                            size: 20,
-                                          ),
-                                          onPressed: () {
-                                            setState(() {
-                                              copied = true;
-                                            });
-                                            _copyNode(node, context);
-                                            Future.delayed(
-                                              const Duration(seconds: 1),
-                                              () {
-                                                setState(() {
-                                                  copied = false;
-                                                });
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    )
-                                  : const SizedBox();
-                            },
-                            theme: DataExplorerTheme(
-                              rootKeyTextStyle: const TextStyle(
-                                color: ColorStyles.light100,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                              propertyKeyTextStyle: const TextStyle(
-                                color: ColorStyles.light100,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                              valueTextStyle: const TextStyle(
-                                color: ColorStyles.yellow,
-                                fontSize: 16,
-                              ),
-                              highlightColor:
-                                  ColorStyles.primaryColor.withOpacity(.5),
-                            ),
                           ),
                         ),
                       ],
