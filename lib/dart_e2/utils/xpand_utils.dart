@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:archive/archive_io.dart';
 
 class XpandUtils {
   static const _chars =

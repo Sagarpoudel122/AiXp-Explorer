@@ -1,20 +1,13 @@
-import 'dart:convert';
-
-import 'package:basic_utils/basic_utils.dart';
-import 'package:collection/collection.dart';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
-import 'package:e2_explorer/src/features/config_startup/widgets/dialouges/edit_dialouges.dart';
 import 'package:e2_explorer/src/features/config_startup/widgets/form_builder.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
-import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
-import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
 
 import 'package:flutter/material.dart';
 
@@ -114,7 +107,6 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
               EE_PAYLOAD_PATH[2] == _signature &&
               EE_PAYLOAD_PATH[3] == _instanceId) {
             convertedMessage.removeWhere((key, value) => value == null);
-            print(convertedMessage['CONFIG_STARTUP']);
             this.data = XpandUtils.decodeEncryptedGzipMessage(
               convertedMessage['CONFIG_STARTUP'],
             );
@@ -122,11 +114,12 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
             setState(() {});
           }
         }
+
         if (this.data.containsKey('CONFIG_STARTUP') &&
             this.data['CONFIG_STARTUP'] is String) {
           final decodedConfig = XpandUtils.decodeEncryptedGzipMessage(
-              this.data['CONFIG_STARTUP']);
-
+            this.data['CONFIG_STARTUP'],
+          );
           this.data.remove('CONFIG_STARTUP');
           this.data['CONFIG_STARTUP'] = decodedConfig;
           setState(() {});
