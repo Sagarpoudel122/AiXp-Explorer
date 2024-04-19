@@ -71,8 +71,10 @@ class _ConfigStartUpEditState extends State<ConfigStartUpEdit> {
               targetId: widget.targetId,
               payload: E2InstanceConfig(
                 instanceConfig: {
-                  "COMMAND": "SAVE_CONFIG",
-                  "DATA": base64Encoded
+                  "INSTANCE_COMMAND": {
+                    "COMMAND": "SAVE_CONFIG",
+                    "DATA": base64Encoded
+                  },
                 },
                 instanceId: _instanceId,
                 name: _name,
