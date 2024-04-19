@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
@@ -9,8 +8,6 @@ import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart'
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/file_utils.dart';
-import 'package:e2_explorer/src/widgets/xml_viewer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:json_data_explorer/json_data_explorer.dart';
@@ -93,7 +90,6 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
                   convertedMessage['CONFIG_STARTUP'],
                 );
                 isLoading = false;
-                print('data is very nice ${this.data}');
                 value.buildNodes(this.data, areAllCollapsed: false);
                 setState(() {});
               }
@@ -101,6 +97,7 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
           },
           builder: (context) {
             return AppDialogWidget(
+              appDialogType: AppDialogType.medium,
               isActionbuttonReversed: true,
               positiveActionButtonAction: () async {
                 await FileUtils.saveJSONToFile(data);
@@ -112,7 +109,6 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
                 child: LoadingParentWidget(
                   isLoading: isLoading,
                   child: SizedBox(
-                    width: double.maxFinite,
                     child: Column(
                       children: [
                         const SizedBox(height: 10),
