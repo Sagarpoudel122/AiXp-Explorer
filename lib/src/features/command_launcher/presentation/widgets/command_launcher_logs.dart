@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
@@ -68,10 +69,21 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
                   (convertedMessage['EE_PAYLOAD_PATH'] as List)
                       .map((e) => e as String?)
                       .toList();
-
+              if (eePayloadPath[0] == widget.targetId) {
+                print(eePayloadPath);
+              }
               // To:Do - Implement the logic to display the logs
               if (convertedMessage["EE_EVENT_TYPE"] == "HEARTBEAT" &&
                   eePayloadPath[0] == widget.targetId) {
+                final bool isV2 = convertedMessage['HEARTBEAT_VERSION'] == 'v2';
+
+                if (isV2) {
+                  final metadataEncoded = XpandUtils.decodeEncryptedGzipMessage(
+                      convertedMessage['ENCODED_DATA']);
+                  convertedMessage.remove('ENCODED_DATA');
+                  convertedMessage.addAll(metadataEncoded);
+                }
+
                 data = convertedMessage;
 
                 value.buildNodes(data, areAllCollapsed: false);
