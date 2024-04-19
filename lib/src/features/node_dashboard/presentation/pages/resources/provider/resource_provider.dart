@@ -2,20 +2,43 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ResourceProvider extends ChangeNotifier {
+final resourceProvider = StateNotifierProvider<ResourceProvider, ResourceState>(
+    (ref) => ResourceProvider());
+
+class ResourceState {
+  final bool isLoading;
+  final NodeHistoryModel? nodeHistoryModel;
+
+  ResourceState({
+    required this.isLoading,
+    this.nodeHistoryModel,
+  });
+
+  ResourceState copyWith({
+    bool? isLoading,
+    NodeHistoryModel? nodeHistoryModel,
+  }) {
+    return ResourceState(
+      isLoading: isLoading ?? this.isLoading,
+      nodeHistoryModel: nodeHistoryModel ?? this.nodeHistoryModel,
+    );
+  }
+}
+
+class ResourceProvider extends StateNotifier<ResourceState> {
   final _signature = 'NET_MON_01';
   final _name = "admin_pipeline";
   final _instanceId = "NET_MON_01_INST";
-  bool isLoading = true;
-  late NodeHistoryModel nodeHistoryModel;
-  final _client = E2Client();
+  final E2Client _client = E2Client();
+
+  // NetworkProvider() : super(NetworkState.initial());
+
+  ResourceProvider() : super(ResourceState(isLoading: false));
 
   void toggleLoading(bool value) {
-    isLoading = value;
-    notifyListeners();
+    state = state.copyWith(isLoading: value);
   }
 
   void nodeHistoryCommand({required String node}) {
@@ -24,12 +47,13 @@ class ResourceProvider extends ChangeNotifier {
       ActionCommands.updatePipelineInstance(
         targetId: node,
         payload: E2InstanceConfig(
-            name: 'admin_pipeline',
-            signature: 'NET_MON_01',
-            instanceId: 'NET_MON_01_INST',
-            instanceConfig: {
-              "INSTANCE_COMMAND": {"node": node, "request": "history"}
-            }),
+          name: 'admin_pipeline',
+          signature: 'NET_MON_01',
+          instanceId: 'NET_MON_01_INST',
+          instanceConfig: {
+            "INSTANCE_COMMAND": {"node": node, "request": "history"}
+          },
+        ),
         initiatorId: kAIXpWallet?.initiatorId,
       ),
     );
@@ -50,12 +74,12 @@ class ResourceProvider extends ChangeNotifier {
         toggleLoading(true);
 
         convertedMessage.removeWhere((key, value) => value == null);
-        nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
-        toggleLoading(false);
-        notifyListeners();
+        final nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
+        state = state.copyWith(
+          isLoading: false,
+          nodeHistoryModel: nodeHistoryModel,
+        );
       }
     }
   }
 }
-
-final resourceProvider = ResourceProvider();

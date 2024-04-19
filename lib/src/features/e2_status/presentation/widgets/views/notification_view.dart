@@ -31,7 +31,9 @@ class _NotificationViewState extends State<NotificationView> {
   @override
   void initState() {
     super.initState();
-    messages = _client.boxMessages[widget.boxName]?.notificationMessages ?? [];
+    messages = (_client.boxMessages[widget.boxName]?.notificationMessages ?? [])
+        .map((e) => e.payload)
+        .toList();
   }
 
   @override
@@ -46,7 +48,9 @@ class _NotificationViewState extends State<NotificationView> {
         // print('Hb received on hw info view');
         setState(() {
           messages =
-              _client.boxMessages[widget.boxName]?.notificationMessages ?? [];
+              (_client.boxMessages[widget.boxName]?.notificationMessages ?? [])
+                  .map((e) => e.payload)
+                  .toList();
         });
       },
       dataFilter: E2ListenerFilters.filterByBox(widget.boxName),

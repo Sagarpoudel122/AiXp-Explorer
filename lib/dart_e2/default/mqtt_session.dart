@@ -7,7 +7,6 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/dart_e2/const/mqtt_config.dart';
 import 'package:e2_explorer/dart_e2/ec_signature_verify/aixp_verifier.dart';
 import 'package:e2_explorer/dart_e2/objects/e2_box.dart';
-import 'package:e2_explorer/main.dart';
 import 'package:flutter/foundation.dart';
 
 class MqttSession extends GenericSession {
@@ -85,7 +84,12 @@ class MqttSession extends GenericSession {
     _heartbeatReceiveStream = StreamController<Map<String, dynamic>>();
     _heartbeatReceiveStream?.stream.listen((message) {
       var messageVerifier = aixpVerifier.verifyMessage(message);
-
+      final eePayloadPath = message['EE_PAYLOAD_PATH'];
+      if (eePayloadPath[0] == 'gts-test2') {
+        JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+        String prettyprint = encoder.convert(message);
+        // print("$prettyprint");
+      }
       if (messageVerifier) {
         _onHeartbeatInternal(message);
       }
@@ -98,7 +102,6 @@ class MqttSession extends GenericSession {
     _notificationReceiveStream?.stream.listen((message) {
       var messageVerifier = aixpVerifier.verifyMessage(message);
       final eePayloadPath = message['EE_PAYLOAD_PATH'];
-
       if (eePayloadPath[0] == 'gts-test2' &&
           eePayloadPath[1] == 'admin_pipeline') {
         JsonEncoder encoder = const JsonEncoder.withIndent('  ');
@@ -117,7 +120,6 @@ class MqttSession extends GenericSession {
     /// Payload (Default communicator) connect
     _payloadReceiveStream = StreamController<Map<String, dynamic>>();
     _payloadReceiveStream?.stream.listen((message) {
-      print("${message['EE_PAYLOAD_PATH']} Payload");
       var messageVerifier = aixpVerifier.verifyMessage(message);
       // print("$messageVerifier Message Verifier onPayload");
       if (messageVerifier) {

@@ -35,12 +35,17 @@ dependencies:
   flutter_svg: ^2.0.9
   flutter_highlight: ^0.7.0
   popover: ^0.3.0
+  collection: ^1.18.0
+  uuid: ^4.4.0
+  archive: ^3.4.10
+
 
 
   # Elliptic Sign & Verify
   pointycastle: ^3.7.4
   basic_utils: ^5.7.0
   crypto: ^3.0.3
+  flutter_riverpod: ^2.5.1
 
 
 

@@ -163,11 +163,11 @@ class E2Client {
   }
 
   void _onHeartbeat(Map<String, dynamic> message) {
-    final boxName = getBoxName(message);
-    final currentBox =
-        boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
-    currentBox.addHeartbeat(message);
-    loadFilters(boxName, currentBox.heartbeatMessages.last);
+    // final boxName = getBoxName(message);
+    // final currentBox =
+    //     boxMessages.putIfAbsent(boxName, () => BoxMessages(boxName: boxName));
+    // currentBox.addHeartbeat(message);
+    // loadFilters(boxName, currentBox.heartbeatMessages.last);
 
     notifiers.heartbeats.emit(message);
     notifiers.all.emit(message);

@@ -15,8 +15,8 @@ import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider
 import 'package:e2_explorer/src/utils/app_utils.dart';
 import 'package:e2_explorer/src/utils/dimens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 class CommandLauncherPage extends StatelessWidget {
   const CommandLauncherPage({Key? key}) : super(key: key);
@@ -36,12 +36,15 @@ class CommandLauncherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final E2Client _client = E2Client();
 
-    return Consumer<NetworkProvider>(builder: (context, provider, child) {
+    return Consumer(builder: (context, ref, child) {
+      final state = ref.watch(networkProvider);
       return E2Listener(
         onPayload: (message) {
           final Map<String, dynamic> convertedMessage =
               MqttMessageEncoderDecoder.raw(message);
-          provider.updateNetmonStatusList(convertedMessage: convertedMessage);
+          ref
+              .read(networkProvider.notifier)
+              .updateNetmonStatusList(convertedMessage: convertedMessage);
         },
         builder: (context) {
           return Scaffold(
@@ -62,7 +65,7 @@ class CommandLauncherPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
                   Expanded(
-                    child: provider.isLoading
+                    child: state.isLoading
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
@@ -74,7 +77,7 @@ class CommandLauncherPage extends StatelessWidget {
                                 CommandLauncherColumns.values.toSet(),
                             sortingColumns: const {},
                             sortedColumn: null,
-                            items: provider.netmonStatusList
+                            items: state.netmonStatusList
                                 .map((e) => CommandLauncherData(
                                       edgeNode: e.boxId,
                                       configStartupFile: "configStartupFile",
@@ -99,7 +102,7 @@ class CommandLauncherPage extends StatelessWidget {
                                             onPressed: () {
                                               _client.session.sendCommand(
                                                 ActionCommands.stop(
-                                                    targetId: ""),
+                                                    targetId: item.edgeNode),
                                               );
                                             },
                                             text: 'Restart',
@@ -114,6 +117,11 @@ class CommandLauncherPage extends StatelessWidget {
                                           const SizedBox(width: 8),
                                           AppButtonSecondary(
                                             onPressed: () {
+                                              _client.session.sendCommand(
+                                                ActionCommands.fullHeartbeat(
+                                                  targetId: item.edgeNode,
+                                                ),
+                                              );
                                               CommandLauncherLogViewDialouge
                                                   .viewLogs(context,
                                                       targetId: item.edgeNode);
