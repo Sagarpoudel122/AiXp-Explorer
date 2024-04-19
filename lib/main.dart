@@ -35,7 +35,7 @@ void main() async {
     appWindow.minSize = initialSize;
     appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
-    appWindow.title = 'E2 Client';
+    appWindow.title = 'AiExpand';
     appWindow.show();
   });
 }
