@@ -2,10 +2,11 @@ import 'package:e2_explorer/dart_e2/commands/e2_commands.dart';
 import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/node_history_model.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/network_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final resourceProvider = StateNotifierProvider<ResourceProvider, ResourceState>(
-    (ref) => ResourceProvider());
+    (ref) => ResourceProvider(ref));
 
 class ResourceState {
   final bool isLoading;
@@ -28,6 +29,7 @@ class ResourceState {
 }
 
 class ResourceProvider extends StateNotifier<ResourceState> {
+  final Ref ref;
   final _signature = 'NET_MON_01';
   final _name = "admin_pipeline";
   final _instanceId = "NET_MON_01_INST";
@@ -35,7 +37,7 @@ class ResourceProvider extends StateNotifier<ResourceState> {
 
   // NetworkProvider() : super(NetworkState.initial());
 
-  ResourceProvider() : super(ResourceState(isLoading: false));
+  ResourceProvider(this.ref) : super(ResourceState(isLoading: false));
 
   void toggleLoading(bool value) {
     state = state.copyWith(isLoading: value);
@@ -43,15 +45,22 @@ class ResourceProvider extends StateNotifier<ResourceState> {
 
   void nodeHistoryCommand({required String node}) {
     toggleLoading(true);
+    final provider = ref.watch(networkProvider);
     _client.session.sendCommand(
       ActionCommands.updatePipelineInstance(
-        targetId: node,
+        targetId: provider.supervisorIds.isNotEmpty
+            ? provider.supervisorIds.first
+            : node,
         payload: E2InstanceConfig(
           name: 'admin_pipeline',
           signature: 'NET_MON_01',
           instanceId: 'NET_MON_01_INST',
           instanceConfig: {
-            "INSTANCE_COMMAND": {"node": node, "request": "history"}
+            "INSTANCE_COMMAND": {
+              "node": node,
+              "request": "history",
+              "steps": 100
+            }
           },
         ),
         initiatorId: kAIXpWallet?.initiatorId,
