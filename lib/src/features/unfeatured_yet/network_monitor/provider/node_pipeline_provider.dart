@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/plugin_model.dart';
 import 'package:riverpod/riverpod.dart';
 
 class NodePipelineState {
@@ -25,12 +26,12 @@ class NodePipelineState {
 class SelectedPipelinePluginState {}
 
 final nodePipelineProvider = StateNotifierProvider.autoDispose
-    .family<NodePipelineProvider, List<Map<String, dynamic>>, String>(
+    .family<NodePipelineProvider, List<DecodedPlugin>, String>(
         (ref, String boxName) {
   return NodePipelineProvider(boxName);
 });
 
-class NodePipelineProvider extends StateNotifier<List<Map<String, dynamic>>> {
+class NodePipelineProvider extends StateNotifier<List<DecodedPlugin>> {
   final String boxName;
 
   String? selectedPipeline;
@@ -39,18 +40,19 @@ class NodePipelineProvider extends StateNotifier<List<Map<String, dynamic>>> {
 
   NodePipelineProvider(this.boxName) : super([]);
 
-  updateState(List data) {
-    state = [...data.map((e) => e).toList()];
+  updateState(List<DecodedPlugin> data) {
+    state = data;
   }
 
   List<Map<String, dynamic>> get getPluginList {
-    final pluginData = state
-        .firstWhereOrNull((element) => element['NAME'] == selectedPipeline);
+    final pluginData =
+        state.firstWhereOrNull((element) => element.name == selectedPipeline);
     if (pluginData != null) {
-      var plugins = pluginData['PLUGINS'] as List;
+      var plugins = pluginData.plugins;
       return plugins
-          .map<Map<String, dynamic>>((e) => e as Map<String, dynamic>)
-          .toList();
+              ?.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>)
+              .toList() ??
+          [];
     }
 
     return [];
@@ -93,7 +95,9 @@ class NodePipelineProvider extends StateNotifier<List<Map<String, dynamic>>> {
         final decodedData = XpandUtils.decodeEncryptedGzipMessage(
             convertedMessage['ENCODED_DATA']);
         final metadataEncoded = decodedData['CONFIG_STREAMS'] as List;
-        updateState(metadataEncoded);
+        updateState(metadataEncoded
+            .map<DecodedPlugin>((e) => DecodedPlugin.fromJson(e))
+            .toList());
       }
     }
   }

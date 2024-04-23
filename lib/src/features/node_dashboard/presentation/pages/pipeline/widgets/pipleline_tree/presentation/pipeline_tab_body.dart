@@ -1,6 +1,7 @@
 import 'package:e2_explorer/src/features/common_widgets/json_viewer/json_viewer.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/features/node_dashboard/presentation/pages/pipeline/widgets/pipleline_tree/presentation/expandable_widget.dart';
+import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/model/plugin_model.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/network_monitor/provider/node_pipeline_provider.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
@@ -60,7 +61,7 @@ class PipelineListWidget extends ConsumerWidget {
           itemBuilder: (context, index) {
             var mapData = data[index];
             return InkWell(
-              onTap: () => notifier.setSelectedPipeline(mapData['NAME']),
+              onTap: () => notifier.setSelectedPipeline(mapData.name),
               child: PipelineItemWidget(
                 mapData: mapData,
                 boxName: boxName,
@@ -76,7 +77,7 @@ class PipelineListWidget extends ConsumerWidget {
 }
 
 class PipelineItemWidget extends ConsumerStatefulWidget {
-  final Map<String, dynamic> mapData;
+  final DecodedPlugin mapData;
   final String boxName;
   const PipelineItemWidget({
     super.key,
@@ -102,12 +103,14 @@ class _PipelineItemWidgetState extends ConsumerState<PipelineItemWidget> {
   @override
   Widget build(BuildContext context) {
     final notifier = ref.read(nodePipelineProvider(widget.boxName).notifier);
-    var entries = widget.mapData.entries
-        .where((entry) => keys.contains(entry.key.toUpperCase()))
+    var entries = widget.mapData
+        .toJson()
+        .entries
+        .where((element) => keys.contains(element.key))
         .toList();
     var finalData = {};
     finalData.addEntries(entries);
-    final currentPipelinName = widget.mapData['NAME'];
+    final currentPipelinName = widget.mapData.name;
     return Container(
       color: notifier.selectedPipeline == currentPipelinName
           ? const Color(0xff2E2C6A)
