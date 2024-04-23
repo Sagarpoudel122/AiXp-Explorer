@@ -51,6 +51,7 @@ class ResourceProvider extends StateNotifier<ResourceState> {
         targetId: provider.supervisorIds.isNotEmpty
             ? provider.supervisorIds.first
             : node,
+        // targetId: node,
         payload: E2InstanceConfig(
           name: 'admin_pipeline',
           signature: 'NET_MON_01',
@@ -59,7 +60,7 @@ class ResourceProvider extends StateNotifier<ResourceState> {
             "INSTANCE_COMMAND": {
               "node": node,
               "request": "history",
-              "steps": 100
+              "options": {"steps": 100}
             }
           },
         ),
@@ -75,20 +76,19 @@ class ResourceProvider extends StateNotifier<ResourceState> {
     final eePayloadPath = (convertedMessage['EE_PAYLOAD_PATH'] as List)
         .map((e) => e as String?)
         .toList();
-    if (eePayloadPath.length == 4) {
-      if (eePayloadPath[0] == boxName &&
-          eePayloadPath[1] == _name &&
-          eePayloadPath[2] == _signature &&
-          eePayloadPath[3] == _instanceId) {
-        toggleLoading(true);
+    if (convertedMessage['E2_TARGET_ID'] == boxName &&
+        eePayloadPath[1] == _name &&
+        eePayloadPath[2] == _signature &&
+        eePayloadPath[3] == _instanceId &&
+        convertedMessage.containsKey('NODE_HISTORY')) {
+      toggleLoading(true);
 
-        convertedMessage.removeWhere((key, value) => value == null);
-        final nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
-        state = state.copyWith(
-          isLoading: false,
-          nodeHistoryModel: nodeHistoryModel,
-        );
-      }
+      convertedMessage.removeWhere((key, value) => value == null);
+      final nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
+      state = state.copyWith(
+        isLoading: false,
+        nodeHistoryModel: nodeHistoryModel,
+      );
     }
   }
 }

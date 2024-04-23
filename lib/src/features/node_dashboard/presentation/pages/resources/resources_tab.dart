@@ -30,10 +30,12 @@ class _ResourcesTabState extends State<ResourcesTab> {
               MqttMessageEncoderDecoder.raw(payload);
 
           ref.read(resourceProvider.notifier).getResources(
-              convertedMessage: convertedMessage, boxName: widget.boxName);
+                convertedMessage: convertedMessage,
+                boxName: widget.boxName,
+              );
         },
         builder: (context) {
-          return state.isLoading
+          return state.isLoading || state.nodeHistoryModel == null
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
