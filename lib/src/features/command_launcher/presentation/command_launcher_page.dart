@@ -49,7 +49,7 @@ class CommandLauncherPage extends StatelessWidget {
         builder: (context) {
           return Scaffold(
             body: DashboardBodyContainer(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
+              // padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 22),
               child: Column(
                 children: [
                   const SizedBox(height: 12),
