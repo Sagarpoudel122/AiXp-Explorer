@@ -47,9 +47,11 @@ class _PipeLineState extends ConsumerState<PipeLine> {
               .updatePipelineList(
                 convertedMessage: convertedMessage,
               );
-          setState(() {
-            isLoading = false;
-          });
+          if (isLoading) {
+            setState(() {
+              isLoading = false;
+            });
+          }
         },
         builder: (a) {
           return LoadingParentWidget(
