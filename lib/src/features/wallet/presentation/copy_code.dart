@@ -10,6 +10,7 @@ import 'package:e2_explorer/src/styles/text_styles.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 class CopyCodeScreen extends StatelessWidget {
@@ -26,9 +27,9 @@ class CopyCodeScreen extends StatelessWidget {
           children: [
             walletPageHeader(title: "Create New Wallet"),
             Container(
-              width: 453,
-              height: 453,
-              padding: const EdgeInsets.symmetric(horizontal: 42, vertical: 31),
+              width: 465,
+              height: 465,
+              padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 28),
               decoration: BoxDecoration(
                   color: AppColors.containerBgColor,
                   borderRadius: BorderRadius.circular(16)),
@@ -45,29 +46,33 @@ class CopyCodeScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyles.body(color: AppColors.textSecondaryColor),
                   ),
-                  const SizedBox(
-                    height: 68,
-                  ),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 25),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 16),
+                    height: 190,
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
                             color: AppColors.sideNavSelectedTileIndicatorColor),
                         color: AppColors.dropdownFieldFillColor),
-                    child: Text(
-                      kAIXpWallet?.privateKeyHex ?? '',
-                      textAlign: TextAlign.center,
-                      style: TextStyles.body(),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 8,
+                        ),
+                        child: Text(
+                          kAIXpWallet?.privateKeyPem ?? '',
+                          textAlign: TextAlign.center,
+                          style: TextStyles.body(),
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 22),
+                  const SizedBox(height: 20),
                   CopyTextWidget(
-                    text: kAIXpWallet?.privateKeyHex ?? '',
+                    text: kAIXpWallet?.privateKeyPem ?? '',
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 30),
                   ClickableButton(
                     onTap: () => context.goNamed(RouteNames.createWalletReady),
                     text: "Continue",
