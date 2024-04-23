@@ -95,6 +95,7 @@ class _MyAppState extends State<MyApp> {
       title: 'MQTT Connection Demo',
       theme: appTheme,
       routerConfig: AppRoutes.routes,
+      scaffoldMessengerKey: AppRoutes.scaffoldMessengerKey,
     );
   }
 }
