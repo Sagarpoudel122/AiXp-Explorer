@@ -1,3 +1,4 @@
+import 'package:e2_explorer/src/design/app_toast.dart';
 import 'package:e2_explorer/src/features/common_widgets/app_dialog_widget.dart';
 import 'package:e2_explorer/src/features/common_widgets/hs_input_field.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
@@ -99,21 +100,35 @@ class _AddNetworkDialogContentState extends State<AddNetworkDialogContent> {
           text: 'Add Network',
           onPressed: () async {
             if (_formKey.currentState?.validate() ?? false) {
-              setState(() {
-                loading = true;
-              });
-              final MqttServer server = MqttServer(
-                name: _nameController.text.trim(),
-                host: _hostController.text.trim(),
-                port: int.parse(_portController.text.trim()),
-                username: _userController.text.trim(),
-                password: _passwordController.text.trim(),
-              );
-              await MqttServerRepository().addMqttServer(server);
-              setState(() {
-                loading = false;
-              });
-              Navigator.of(context).pop();
+              try {
+                setState(() {
+                  loading = true;
+                });
+                final MqttServer server = MqttServer(
+                  name: _nameController.text.trim(),
+                  host: _hostController.text.trim(),
+                  port: int.parse(_portController.text.trim()),
+                  username: _userController.text.trim(),
+                  password: _passwordController.text.trim(),
+                );
+                await MqttServerRepository().addMqttServer(server);
+                setState(() {
+                  loading = false;
+                });
+                AppToast(
+                        message: 'Network added successfully',
+                        type: ToastificationType.success)
+                    .show(context);
+                Navigator.of(context).pop();
+              } catch (e) {
+                setState(() {
+                  loading = false;
+                });
+                AppToast(
+                        message: 'Failed to add network',
+                        type: ToastificationType.error)
+                    .show(context);
+              }
             }
           },
         ),
