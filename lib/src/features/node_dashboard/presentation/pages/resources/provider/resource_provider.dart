@@ -45,7 +45,7 @@ class ResourceProvider extends StateNotifier<ResourceState> {
 
   void nodeHistoryCommand({required String node}) {
     toggleLoading(true);
-    final provider = ref.watch(networkProvider);
+    final provider = ref.read(networkProvider);
     _client.session.sendCommand(
       ActionCommands.updatePipelineInstance(
         targetId: provider.supervisorIds.isNotEmpty
@@ -59,7 +59,7 @@ class ResourceProvider extends StateNotifier<ResourceState> {
             "INSTANCE_COMMAND": {
               "node": node,
               "request": "history",
-              "steps": 100
+              "options": {"steps": 100}
             }
           },
         ),
@@ -75,20 +75,21 @@ class ResourceProvider extends StateNotifier<ResourceState> {
     final eePayloadPath = (convertedMessage['EE_PAYLOAD_PATH'] as List)
         .map((e) => e as String?)
         .toList();
-    if (eePayloadPath.length == 4) {
-      if (eePayloadPath[0] == boxName &&
-          eePayloadPath[1] == _name &&
-          eePayloadPath[2] == _signature &&
-          eePayloadPath[3] == _instanceId) {
-        toggleLoading(true);
 
-        convertedMessage.removeWhere((key, value) => value == null);
-        final nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
-        state = state.copyWith(
-          isLoading: false,
-          nodeHistoryModel: nodeHistoryModel,
-        );
-      }
+    if (convertedMessage['E2_TARGET_ID'] == boxName &&
+        eePayloadPath[1] == _name &&
+        eePayloadPath[2] == _signature &&
+        eePayloadPath[3] == _instanceId &&
+        convertedMessage.containsKey('NODE_HISTORY')) {
+      toggleLoading(true);
+      print(convertedMessage['INITIATOR_ID']);
+
+      convertedMessage.removeWhere((key, value) => value == null);
+      final nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
+      state = state.copyWith(
+        isLoading: false,
+        nodeHistoryModel: nodeHistoryModel,
+      );
     }
   }
 }
