@@ -1,4 +1,5 @@
 import 'package:e2_explorer/main.dart';
+import 'package:e2_explorer/src/design/app_toast.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/clickable_button.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/header.dart';
@@ -10,6 +11,7 @@ import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/utils/form_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:toastification/toastification.dart';
 
 class WalletPasswordScreen extends StatefulWidget {
   const WalletPasswordScreen({super.key});
@@ -71,6 +73,14 @@ class _WalletPasswordScreenState extends State<WalletPasswordScreen> {
                         if (isSuccess) {
                           // ignore: use_build_context_synchronously
                           context.goNamed(RouteNames.connection);
+                          AppToast(
+                            message: "Wallet unlocked successfully",
+                            description:
+                                'You have successfully unlocked your wallet.',
+                          ).show(
+                            context,
+                            type: ToastificationType.success,
+                          );
                         }
                       },
                       // text: "Create a Wallet",

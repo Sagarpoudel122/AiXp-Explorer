@@ -34,10 +34,10 @@ void main() async {
 
     // appWindow.minSize = initialSize;
     final initialSize = Size(1400, 800);
-    final minSize = Size(600, 450);
-    final maxSize = Size(1400, 800);
+    // final minSize = Size(600, 450);
+    final maxSize = Size(2800, 1400);
     appWindow.maxSize = maxSize;
-    appWindow.minSize = minSize;
+    // appWindow.minSize = minSize;
     appWindow.size = initialSize;
     // appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
@@ -95,6 +95,7 @@ class _MyAppState extends State<MyApp> {
       title: 'MQTT Connection Demo',
       theme: appTheme,
       routerConfig: AppRoutes.routes,
+      scaffoldMessengerKey: AppRoutes.scaffoldMessengerKey,
     );
   }
 }

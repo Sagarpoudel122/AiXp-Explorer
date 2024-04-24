@@ -13,9 +13,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 
-class CopyCodeScreen extends StatelessWidget {
+class CopyCodeScreen extends StatefulWidget {
   const CopyCodeScreen({super.key});
 
+  @override
+  State<CopyCodeScreen> createState() => _CopyCodeScreenState();
+}
+
+class _CopyCodeScreenState extends State<CopyCodeScreen> {
+  bool isVisible = false;
   @override
   Widget build(BuildContext context) {
     // print(kAIXpWallet?.privateKeyHex);
@@ -61,7 +67,9 @@ class CopyCodeScreen extends StatelessWidget {
                           vertical: 8,
                         ),
                         child: Text(
-                          kAIXpWallet?.privateKeyPem ?? '',
+                          isVisible
+                              ? kAIXpWallet?.privateKeyPem ?? ''
+                              : "**************************************************************************************************************************************************************************************************************************************************************************",
                           textAlign: TextAlign.center,
                           style: TextStyles.body(),
                         ),
@@ -69,8 +77,28 @@ class CopyCodeScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  CopyTextWidget(
-                    text: kAIXpWallet?.privateKeyPem ?? '',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: 100,
+                        child: CopyTextWidget(
+                          text: kAIXpWallet?.privateKeyPem ?? '',
+                          allowCopy: isVisible,
+                        ),
+                      ),
+                      Container(
+                        width: 100,
+                        child: ShowHideWidget(
+                          isVisible: isVisible,
+                          onToggle: (a) {
+                            setState(() {
+                              isVisible = a;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 30),
                   ClickableButton(

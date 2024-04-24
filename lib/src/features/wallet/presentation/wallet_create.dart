@@ -1,4 +1,5 @@
 import 'package:e2_explorer/main.dart';
+import 'package:e2_explorer/src/design/app_toast.dart';
 import 'package:e2_explorer/src/features/common_widgets/buttons/clickable_button.dart';
 import 'package:e2_explorer/src/features/common_widgets/layout/loading_parent_widget.dart';
 import 'package:e2_explorer/src/features/wallet/widgets/header.dart';
@@ -119,6 +120,14 @@ class _WalletCreateState extends State<WalletCreate> {
                             await kAIXpWallet
                                 ?.createWallet(passwordController.text);
                             context.goNamed(RouteNames.createCopyCode);
+                            AppToast(
+                              message: "Wallet created successfully",
+                              description:
+                                  'You have successfully created your wallet.',
+                            ).show(
+                              context,
+                              type: ToastificationType.success,
+                            );
                           } catch (e) {
                           } finally {
                             setState(() {
