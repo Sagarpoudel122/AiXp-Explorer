@@ -41,7 +41,7 @@ void main() async {
     appWindow.size = initialSize;
     // appWindow.size = initialSize;
     appWindow.alignment = Alignment.center;
-    appWindow.title = 'AiExpand';
+    appWindow.title = 'AiXpand';
     appWindow.show();
   });
 }
