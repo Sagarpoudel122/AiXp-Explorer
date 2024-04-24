@@ -6,12 +6,10 @@ import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
 
 class DebugViewer extends StatelessWidget {
-  const DebugViewer({
-    super.key,
-    required this.boxName,
-  });
+  const DebugViewer({super.key, required this.boxName, this.onTabChanged});
 
   final String? boxName;
+  final Function(int a)? onTabChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,9 @@ class DebugViewer extends StatelessWidget {
           //   key: ValueKey('${boxName ?? ''}3'),
           //   boxName: boxName!,
           // ),
-          onTabChanged: (tab) {},
+          onTabChanged: (tab) {
+            onTabChanged?.call(tab.index);
+          },
         ));
   }
 }

@@ -11,6 +11,7 @@ import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:e2_explorer/src/widgets/transparent_inkwell_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,7 @@ class NetworkPage extends ConsumerStatefulWidget {
 }
 
 class _NetworkPageState extends ConsumerState<NetworkPage> {
+  int tabIndex = 1;
   bool isSingleNodeManager = false;
   static const _networkPageIndex = 0;
   static const _boxDetailsPageIndex = 1;
@@ -29,6 +31,8 @@ class _NetworkPageState extends ConsumerState<NetworkPage> {
   NetmonBox? selectedBox;
   int _navIndex = _networkPageIndex;
   late NodeHistoryModel nodeHistoryModel;
+
+  late TabController tabController;
 
   @override
   void initState() {
@@ -109,14 +113,17 @@ class _NetworkPageState extends ConsumerState<NetworkPage> {
                       ],
                     ),
                   ),
-                  AppButtonPrimary(
-                    onPressed: () {
-                      ref
-                          .read(resourceProvider.notifier)
-                          .nodeHistoryCommand(node: selectedBoxName!);
-                    },
-                    text: 'Refresh',
-                    height: 32,
+                  Visibility(
+                    visible: tabIndex == 0,
+                    child: AppButtonPrimary(
+                      onPressed: () {
+                        ref
+                            .read(resourceProvider.notifier)
+                            .nodeHistoryCommand(node: selectedBoxName!);
+                      },
+                      text: 'Refresh',
+                      height: 32,
+                    ),
                   ),
                 ],
               ),
@@ -127,6 +134,10 @@ class _NetworkPageState extends ConsumerState<NetworkPage> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: DebugViewer(
+                        onTabChanged: (a) {
+                          tabIndex = a;
+                          setState(() {});
+                        },
                         boxName: selectedBoxName,
                       ),
                     ),
