@@ -45,13 +45,12 @@ class ResourceProvider extends StateNotifier<ResourceState> {
 
   void nodeHistoryCommand({required String node}) {
     toggleLoading(true);
-    final provider = ref.watch(networkProvider);
+    final provider = ref.read(networkProvider);
     _client.session.sendCommand(
       ActionCommands.updatePipelineInstance(
         targetId: provider.supervisorIds.isNotEmpty
             ? provider.supervisorIds.first
             : node,
-        // targetId: node,
         payload: E2InstanceConfig(
           name: 'admin_pipeline',
           signature: 'NET_MON_01',
@@ -76,12 +75,14 @@ class ResourceProvider extends StateNotifier<ResourceState> {
     final eePayloadPath = (convertedMessage['EE_PAYLOAD_PATH'] as List)
         .map((e) => e as String?)
         .toList();
+
     if (convertedMessage['E2_TARGET_ID'] == boxName &&
         eePayloadPath[1] == _name &&
         eePayloadPath[2] == _signature &&
         eePayloadPath[3] == _instanceId &&
         convertedMessage.containsKey('NODE_HISTORY')) {
       toggleLoading(true);
+      print(convertedMessage['INITIATOR_ID']);
 
       convertedMessage.removeWhere((key, value) => value == null);
       final nodeHistoryModel = NodeHistoryModel.fromJson(convertedMessage);
