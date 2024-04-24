@@ -9,7 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:pointycastle/export.dart';
 
 class CustomJsonEncoder {
-  static num _formatFloat(num value) {
+  static num formatFloat(num value) {
     final representation = value.toString();
     final response = representation.endsWith('.0')
         ? representation.substring(0, representation.length - 2)
@@ -28,7 +28,7 @@ class CustomJsonEncoder {
 
   static dynamic _handleKnowDataType(var value) {
     if (value is double) {
-      return _formatFloat(value);
+      return formatFloat(value);
     }
     if (value is List) {
       return value.map((e) {

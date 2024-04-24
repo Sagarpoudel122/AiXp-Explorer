@@ -109,11 +109,9 @@ class _ConfigStartUpViewState extends State<ConfigStartUpView> {
                 child: LoadingParentWidget(
                   isLoading: isLoading,
                   child: SizedBox(
-                    child: Expanded(
-                      child: ReusableJsonDataExplorer(
-                        value: value,
-                        nodes: value.displayNodes,
-                      ),
+                    child: ReusableJsonDataExplorer(
+                      value: value,
+                      nodes: value.displayNodes,
                     ),
                   ),
                 ),
