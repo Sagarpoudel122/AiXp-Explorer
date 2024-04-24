@@ -120,8 +120,14 @@ class MqttSession extends GenericSession {
     /// Payload (Default communicator) connect
     _payloadReceiveStream = StreamController<Map<String, dynamic>>();
     _payloadReceiveStream?.stream.listen((message) {
+      final eePayloadPath = message['EE_PAYLOAD_PATH'];
       var messageVerifier = aixpVerifier.verifyMessage(message);
-      // print("$messageVerifier Message Verifier onPayload");
+
+      if ((eePayloadPath[0] == 'stg_k8s_super' ||
+              eePayloadPath[0] == 'gts-test2') &&
+          eePayloadPath[1] == 'admin_pipeline') {
+        print("$eePayloadPath EE_PAYLOAD_PATH");
+      }
       if (messageVerifier) {
         onPayload(message);
       }

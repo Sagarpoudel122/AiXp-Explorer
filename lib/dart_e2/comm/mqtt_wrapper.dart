@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:e2_explorer/dart_e2/const/mqtt_config.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/connection/domain/models/mqtt_server.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';

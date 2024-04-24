@@ -25,9 +25,8 @@ class NodePipelineState {
 
 class SelectedPipelinePluginState {}
 
-final nodePipelineProvider = StateNotifierProvider.autoDispose
-    .family<NodePipelineProvider, List<DecodedPlugin>, String>(
-        (ref, String boxName) {
+final nodePipelineProvider = StateNotifierProvider.family<NodePipelineProvider,
+    List<DecodedPlugin>, String>((ref, String boxName) {
   return NodePipelineProvider(boxName);
 });
 
@@ -41,7 +40,7 @@ class NodePipelineProvider extends StateNotifier<List<DecodedPlugin>> {
   NodePipelineProvider(this.boxName) : super([]);
 
   updateState(List<DecodedPlugin> data) {
-    state = data;
+    state = [...data];
   }
 
   List<Map<String, dynamic>> get getPluginList {
@@ -50,7 +49,7 @@ class NodePipelineProvider extends StateNotifier<List<DecodedPlugin>> {
     if (pluginData != null) {
       var plugins = pluginData.plugins;
       return plugins
-              ?.map<Map<String, dynamic>>((e) => e as Map<String, dynamic>)
+              ?.map<Map<String, dynamic>>((e) => e?.toJson() ?? {})
               .toList() ??
           [];
     }
@@ -95,9 +94,16 @@ class NodePipelineProvider extends StateNotifier<List<DecodedPlugin>> {
         final decodedData = XpandUtils.decodeEncryptedGzipMessage(
             convertedMessage['ENCODED_DATA']);
         final metadataEncoded = decodedData['CONFIG_STREAMS'] as List;
-        updateState(metadataEncoded
-            .map<DecodedPlugin>((e) => DecodedPlugin.fromJson(e))
-            .toList());
+        print(metadataEncoded);
+        try {
+          updateState(
+            metadataEncoded
+                .map<DecodedPlugin>((e) => DecodedPlugin.fromJson(e))
+                .toList(),
+          );
+        } catch (e, _) {
+          print(e);
+        }
       }
     }
   }

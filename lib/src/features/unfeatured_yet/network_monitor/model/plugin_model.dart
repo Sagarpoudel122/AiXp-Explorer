@@ -79,14 +79,14 @@ class PluginModel {
 }
 
 class DecodedPlugin {
-  String reconnectable;
-  String url;
-  bool liveFeed;
+  String? reconnectable;
+  String? url;
+  bool? liveFeed;
   String name;
   List<Plugin?>? plugins;
   String? sessionId;
   String type;
-  bool validated;
+  bool? validated;
 
   DecodedPlugin({
     required this.reconnectable,
@@ -113,7 +113,7 @@ class DecodedPlugin {
         type: json['TYPE'],
         validated: json['VALIDATED'],
       );
-    } catch (e) {
+    } catch (e, _) {
       throw Exception('Error parsing DecodedPlugin: $e');
     }
   }
@@ -133,7 +133,7 @@ class DecodedPlugin {
 }
 
 class Plugin {
-  List<Instance?>? instances;
+  List<Map<String, dynamic>?>? instances;
   String? signature;
 
   Plugin({
@@ -149,8 +149,7 @@ class Plugin {
       //   ),
       // ),
       instances: json['INSTANCES'] != null
-          ? List<Instance>.from(
-              json['INSTANCES'].map((x) => Instance.fromJson(x)))
+          ? List<Map<String, dynamic>>.from(json['INSTANCES'].map((x) => x))
           : null,
       signature: json['SIGNATURE'],
     );
@@ -158,8 +157,7 @@ class Plugin {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['INSTANCES'] =
-        instances?.map((instance) => instance?.toJson()).toList();
+    data['INSTANCES'] = instances?.map((instance) => instance).toList();
     data['SIGNATURE'] = signature;
     return data;
   }
