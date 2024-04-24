@@ -14,7 +14,8 @@ class AddNetworkDialogContent extends StatefulWidget {
   const AddNetworkDialogContent({super.key});
 
   @override
-  State<AddNetworkDialogContent> createState() => _AddNetworkDialogContentState();
+  State<AddNetworkDialogContent> createState() =>
+      _AddNetworkDialogContentState();
 }
 
 class _AddNetworkDialogContentState extends State<AddNetworkDialogContent> {
@@ -41,9 +42,8 @@ class _AddNetworkDialogContentState extends State<AddNetworkDialogContent> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const SizedBox(height: 17),
             TextWidget(
-              'Lorebfnek fejbfkwejrbfvr erbvfjbvkjbekjrbvr vernbkrj',
+              'Add your network details to connect',
               style: CustomTextStyles.text16_400_secondary,
             ),
             const SizedBox(height: 27),
@@ -70,17 +70,18 @@ class _AddNetworkDialogContentState extends State<AddNetworkDialogContent> {
             ),
             const SizedBox(height: 16),
             TextInputFieldWidget(
-              hintText: 'Password',
-              controller: _passwordController,
-              focusNode: _passwordFocusNode,
-              validator: FormUtils.validatePassword,
-            ),
-            const SizedBox(height: 16),
-            TextInputFieldWidget(
               hintText: 'User',
               controller: _userController,
               focusNode: _userFocusNode,
               validator: FormUtils.validateRequiredField,
+            ),
+            const SizedBox(height: 16),
+            TextInputFieldWidget(
+              hintText: 'Password',
+              controller: _passwordController,
+              focusNode: _passwordFocusNode,
+              validator: FormUtils.validatePassword,
+              obscureText: true,
             ),
           ],
         ),
