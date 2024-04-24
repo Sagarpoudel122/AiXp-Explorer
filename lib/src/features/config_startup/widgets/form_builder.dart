@@ -1,6 +1,8 @@
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:e2_explorer/src/widgets/custom_drop_down.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:number_text_input_formatter/number_text_input_formatter.dart';
 
 class FormTextStyle extends StatelessWidget {
   final String text;
@@ -49,6 +51,7 @@ class FormTextStyle extends StatelessWidget {
 
 enum FormBuilderType {
   text,
+  number,
   boolean,
   map,
   list;
@@ -56,13 +59,16 @@ enum FormBuilderType {
   FormBuilderType get type => this;
   static FormBuilderType fromInstanceType(dynamic instanceType) {
     if (instanceType is String ||
-        instanceType is int ||
-        instanceType is double ||
-        instanceType is num ||
         instanceType is DateTime ||
         instanceType is Duration ||
         instanceType == null) {
+      if (bool.tryParse(instanceType) != null) {
+        return FormBuilderType.boolean;
+      }
       return FormBuilderType.text;
+    }
+    if (instanceType is int || instanceType is double || instanceType is num) {
+      return FormBuilderType.number;
     } else if (instanceType is bool) {
       return FormBuilderType.boolean;
     } else if (instanceType is List) {
@@ -115,6 +121,23 @@ class _FormBuilderState extends State<FormBuilder> {
         const SizedBox(height: 10),
         if (widget.type == FormBuilderType.text)
           TextField(controller: _controller),
+        if (widget.type == FormBuilderType.number)
+          TextField(
+            controller: _controller,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: <NumberTextInputFormatter>[
+              NumberTextInputFormatter(
+                integerDigits: 10,
+                decimalDigits: 0,
+                maxValue: '1000000000.00',
+                decimalSeparator: '.',
+                allowNegative: true,
+                overrideDecimalPoint: true,
+                insertDecimalPoint: false,
+                insertDecimalDigits: true,
+              ),
+            ],
+          ),
         if (widget.type == FormBuilderType.boolean)
           CustomDropDown<bool>(
             onChanged: (value) {},
@@ -204,6 +227,19 @@ class _JsonFormBuilderState extends State<JsonFormBuilder> {
     return fields;
   }
 
+  dynamic regenrateDataBasedonType(String value) {
+    if (num.tryParse(value) != null) {
+      return num.parse(value);
+    }
+    if (bool.tryParse(value) != null) {
+      return bool.parse(value);
+    }
+    if (value == 'null') {
+      return null;
+    }
+    return value;
+  }
+
   void _updateData(String key, int? index, String value) {
     List<String> keys = key.split('.');
     dynamic currentData = newData;
@@ -211,11 +247,11 @@ class _JsonFormBuilderState extends State<JsonFormBuilder> {
     for (int i = 0; i < keys.length - 1; i++) {
       currentData = currentData[keys[i]];
     }
-
+    var newValue = regenrateDataBasedonType(value);
     if (index != null) {
-      currentData[keys.last][index] = value;
+      currentData[keys.last][index] = newValue;
     } else {
-      currentData[keys.last] = value;
+      currentData[keys.last] = newValue;
     }
 
     widget.onChanged?.call(newData);
