@@ -23,7 +23,7 @@ class NetworkPage extends ConsumerStatefulWidget {
 }
 
 class _NetworkPageState extends ConsumerState<NetworkPage> {
-  int tabIndex = 1;
+  int tabIndex = 0;
   bool isSingleNodeManager = false;
   static const _networkPageIndex = 0;
   static const _boxDetailsPageIndex = 1;
