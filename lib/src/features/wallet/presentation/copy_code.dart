@@ -80,14 +80,14 @@ class _CopyCodeScreenState extends State<CopyCodeScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
+                      SizedBox(
                         width: 100,
                         child: CopyTextWidget(
                           text: kAIXpWallet?.privateKeyPem ?? '',
-                          allowCopy: isVisible,
+                          allowCopy: true,
                         ),
                       ),
-                      Container(
+                      SizedBox(
                         width: 100,
                         child: ShowHideWidget(
                           isVisible: isVisible,
