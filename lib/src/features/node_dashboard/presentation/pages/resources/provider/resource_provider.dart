@@ -45,6 +45,7 @@ class ResourceProvider extends StateNotifier<ResourceState> {
 
   void nodeHistoryCommand({required String node}) {
     toggleLoading(true);
+
     final provider = ref.read(networkProvider);
     _client.session.sendCommand(
       ActionCommands.updatePipelineInstance(

@@ -34,11 +34,12 @@ class DebugViewer extends StatelessWidget {
           ),
           pipelinesView: PipeLine(
             key: ValueKey('${boxName ?? ''}2'),
-            // boxName: boxName!,z
+            boxName: boxName!,
           ),
           commsView: Comms(
             boxName: boxName!,
           ),
+
           // Comms(
           //   key: ValueKey('${boxName ?? ''}3'),
           //   boxName: boxName!,
@@ -46,6 +47,7 @@ class DebugViewer extends StatelessWidget {
           onTabChanged: (tab) {
             onTabChanged?.call(tab.index);
           },
+
         ));
   }
 }

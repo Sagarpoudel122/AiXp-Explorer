@@ -57,8 +57,8 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
     return p.ChangeNotifierProvider.value(
       value: store,
       child: p.Consumer<DataExplorerStore>(
-          builder: (context, DataExplorerStore value, child) {
-        return E2Listener(
+        builder: (context, DataExplorerStore value, child) {
+          return E2Listener(
             onPayload: (message) {},
             onHeartbeat: (message) {
               final Map<String, dynamic> convertedMessage =
@@ -68,62 +68,68 @@ class _CommandLauncherLogsState extends State<CommandLauncherLogs> {
                       .map((e) => e as String?)
                       .toList();
               if (eePayloadPath[0] == widget.targetId) {
-                print(eePayloadPath);
-              }
-              // To:Do - Implement the logic to display the logs
-              if (convertedMessage["EE_EVENT_TYPE"] == "HEARTBEAT" &&
-                  eePayloadPath[0] == widget.targetId) {
-                final bool isV2 = convertedMessage['HEARTBEAT_VERSION'] == 'v2';
+                // To:Do - Implement the logic to display the logs
+                if (convertedMessage["EE_EVENT_TYPE"] == "HEARTBEAT" &&
+                    eePayloadPath[0] == widget.targetId) {
+                  final bool isV2 =
+                      convertedMessage['HEARTBEAT_VERSION'] == 'v2';
 
-                if (isV2) {
-                  final metadataEncoded = XpandUtils.decodeEncryptedGzipMessage(
-                      convertedMessage['ENCODED_DATA']);
-                  convertedMessage.remove('ENCODED_DATA');
-                  convertedMessage.addAll(metadataEncoded);
+                  if (isV2) {
+                    final metadataEncoded =
+                        XpandUtils.decodeEncryptedGzipMessage(
+                            convertedMessage['ENCODED_DATA']);
+                    convertedMessage.remove('ENCODED_DATA');
+                    convertedMessage.addAll(metadataEncoded);
+                  }
+
+                  data = convertedMessage;
+
+                  value.buildNodes(data, areAllCollapsed: false);
+                  setState(() {
+                    isLoading = false;
+                  });
                 }
-
-                data = convertedMessage;
-
-                value.buildNodes(data, areAllCollapsed: false);
-                setState(() {
-                  isLoading = false;
-                });
               }
             },
             builder: (context) {
               return AppDialogWidget(
-                  appDialogType: AppDialogType.medium,
-                  headerButtons: [
-                    AppDialogHeaderButtons(
-                        icon: Icons.copy,
-                        onTap: () {
-                          if (!isLoading) {
-                            Clipboard.setData(
-                                ClipboardData(text: data.toString()));
-                          }
-                        }),
-                    AppDialogHeaderButtons(
-                        icon: Icons.download_sharp,
-                        onTap: () {
-                          if (!isLoading) {
-                            FileUtils.saveJSONToFile(data);
-                          }
-                        }),
-                  ],
-                  title:
-                      "Logs for ${widget.targetId} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
-                  content: Container(
-                      height: 475,
-                      padding: const EdgeInsets.all(16),
-                      child: LoadingParentWidget(
-                        isLoading: isLoading,
-                        child: ReusableJsonDataExplorer(
-                          nodes: value.displayNodes,
-                          value: value,
-                        ),
-                      )));
-            });
-      }),
+                appDialogType: AppDialogType.medium,
+                headerButtons: [
+                  AppDialogHeaderButtons(
+                      icon: Icons.copy,
+                      onTap: () {
+                        if (!isLoading) {
+                          Clipboard.setData(
+                              ClipboardData(text: data.toString()));
+                        }
+                      }),
+                  AppDialogHeaderButtons(
+                    icon: Icons.download_sharp,
+                    onTap: () {
+                      if (!isLoading) {
+                        FileUtils.saveJSONToFile(data);
+                      }
+                    },
+                  ),
+                ],
+                title:
+                    "Logs for ${widget.targetId} requested at ${DateTime.now().hour}:${DateTime.now().minute}",
+                content: Container(
+                  height: 475,
+                  padding: const EdgeInsets.all(16),
+                  child: LoadingParentWidget(
+                    isLoading: isLoading,
+                    child: ReusableJsonDataExplorer(
+                      nodes: value.displayNodes,
+                      value: value,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
