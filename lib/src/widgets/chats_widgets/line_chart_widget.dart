@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:e2_explorer/src/features/common_widgets/text_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -54,20 +56,28 @@ class LineChartWidget extends StatelessWidget {
         }).toList(),
       );
 
-  LineChartData get sampleData2 => LineChartData(
-        backgroundColor: AppColors.containerBgColor,
-        lineTouchData: lineTouchData2,
-        gridData: gridData,
-        titlesData: titlesData2,
-        borderData: borderData,
-        lineBarsData: lineBarsData2,
-        minX: 0,
-        maxX: (timestamps.length.toDouble() - 1),
-        maxY: (data.reduce(
-                (value, element) => value > element ? value : element)) +
-            20,
-        minY: 0,
-      );
+  LineChartData get sampleData2 {
+    double maxData =
+        data.reduce((value, element) => value > element ? value : element);
+    double averageChange = _calculateAverageChange(data);
+    double minBufferMultiplier = 0.2; // Adjust this multiplier as needed
+    double minBuffer = averageChange * minBufferMultiplier;
+    double bufferPercentage = 0.1; // Adjust this buffer percentage as needed
+    double buffer = max(maxData * bufferPercentage, minBuffer);
+    double maxY = maxData + buffer;
+    return LineChartData(
+      backgroundColor: AppColors.containerBgColor,
+      lineTouchData: lineTouchData2,
+      gridData: gridData,
+      titlesData: titlesData2,
+      borderData: borderData,
+      lineBarsData: lineBarsData2,
+      minX: 0,
+      maxX: (timestamps.length.toDouble() - 1),
+      maxY: maxY,
+      minY: 0,
+    );
+  }
 
   LineTouchData get lineTouchData2 => const LineTouchData(
       enabled: true,
@@ -119,6 +129,14 @@ class LineChartWidget extends StatelessWidget {
     DateTime parsedDateTime = DateTime.parse(timestamp);
     String timeString = DateFormat.Hm().format(parsedDateTime);
     return timeString;
+  }
+
+  double _calculateAverageChange(List<double> data) {
+    double sum = 0;
+    for (int i = 1; i < data.length; i++) {
+      sum += (data[i] - data[i - 1]).abs();
+    }
+    return sum / (data.length - 1);
   }
 
   Widget bottomTitleWidgets(double value, TitleMeta meta) {
