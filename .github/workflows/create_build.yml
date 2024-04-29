@@ -74,31 +74,31 @@ jobs:
           token: ${{ secrets.TOKEN }}
           "allowUpdates": true
 
-  build_macos:
-    name: Build & Release for macOS
-    runs-on: macos-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # build_macos:
+  #   name: Build & Release for macOS
+  #   runs-on: macos-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: "stable"
-          architecture: x64
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         channel: "stable"
+  #         architecture: x64
 
-      - name: Build for macOS
-        run: flutter build macos --release
+  #     - name: Build for macOS
+  #       run: flutter build macos --release
 
-      - name: Zip artifacts
-        run: |
-          mkdir -p release
-          zip -r release/macos_artifacts.zip build/macos/Build/Products/Release/*
+  #     - name: Zip artifacts
+  #       run: |
+  #         mkdir -p release
+  #         zip -r release/macos_artifacts.zip build/macos/Build/Products/Release/*
 
-      - name: Push to Releases
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: release/macos_artifacts.zip
-          tag: v1.0.${{ github.run_number }}
-          token: ${{ secrets.TOKEN }}
-          "allowUpdates": true
+  #     - name: Push to Releases
+  #       uses: ncipollo/release-action@v1
+  #       with:
+  #         artifacts: release/macos_artifacts.zip
+  #         tag: v1.0.${{ github.run_number }}
+  #         token: ${{ secrets.TOKEN }}
+  #         "allowUpdates": true
