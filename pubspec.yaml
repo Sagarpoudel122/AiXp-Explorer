@@ -57,8 +57,8 @@ msix_config:
   identity_name: hyperfy.aiexpand.explorer
   msix_version: 1.0.0.0
   install_certificate: false
-  certificate_path: ./CERTIFICATE.pfx
-  certificate_password: test123
+  # certificate_path: ./CERTIFICATE.pfx
+  # certificate_password: test123
   # logo_path: C:\path\to\logo.png
   # capabilities: internetClient, location, microphone, webcam
 
