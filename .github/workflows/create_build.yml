@@ -7,7 +7,7 @@ on:
       - feature_create_build
   push:
     branches:
-      - dev_main
+      - main
       - feature_create_build
 
 jobs:
