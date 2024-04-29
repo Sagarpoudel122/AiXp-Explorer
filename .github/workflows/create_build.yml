@@ -10,7 +10,6 @@ on:
       - dev_main
       - feature_create_build
 
-
 jobs:
   build_windows:
     name: Build & Release for Windows
@@ -26,7 +25,7 @@ jobs:
           architecture: x64
 
       - name: Build for Windows
-        run: flutter build windows --release
+        run: dart run msix:create
 
       - name: Zip artifacts
         run: |
