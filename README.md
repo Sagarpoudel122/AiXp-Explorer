@@ -1,4 +1,4 @@
-# e2_explorerr
+# e2_explorer
 
 A new Flutter project.
 
