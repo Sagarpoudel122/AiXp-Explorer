@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:e2_explorer/main.dart';
+
 enum CommandAction {
   stop,
   restart,
@@ -102,11 +104,16 @@ class E2Command {
       'PAYLOAD': payload,
       'INITIATOR_ID': initiatorId,
       'SESSION_ID': sessionId,
+      'TIME': DateTime.now().millisecondsSinceEpoch,
     }..removeWhere((key, value) => value == null);
   }
 
+  Map<String, dynamic> signedMap() {
+    return kAIXpWallet!.signMessage(toMap());
+  }
+
   String toJson() {
-    return jsonEncode(toMap());
+    return jsonEncode(signedMap());
   }
 
   /// ToDO: Do we need this?

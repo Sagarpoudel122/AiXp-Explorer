@@ -1,27 +1,16 @@
+import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:intl/intl.dart';
 
 class PayloadMessage {
-  final String boxName;
-  final String pipelineName;
-  final String pluginSignature;
-  final String pluginInstanceName;
-  final String timestamp;
-  final String timezone;
+  final E2Payload payload;
   final DateTime localTimestamp;
-  final Map<String, dynamic> content;
 
   ///ToDO this is not ok
   final String filteringId;
 
   PayloadMessage({
-    required this.boxName,
-    required this.pipelineName,
-    required this.pluginSignature,
-    required this.pluginInstanceName,
-    required this.timestamp,
-    required this.timezone,
+    required this.payload,
     required this.localTimestamp,
-    required this.content,
     required this.filteringId,
   });
 
@@ -29,19 +18,6 @@ class PayloadMessage {
   String toString() {
     return 'PayloadMessage{filteringId: $filteringId}';
   }
-
-  /// ToDO: check if we need toMap function here
-  // Map<String, dynamic> toMap() {
-  //   return {
-  //     'boxName': this.boxName,
-  //     'pipelineName': this.pipelineName,
-  //     'pluginSignature': this.pluginSignature,
-  //     'timestamp': this.timestamp,
-  //     'timezone': this.timezone,
-  //     'localTimestamp': this.localTimestamp,
-  //     'content': this.content,
-  //   };
-  // }
 
   /// Create a PayloadMessage object from json
   /// it should have the following structure:
@@ -52,35 +28,52 @@ class PayloadMessage {
   /// timezone -> data.specificValue.ee_timezone
   /// content -> the whole message
 
-  factory PayloadMessage.fromMap(Map<String, dynamic> payloadMap) {
-    final eePayloadPath = (payloadMap['EE_PAYLOAD_PATH'] as List).map((e) => e as String).toList();
+  factory PayloadMessage.fromE2Payload(E2Payload payload) {
+    final boxName = payload.boxId;
+    final pipelineName = payload.pipelineName;
+    final pluginSignature = payload.pluginSignature;
+    final pluginInstanceName = payload.pluginInstanceName;
 
-    final boxName = eePayloadPath[0];
-    final pipelineName = eePayloadPath[1];
-    final pluginSignature = eePayloadPath[2].toUpperCase();
-    final pluginInstanceName = eePayloadPath[3];
-
-    // final timestamp = payloadMap['data'] != null ? payloadMap['data']['time'] : '2023-08-31 14:06:04.980345';
-    final timestamp = payloadMap['data']['time'];
-    // final timezone = payloadMap['data'] != null ?  payloadMap['data']['specificValue']['ee_timezone'] : 'UTC+3';
-    final timezone = payloadMap['data']['specificValue']['ee_timezone'];
-
-    final content = payloadMap;
-
-    final localTimestamp = _parseLocalTimestamp(timestamp, timezone);
+    final localTimestamp =
+        _parseLocalTimestamp(payload.timestamp, payload.timezone);
 
     return PayloadMessage(
-      boxName: boxName,
-      pipelineName: pipelineName,
-      pluginSignature: pluginSignature,
-      pluginInstanceName: pluginInstanceName,
-      timestamp: timestamp,
-      timezone: timezone,
       localTimestamp: localTimestamp,
-      content: content,
-      filteringId: '$boxName#$pipelineName#$pluginSignature#$pluginInstanceName',
+      payload: payload,
+      filteringId:
+          '$boxName#$pipelineName#$pluginSignature#$pluginInstanceName',
     );
   }
+
+  // factory PayloadMessage.fromMap(Map<String, dynamic> payloadMap) {
+  //   final eePayloadPath = (payloadMap['EE_PAYLOAD_PATH'] as List).map((e) => e as String).toList();
+  //
+  //   final boxName = eePayloadPath[0];
+  //   final pipelineName = eePayloadPath[1];
+  //   final pluginSignature = eePayloadPath[2].toUpperCase();
+  //   final pluginInstanceName = eePayloadPath[3];
+  //
+  //   // final timestamp = payloadMap['data'] != null ? payloadMap['data']['time'] : '2023-08-31 14:06:04.980345';
+  //   final timestamp = payloadMap['data']['time'];
+  //   // final timezone = payloadMap['data'] != null ?  payloadMap['data']['specificValue']['ee_timezone'] : 'UTC+3';
+  //   final timezone = payloadMap['data']['specificValue']['ee_timezone'];
+  //
+  //   final content = payloadMap;
+  //
+  //   final localTimestamp = _parseLocalTimestamp(timestamp, timezone);
+  //
+  //   return PayloadMessage(
+  //     boxName: boxName,
+  //     pipelineName: pipelineName,
+  //     pluginSignature: pluginSignature,
+  //     pluginInstanceName: pluginInstanceName,
+  //     timestamp: timestamp,
+  //     timezone: timezone,
+  //     localTimestamp: localTimestamp,
+  //     content: content,
+  //     filteringId: '$boxName#$pipelineName#$pluginSignature#$pluginInstanceName',
+  //   );
+  // }
 }
 
 /// Used to concatenate timezone and timestamp in order to obtain the desired format

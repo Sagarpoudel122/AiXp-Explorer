@@ -1,3 +1,5 @@
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/payload_message.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
@@ -38,25 +40,20 @@ class _FullPayloadViewState extends State<FullPayloadView> {
 
   final ScrollController _scrollController = ScrollController();
 
-  /// ToDO: Remove this in the future
-  List<Map<String, dynamic>> extractMapFromMessage(List<PayloadMessage> messages) {
-    return messages.map((message) => message.content).toList();
-  }
-
   void setSelectedMessage(PayloadMessage message) {
     _selectedMessage = message;
-    // _selectedMessageText = const JsonEncoder.withIndent('    ').convert(message);
   }
 
   bool Function(PayloadMessage) filterMessagesByPipeline(String pipelineName) {
     return (PayloadMessage message) {
-      return pipelineName == message.pipelineName;
+      return pipelineName == message.payload.pipelineName;
     };
   }
 
-  bool Function(PayloadMessage) filterMessagesByPipelines(List<String> pipelines) {
+  bool Function(PayloadMessage) filterMessagesByPipelines(
+      List<String> pipelines) {
     return (PayloadMessage message) {
-      return pipelines.contains(message.pipelineName);
+      return pipelines.contains(message.payload.pipelineName);
     };
   }
 
@@ -78,7 +75,8 @@ class _FullPayloadViewState extends State<FullPayloadView> {
   //   }
   // }
 
-  bool Function(PayloadMessage) filterMessagesByMessageFilters(List<MessageFilter> filters) {
+  bool Function(PayloadMessage) filterMessagesByMessageFilters(
+      List<MessageFilter> filters) {
     return (PayloadMessage message) {
       bool filterPass = false;
       for (final filter in filters) {
@@ -146,7 +144,13 @@ class _FullPayloadViewState extends State<FullPayloadView> {
                 // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
 
                 /// ToDo:  find  a way to optimize and insert the element in the sorted list
-                messages.add(PayloadMessage.fromMap(message));
+                final Map<String, dynamic> convertedMessage =
+                    MqttMessageEncoderDecoder.raw(message);
+                final E2Payload payloadObject = E2Payload.fromMap(
+                  convertedMessage,
+                  originalMap: message,
+                );
+                messages.add(PayloadMessage.fromE2Payload(payloadObject));
                 messages.sort(
                   (a, b) => a.localTimestamp.compareTo(b.localTimestamp),
                 );
@@ -170,7 +174,8 @@ class _FullPayloadViewState extends State<FullPayloadView> {
                       // ),
                       FilterDropdown(
                         filters: _client.boxFilters.values.toList(),
-                        onCheckedItemsChanged: (List<MessageFilter> checkedItems) {
+                        onCheckedItemsChanged:
+                            (List<MessageFilter> checkedItems) {
                           debugPrint('Checked filters: $checkedItems');
                           setStateBuilder(() {
                             filters = checkedItems;
@@ -186,8 +191,12 @@ class _FullPayloadViewState extends State<FullPayloadView> {
                                   // messages: messagesByPipelines[selectedPipelineName] ?? [],
                                   messages: filters.isEmpty
                                       ? messages
-                                      : messages.where(filterMessagesByMessageFilters(filters)).toList(),
-                                  selectedMessageId: _selectedMessage?.content['messageID'],
+                                      : messages
+                                          .where(filterMessagesByMessageFilters(
+                                              filters))
+                                          .toList(),
+                                  selectedMessageId:
+                                      _selectedMessage?.payload.hash,
                                   scrollController: _scrollController,
                                   onTap: (int index, PayloadMessage message) {
                                     setState(() {

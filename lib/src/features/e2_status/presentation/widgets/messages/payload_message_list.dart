@@ -92,15 +92,17 @@ class _PayloadMessageListState extends State<PayloadMessageList> {
             reverse: true,
             controller: widget.scrollController,
             itemBuilder: (context, index) {
-              final message = widget.messages[index].content;
+              final message = widget.messages[index].payload;
               return InkWell(
                 // key: message['messageId'],
-                key: ValueKey(widget.messages[index].content['messageID']),
+                key: ValueKey(widget.messages[index].payload.hash),
                 onTap: () {
                   widget.onTap?.call(index, widget.messages[index]);
                 },
                 child: Container(
-                  color: widget.selectedMessageId == message['messageID'] ? const Color(0xff2A3A6F) : _defaultColor,
+                  color: widget.selectedMessageId == message.hash
+                      ? const Color(0xff2A3A6F)
+                      : _defaultColor,
                   height: 30,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -109,7 +111,7 @@ class _PayloadMessageListState extends State<PayloadMessageList> {
                       children: [
                         Expanded(
                           child: Text(
-                            '${message['EE_PAYLOAD_PATH'][0]} -> ${message['type']}',
+                            '${message.boxId} -> ${message.pluginSignature}',
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Colors.white38,
@@ -119,7 +121,8 @@ class _PayloadMessageListState extends State<PayloadMessageList> {
                         Align(
                           alignment: Alignment.centerRight,
                           child: Text(
-                            DateFormat('HH:mm:ss').format(widget.messages[index].localTimestamp),
+                            DateFormat('HH:mm:ss')
+                                .format(widget.messages[index].localTimestamp),
                             style: const TextStyle(
                               color: Colors.white38,
                             ),

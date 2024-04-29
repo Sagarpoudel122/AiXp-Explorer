@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:e2_explorer/dart_e2/models/e2_message.dart';
+import 'package:e2_explorer/dart_e2/models/utils_models/e2_heartbeat.dart';
 import 'package:e2_explorer/src/features/common_widgets/tree_list/single_level_tree_list/single_level_tree_view.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_listener.dart';
@@ -26,14 +26,13 @@ class _PipelineDetailedViewState extends State<PipelineDetailedView> {
   String? selectedPipelineName;
   String? selectedPluginId;
 
-  E2Message? currentHeartbeat;
-  Map<String, dynamic>? currentHeartbeatMap;
+  E2Heartbeat? currentHeartbeat;
 
   @override
   void initState() {
     super.initState();
-    // currentHeartbeat = _client.boxMessages[widget.boxName]?.heartbeatDecodedMessages.lastOrNull;
-    currentHeartbeatMap = _client.boxMessages[widget.boxName]?.heartbeatMessages.lastOrNull;
+    currentHeartbeat =
+        _client.boxMessages[widget.boxName]?.heartbeatMessages.lastOrNull;
   }
 
   @override
@@ -50,13 +49,13 @@ class _PipelineDetailedViewState extends State<PipelineDetailedView> {
     return E2Listener(
       onHeartbeat: (data) {
         setState(() {
-          // currentHeartbeat = _client.boxMessages[widget.boxName]?.heartbeatDecodedMessages.lastOrNull;
-          currentHeartbeatMap = _client.boxMessages[widget.boxName]?.heartbeatMessages.lastOrNull;
+          currentHeartbeat =
+              _client.boxMessages[widget.boxName]?.heartbeatMessages.lastOrNull;
         });
       },
       dataFilter: E2ListenerFilters.filterByBox(widget.boxName),
       builder: (context) {
-        if (currentHeartbeatMap == null) {
+        if (currentHeartbeat == null) {
           return const Center(
             child: Text(
               'No heartbeat received',
@@ -65,8 +64,9 @@ class _PipelineDetailedViewState extends State<PipelineDetailedView> {
           );
         }
         // final pipelines = currentHeartbeat!.configPipelines.allPipelines;
-        final pipelinesMapList =
-            (currentHeartbeatMap!['metadata']['config_streams'] as List).map((e) => e as Map<String, dynamic>).toList();
+        final pipelinesMapList = (currentHeartbeat!.configPipelines as List)
+            .map((e) => e as Map<String, dynamic>)
+            .toList();
         return Container(
           width: double.infinity,
           color: const Color(0xff161616),
@@ -140,25 +140,29 @@ class _PipelineDetailedViewState extends State<PipelineDetailedView> {
                 ),
                 Expanded(
                   flex: 2,
-                  child: selectedPipelineName != null && selectedPluginId != null && currentHeartbeatMap != null
+                  child: selectedPipelineName != null &&
+                          selectedPluginId != null &&
+                          currentHeartbeat != null
                       ? Container(
                           height: double.infinity,
                           width: double.infinity,
                           color: const Color(0xff161616),
                           child: PluginViewer(
-                            heartbeatMap: currentHeartbeatMap!,
+                            heartbeat: currentHeartbeat!,
                             selectedPlugin: selectedPluginId!,
                             selectedPipeline: selectedPipelineName!,
                           ),
                         )
-                      : selectedPipelineName != null && currentHeartbeatMap != null
+                      : selectedPipelineName != null && currentHeartbeat != null
                           ? SizedBox(
                               width: double.infinity,
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: PipelineViewer(
-                                  pipelineBody:
-                                      pipelinesMapList.firstWhere((element) => element['NAME'] == selectedPipelineName),
+                                  pipelineBody: pipelinesMapList.firstWhere(
+                                      (element) =>
+                                          element['NAME'] ==
+                                          selectedPipelineName),
                                 ),
                               ),
                             )

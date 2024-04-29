@@ -116,7 +116,8 @@ class _ServerSelectionDropdownState extends State<ServerSelectionDropdown> {
       ),
       contentBuilder: (BuildContext context, OverlayController overlay) {
         final List<MqttServer> displayedServers = servers
-            .where((MqttServer element) => element.name.toLowerCase().startsWith(searchQuery.toLowerCase()))
+            .where((MqttServer element) =>
+                element.name.toLowerCase().startsWith(searchQuery.toLowerCase()))
             .toList();
         return Material(
           color: Colors.transparent,
@@ -138,7 +139,8 @@ class _ServerSelectionDropdownState extends State<ServerSelectionDropdown> {
                       await MqttServerRepository().saveSelectedServerName(newServer.name);
                       setState(() async {
                         servers = await MqttServerRepository().getMqttServers();
-                        selectedIndex = servers.indexWhere((element) => element.name == newServer.name);
+                        selectedIndex =
+                            servers.indexWhere((element) => element.name == newServer.name);
                       });
                       overlay.closeWithResult(Nullable<MqttServer>.value(newServer));
                       // overlayController.rebuild();
@@ -186,7 +188,8 @@ class _ServerSelectionDropdownState extends State<ServerSelectionDropdown> {
                                 });
                                 // widget.onItemChanged?.call(null, true);
                                 await MqttServerRepository().saveSelectedServerName(null);
-                                overlay.closeWithResult(Nullable<MqttServer>.value(MqttServer.defaultServer));
+                                overlay.closeWithResult(
+                                    Nullable<MqttServer>.value(MqttServer.defaultServer));
                               },
                             ),
                           ),
@@ -210,7 +213,8 @@ class _ServerSelectionDropdownState extends State<ServerSelectionDropdown> {
                                   )
                                 ],
                                 onMenuClose: () {},
-                                selected: selectedIndex != null && displayedServers[index] == servers[selectedIndex!],
+                                selected: selectedIndex != null &&
+                                    displayedServers[index] == servers[selectedIndex!],
                                 //selectedIndex == index,
                                 server: displayedServers[index],
                                 onTap: (bool isSelected) async {
@@ -218,8 +222,10 @@ class _ServerSelectionDropdownState extends State<ServerSelectionDropdown> {
                                     setState(() {
                                       selectedIndex = index;
                                     });
-                                    await MqttServerRepository().saveSelectedServerName(displayedServers[index].name);
-                                    overlay.closeWithResult(Nullable<MqttServer>.value(displayedServers[index]));
+                                    await MqttServerRepository()
+                                        .saveSelectedServerName(displayedServers[index].name);
+                                    overlay.closeWithResult(
+                                        Nullable<MqttServer>.value(displayedServers[index]));
                                   } else {
                                     overlay.closeWithResult(null);
                                   }

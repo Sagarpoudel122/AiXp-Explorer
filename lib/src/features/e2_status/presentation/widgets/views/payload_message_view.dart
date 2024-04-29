@@ -29,15 +29,16 @@ class PayloadMessageView extends StatefulWidget {
 class _PayloadMessageViewState extends State<PayloadMessageView> {
   late bool hasImages = false;
   List<String> base64Images = [];
-  Map<String, dynamic>? selectedMessage;
+  PayloadMessage? selectedMessage;
   final DataExplorerStore store = DataExplorerStore();
   final TextEditingController searchController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    final imgField = widget.selectedMessage?.content['data']?['img']['id'];
-    selectedMessage = widget.selectedMessage?.content;
+    // final imgField = widget.selectedMessage?.content['data']?['img']['id'];
+    final imgField = null;
+    selectedMessage = widget.selectedMessage;
     store.buildNodes(json.decode(jsonEncode(selectedMessage)));
     if (imgField != null) {
       if (imgField is List) {
@@ -58,12 +59,15 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
   @override
   void didUpdateWidget(PayloadMessageView oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.selectedMessage?.content['messageID'] != oldWidget.selectedMessage?.content['messageID']) {
+    if (widget.selectedMessage?.payload.hash !=
+        oldWidget.selectedMessage?.payload.hash) {
       print('Message view different');
-      selectedMessage = widget.selectedMessage?.content;
-      store.buildNodes(json.decode(jsonEncode(selectedMessage)));
+      selectedMessage = widget.selectedMessage;
+      store.buildNodes(
+          json.decode(jsonEncode(selectedMessage?.payload.messageBody)));
 
-      final imgField = widget.selectedMessage?.content['data']?['img']['id'];
+      // final imgField = widget.selectedMessage?.content['data']?['img']['id'];
+      final imgField = null;
 
       if (imgField != null) {
         if (imgField is List) {
@@ -130,7 +134,8 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                     child: Builder(builder: (context) {
                       if (!hasImages && false) {
                         return SelectableText(
-                          const JsonEncoder.withIndent('    ').convert(widget.selectedMessage),
+                          const JsonEncoder.withIndent('    ')
+                              .convert(widget.selectedMessage),
                           style: const TextStyle(
                             color: Colors.white70,
                           ),
@@ -152,7 +157,8 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                           Expanded(
                                             child: TextField(
                                               controller: searchController,
-                                              onChanged: (term) => store.search(term),
+                                              onChanged: (term) =>
+                                                  store.search(term),
                                               maxLines: 1,
                                               style: GoogleFonts.lato(
                                                 color: ColorStyles.light100,
@@ -165,14 +171,19 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: ColorStyles.light100),
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          ColorStyles.light100),
                                                 ),
                                                 // focusedBorder: UnderlineInputBorder(
                                                 //   borderSide: BorderSide(color: theColor),
                                                 // ),
                                                 border: UnderlineInputBorder(
-                                                  borderSide: BorderSide(color: ColorStyles.light100),
+                                                  borderSide: BorderSide(
+                                                      color:
+                                                          ColorStyles.light100),
                                                 ),
                                                 hintText: 'Search',
                                               ),
@@ -182,14 +193,16 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                             width: 8,
                                           ),
                                           IconButton(
-                                            onPressed: store.focusPreviousSearchResult,
+                                            onPressed:
+                                                store.focusPreviousSearchResult,
                                             icon: const Icon(
                                               Icons.arrow_drop_up,
                                               color: ColorStyles.light100,
                                             ),
                                           ),
                                           IconButton(
-                                            onPressed: store.focusNextSearchResult,
+                                            onPressed:
+                                                store.focusNextSearchResult,
                                             icon: const Icon(
                                               Icons.arrow_drop_down,
                                               color: ColorStyles.light100,
@@ -208,10 +221,17 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                           message: 'Copy file to clipboard',
                                           child: InkWell(
                                             onTap: () async {
-                                              await Clipboard.setData(ClipboardData(
-                                                  text: const JsonEncoder.withIndent('    ').convert(selectedMessage)));
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                  const SnackBar(content: Text('Message copied to clipboard!')));
+                                              await Clipboard.setData(
+                                                  ClipboardData(
+                                                      text: const JsonEncoder
+                                                              .withIndent(
+                                                              '    ')
+                                                          .convert(
+                                                              selectedMessage)));
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                      content: Text(
+                                                          'Message copied to clipboard!')));
                                             },
                                             child: Icon(
                                               CarbonIcons.copy,
@@ -225,15 +245,26 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                           child: InkWell(
                                             onTap: () async {
                                               String selectedDirectory =
-                                                  await FilePicker.platform.getDirectoryPath() ?? '';
-                                              if (selectedDirectory.isNotEmpty) {
-                                                final messageId = selectedMessage?['messageID'] ?? 'savedJson';
-                                                final File file = File('$selectedDirectory/$messageId.json');
+                                                  await FilePicker.platform
+                                                          .getDirectoryPath() ??
+                                                      '';
+                                              if (selectedDirectory
+                                                  .isNotEmpty) {
+                                                final messageId =
+                                                    selectedMessage
+                                                            ?.payload.hash ??
+                                                        'savedJson';
+                                                final File file = File(
+                                                    '$selectedDirectory/$messageId.json');
                                                 await file.writeAsString(
-                                                  const JsonEncoder.withIndent('    ').convert(selectedMessage),
+                                                  const JsonEncoder.withIndent(
+                                                          '    ')
+                                                      .convert(selectedMessage),
                                                 );
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                    SnackBar(content: Text('Message saved to $selectedDirectory!')));
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(SnackBar(
+                                                        content: Text(
+                                                            'Message saved to $selectedDirectory!')));
                                               }
                                             },
                                             child: Icon(
@@ -253,9 +284,11 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Consumer<DataExplorerStore>(
-                                            builder: (context, state, child) => JsonDataExplorer(
+                                            builder: (context, state, child) =>
+                                                JsonDataExplorer(
                                               nodes: state.displayNodes,
-                                              collapsableToggleBuilder: (context, node) {
+                                              collapsableToggleBuilder:
+                                                  (context, node) {
                                                 if (node.isCollapsed) {
                                                   return const Icon(
                                                     CarbonIcons.chevron_right,
@@ -276,51 +309,68 @@ class _PayloadMessageViewState extends State<PayloadMessageView> {
                                                 /// Temporary to ignore the big image field
                                                 /// ToDo: modify the package for custom functionality
                                                 if (newValue.length > 500) {
-                                                  return newValue.replaceRange(10, newValue.length, '...');
+                                                  return newValue.replaceRange(
+                                                      10,
+                                                      newValue.length,
+                                                      '...');
                                                 }
                                                 return newValue;
                                               },
                                               theme: DataExplorerTheme(
-                                                rootKeyTextStyle: GoogleFonts.inconsolata(
+                                                rootKeyTextStyle:
+                                                    GoogleFonts.inconsolata(
                                                   color: ColorStyles.light100,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                propertyKeyTextStyle: GoogleFonts.inconsolata(
+                                                propertyKeyTextStyle:
+                                                    GoogleFonts.inconsolata(
                                                   color: ColorStyles.light200,
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                keySearchHighlightTextStyle: GoogleFonts.inconsolata(
+                                                keySearchHighlightTextStyle:
+                                                    GoogleFonts.inconsolata(
                                                   color: Colors.black,
-                                                  backgroundColor: const Color(0xFFFFEDAD),
+                                                  backgroundColor:
+                                                      const Color(0xFFFFEDAD),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                focusedKeySearchHighlightTextStyle: GoogleFonts.inconsolata(
+                                                focusedKeySearchHighlightTextStyle:
+                                                    GoogleFonts.inconsolata(
                                                   color: Colors.black,
-                                                  backgroundColor: const Color(0xFFF29D0B),
+                                                  backgroundColor:
+                                                      const Color(0xFFF29D0B),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                valueTextStyle: GoogleFonts.inconsolata(
+                                                valueTextStyle:
+                                                    GoogleFonts.inconsolata(
                                                   color: ColorStyles.yellow,
                                                   fontSize: 16,
                                                 ),
-                                                valueSearchHighlightTextStyle: GoogleFonts.inconsolata(
-                                                  color: const Color(0xFFCA442C),
-                                                  backgroundColor: const Color(0xFFFFEDAD),
+                                                valueSearchHighlightTextStyle:
+                                                    GoogleFonts.inconsolata(
+                                                  color:
+                                                      const Color(0xFFCA442C),
+                                                  backgroundColor:
+                                                      const Color(0xFFFFEDAD),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                focusedValueSearchHighlightTextStyle: GoogleFonts.inconsolata(
+                                                focusedValueSearchHighlightTextStyle:
+                                                    GoogleFonts.inconsolata(
                                                   color: Colors.black,
-                                                  backgroundColor: const Color(0xFFF29D0B),
+                                                  backgroundColor:
+                                                      const Color(0xFFF29D0B),
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 16,
                                                 ),
-                                                indentationLineColor: const Color(0xFFE1E1E1),
-                                                highlightColor: ColorStyles.dark600,
+                                                indentationLineColor:
+                                                    const Color(0xFFE1E1E1),
+                                                highlightColor:
+                                                    ColorStyles.dark600,
                                               ),
 
                                               ///TODO add theme

@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:e2_explorer/dart_e2/const/mqtt_config.dart';
 import 'package:e2_explorer/dart_e2/utils/xpand_utils.dart';
+import 'package:e2_explorer/main.dart';
 import 'package:e2_explorer/src/features/unfeatured_yet/connection/domain/models/mqtt_server.dart';
 import 'package:mqtt5_client/mqtt5_client.dart';
 import 'package:mqtt5_client/mqtt5_server_client.dart';
@@ -58,12 +59,14 @@ class MqttWrapper {
   final List<MqttSubscription> _subscriptions = <MqttSubscription>[];
 
   bool get isConnected {
-    final MqttConnectionState connectionStatus = _client.connectionStatus!.state;
+    final MqttConnectionState connectionStatus =
+        _client.connectionStatus!.state;
 
     return connectionStatus == MqttConnectionState.connected;
   }
 
-  Future<void> serverConnect({StreamController<Map<String, dynamic>>? receiveStream}) async {
+  Future<void> serverConnect(
+      {StreamController<Map<String, dynamic>>? receiveStream}) async {
     try {
       await _client.connect(server.username, server.password);
 
@@ -72,8 +75,10 @@ class MqttWrapper {
       /// Might not be the best place to put this listener
       /// What case can have the updates null?
       _client.updates.listen((event) {
-        final MqttPublishMessage recMess = event[0].payload as MqttPublishMessage;
-        final String pt = MqttUtilities.bytesToStringAsString(recMess.payload.message!);
+        final MqttPublishMessage recMess =
+            event[0].payload as MqttPublishMessage;
+        final String pt =
+            MqttUtilities.bytesToStringAsString(recMess.payload.message!);
 
         try {
           final Map<String, dynamic> decodedPayload = jsonDecode(pt);
@@ -98,13 +103,15 @@ class MqttWrapper {
       int retryNumber = 0;
       while (retryNumber < maxRetries) {
         /// Check if we have to use the atLeastOnce, or the config 0. Config 0 could be the first in the enum?
-        final MqttSubscription? subscription = _client.subscribe(receiveChannelName, MqttConfig.qos);
+        final MqttSubscription? subscription =
+            _client.subscribe(receiveChannelName, MqttConfig.qos);
         if (subscription != null) {
           /// Might not be necessary?
           _subscriptions.add(subscription);
           break;
         } else {
-          print('Trying to subscribe to topic: $receiveChannelName, retry number: ${retryNumber + 1}');
+          print(
+              'Trying to subscribe to topic: $receiveChannelName, retry number: ${retryNumber + 1}');
         }
         retryNumber++;
       }
@@ -120,7 +127,8 @@ class MqttWrapper {
       /// What values are we sending exactly? How?
       builder.addString(jsonBody);
       if (builder.payload != null) {
-        final result = _client.publishMessage(sendChannelName!, MqttConfig.qos, builder.payload!);
+        final result = _client.publishMessage(
+            sendChannelName!, MqttConfig.qos, builder.payload!);
       }
     }
   }
@@ -132,7 +140,8 @@ class MqttWrapper {
       /// What values are we sending exactly? How?
       builder.addString(jsonBody);
       if (builder.payload != null) {
-        final result = _client.publishMessage(topicName, MqttConfig.qos, builder.payload!);
+        final result =
+            _client.publishMessage(topicName, MqttConfig.qos, builder.payload!);
         print(result);
       }
     }

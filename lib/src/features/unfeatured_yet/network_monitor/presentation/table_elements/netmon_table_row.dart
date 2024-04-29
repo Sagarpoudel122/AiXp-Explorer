@@ -1,4 +1,4 @@
-import 'package:e2_explorer/dart_e2/models/netmon/netmon_box_details.dart';
+import 'package:e2_explorer/dart_e2/models/payload/netmon/netmon_box_details.dart';
 import 'package:e2_explorer/src/styles/color_styles.dart';
 import 'package:e2_explorer/src/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -199,7 +199,8 @@ TableRow createNetmonHeader() {
   );
 }
 
-DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details, {void Function(String)? onBoxClicked}) {
+DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details,
+    {void Function(String)? onBoxClicked}) {
   return DataRow(
     cells: [
       DataCell(
@@ -215,7 +216,9 @@ DataRow createNetmonTableDataRow(String boxName, NetmonBoxDetails details, {void
         Text(
           '${details.working}',
           style: TextStyles.small14(
-            color: details.working == 'ONLINE' ? ColorStyles.green : ColorStyles.red,
+            color: details.working == 'ONLINE'
+                ? ColorStyles.green
+                : ColorStyles.red,
           ),
         ),
       ),

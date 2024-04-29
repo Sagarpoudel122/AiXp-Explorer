@@ -1,3 +1,5 @@
+import 'package:e2_explorer/dart_e2/formatter/format_decoder.dart';
+import 'package:e2_explorer/dart_e2/models/payload/e2_payload.dart';
 import 'package:e2_explorer/src/features/common_widgets/tooltip/simple_tooltip.dart';
 import 'package:e2_explorer/src/features/e2_status/application/client_messages/payload_message.dart';
 import 'package:e2_explorer/src/features/e2_status/application/e2_client.dart';
@@ -33,7 +35,8 @@ class _PayloadViewerState extends State<PayloadViewer> {
 
   List<PayloadMessage> messages = [];
   List<MessageFilter> filters = [];
-  late final ValueNotifier<List<MessageFilter>> filterNotifier = ValueNotifier<List<MessageFilter>>(filters);
+  late final ValueNotifier<List<MessageFilter>> filterNotifier =
+      ValueNotifier<List<MessageFilter>>(filters);
 
   final ScrollController _scrollController = ScrollController();
 
@@ -44,17 +47,19 @@ class _PayloadViewerState extends State<PayloadViewer> {
 
   bool Function(PayloadMessage) filterMessagesByPipeline(String pipelineName) {
     return (PayloadMessage message) {
-      return pipelineName == message.pipelineName;
+      return pipelineName == message.payload.pipelineName;
     };
   }
 
-  bool Function(PayloadMessage) filterMessagesByPipelines(List<String> pipelines) {
+  bool Function(PayloadMessage) filterMessagesByPipelines(
+      List<String> pipelines) {
     return (PayloadMessage message) {
-      return pipelines.contains(message.pipelineName);
+      return pipelines.contains(message.payload.pipelineName);
     };
   }
 
-  bool Function(PayloadMessage) filterMessagesByMessageFilters(List<MessageFilter> filters) {
+  bool Function(PayloadMessage) filterMessagesByMessageFilters(
+      List<MessageFilter> filters) {
     return (PayloadMessage message) {
       bool filterPass = false;
       for (final filter in filters) {
@@ -67,7 +72,8 @@ class _PayloadViewerState extends State<PayloadViewer> {
     };
   }
 
-  bool filterSingleMessageByFilters(final PayloadMessage message, List<MessageFilter> filters) {
+  bool filterSingleMessageByFilters(
+      final PayloadMessage message, List<MessageFilter> filters) {
     bool filterPass = false;
     for (final filter in filters) {
       filterPass = filterPass || message.filteringId.startsWith(filter.id);
@@ -148,29 +154,34 @@ class _PayloadViewerState extends State<PayloadViewer> {
               builder: (context, setStateBuilder) {
                 return E2Listener(
                   onPayload: (message) {
-                    // if (messages.isEmpty) {
-                    //   final box = _client.selectBoxByName(widget.boxName);
-                    //   messages = box?.payloadMessages ?? [];
-                    // }
-                    // print('EEEEEE');
-                    // _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                    if (message == null) return;
 
-                    /// ToDo:  find  a way to optimize and insert the element in the sorted list
-                    final payloadMessage = PayloadMessage.fromMap(message);
+                    final payloadMessage = PayloadMessage.fromE2Payload(
+                      E2Payload.fromMap(
+                        MqttMessageEncoderDecoder.raw(message),
+                        originalMap: message,
+                      ),
+                    );
+
                     messages.add(payloadMessage);
+
                     if (autoScroll) {
                       if (filters.isNotEmpty) {
-                        if (filterSingleMessageByFilters(payloadMessage, filters)) {
-                          _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                        if (filterSingleMessageByFilters(
+                            payloadMessage, filters)) {
+                          _scrollController.jumpTo(
+                              _scrollController.position.maxScrollExtent);
                         }
                       } else {
-                        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+                        _scrollController
+                            .jumpTo(_scrollController.position.maxScrollExtent);
                       }
                     }
-
+                    // TODO: sort messages by timestamp
                     // messages.sort(
                     //   (a, b) => a.localTimestamp.compareTo(b.localTimestamp),
                     // );
+
                     setStateBuilder(() {});
                   },
                   dataFilter: E2ListenerFilters.acceptAll(),
@@ -202,7 +213,8 @@ class _PayloadViewerState extends State<PayloadViewer> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(
                                               'Message list header --> sort in future?',
@@ -230,15 +242,22 @@ class _PayloadViewerState extends State<PayloadViewer> {
                                     /// ToDO: Replace message list with a widget that can be further parametrized
                                     child: ValueListenableBuilder(
                                       valueListenable: filterNotifier,
-                                      builder: (BuildContext context, value, Widget? child) {
+                                      builder: (BuildContext context, value,
+                                          Widget? child) {
                                         return PayloadMessageList(
                                           // messages: messagesByPipelines[selectedPipelineName] ?? [],
                                           messages: filters.isEmpty
                                               ? messages
-                                              : messages.where(filterMessagesByMessageFilters(filters)).toList(),
-                                          selectedMessageId: _selectedMessage?.content['messageID'],
+                                              : messages
+                                                  .where(
+                                                      filterMessagesByMessageFilters(
+                                                          filters))
+                                                  .toList(),
+                                          selectedMessageId:
+                                              _selectedMessage?.payload.hash,
                                           scrollController: _scrollController,
-                                          onTap: (int index, PayloadMessage message) {
+                                          onTap: (int index,
+                                              PayloadMessage message) {
                                             setState(() {
                                               // setSelectedMessage(messagesByPipelines[selectedPipelineName]![index]);
                                               setSelectedMessage(message);

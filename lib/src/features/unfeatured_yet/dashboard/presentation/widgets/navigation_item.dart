@@ -10,9 +10,17 @@ class NavigationItem {
     required this.title,
     required this.pageWidget,
     this.icon,
+    this.children,
+    required this.path,
+    this.svgIconPath,
+    this.includeBottomDivider = false,
   });
 
   final Widget pageWidget;
   final IconData? icon;
   final String title;
+  final List<NavigationItem>? children;
+  final String path;
+  final String? svgIconPath;
+  final bool includeBottomDivider;
 }
